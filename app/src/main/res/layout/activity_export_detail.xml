@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".activity.outbound.ExportDetailActivity">
+
+
+    <!-- Left Panel: Input Fields -->
+    <LinearLayout
+        android:id="@+id/leftPanel"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/productExportRv"
+        app:layout_constraintWidth_percent="0.4">
+
+        <!-- Code -->
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Code"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/codeExportEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Code"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="text" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/titleExportEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="text" />
+
+        <!-- Items -->
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number of products"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/itemsExportEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Items"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="number" />
+
+        <!-- Total -->
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total number of product"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/totalExportEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Total"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="number" />
+
+
+        <Button
+            android:id="@+id/returnBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Return"/>
+    </LinearLayout>
+
+    <!-- Right Panel: RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productExportRv"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/leftPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.6"
+        tools:listitem="@layout/row_post" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take product from location"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Left Side -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Warehouse"/>
+                <EditText android:id="@+id/warehouseOldEd" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Warehouse 1" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Floor"/>
+                <EditText android:id="@+id/floorOldEd" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Floor 1" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Area"/>
+                <EditText android:id="@+id/areaOldEt" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Area"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Location Code"/>
+                <EditText android:id="@+id/locationOld1" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Location" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+            <TextView android:id="@+id/locationBarcodeStatus1Text" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:text="Please scan the barcode"
+                android:textSize="14sp" android:textColor="#FF0000" android:layout_marginBottom="16dp"  />
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Product Name"/>
+                <EditText android:id="@+id/productName1" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Product Name"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Product Quantity"/>
+                <EditText android:id="@+id/productQuantity1" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Quantity" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Product Code"/>
+                <EditText android:id="@+id/productCode1" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Code" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+            <TextView android:id="@+id/productBarcodeStatus1Text" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:text="Please scan the product barcode"
+                android:textSize="14sp" android:textColor="#FF0000" android:layout_marginBottom="16dp" />
+        </LinearLayout>
+
+        <!-- Right Side -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Warehouse"/>
+                <EditText android:id="@+id/warehouseNew2" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Warehouse 2" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Floor"/>
+                <EditText android:id="@+id/floorNew2" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Floor 2" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Area" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+                <EditText android:id="@+id/areaNew2" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Area 2" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Location Code"/>
+                <EditText android:id="@+id/locationNewCode2" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Name" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+            <TextView android:id="@+id/locationBarcodeStatus2Text" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:text="Please scan the barcode"
+                android:textSize="14sp" android:textColor="#FF0000" android:layout_marginBottom="16dp" />
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Product Name"/>
+                <EditText android:id="@+id/productName2" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Name" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Product Quantity"/>
+                <EditText android:id="@+id/productQuantity2" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Quantity" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Product Code"/>
+                <EditText android:id="@+id/productCode2" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="Code" android:focusable="false"
+                    android:focusableInTouchMode="false" />
+            </LinearLayout>
+            <TextView android:id="@+id/productBarcodeStatus2Text" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:text="Please scan the product barcode"
+                android:textSize="14sp" android:textColor="#FF0000" android:layout_marginBottom="16dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button android:id="@+id/continueConfirmProductBtn" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="Continue" android:layout_gravity="center"/>
+</LinearLayout>

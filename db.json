@@ -1,0 +1,86 @@
+{
+  "product": [
+    {
+      "id": "1",
+      "name": "Product A",
+      "price": 100
+    },
+    {
+      "id": "2",
+      "name": "Product B",
+      "price": 200
+    }
+  ],
+  "warehouse": [
+    {
+      "id": "473",
+      "warehouseName": "C1-01",
+      "warehouseProduct": "Nuoc mam",
+      "warehouseTotalProducts": 1896
+    },
+    {
+      "id": "474",
+      "warehouseName": "C1-01",
+      "warehouseProduct": "Nuoc mam",
+      "warehouseTotalProducts": 900
+    },
+    {
+      "id": "475",
+      "warehouseName": "C1-01",
+      "warehouseProduct": "Nuoc mam",
+      "warehouseTotalProducts": 200
+    },
+    {
+      "id": "476",
+      "warehouseName": "C1-01",
+      "warehouseProduct": "Nuoc mam",
+      "warehouseTotalProducts": 200
+    }
+  ],
+  "inbound": [
+    {
+      "id": "d0351",
+      "inputCheckTitle": 56789,
+      "inputCheckCode": "12345679",
+      "inputCheckPrice": 5000,
+      "product": [
+        {
+          "id": 100,
+          "productName": "Nuoc mam",
+          "productQuantity": 100,
+          "productLocation": "473",
+          "productImage": "https://choviet.tw/cdn/shop/products/namngu900.jpg?v=1658415145"
+        },
+        {
+          "id": 100,
+          "productName": "Nuoc mam",
+          "productQuantity": 100,
+          "productLocation": "473",
+          "productImage": "https://choviet.tw/cdn/shop/products/namngu900.jpg?v=1658415145"
+        }
+      ]
+    },
+    {
+      "id": "473",
+      "inputCheckTitle": 6789,
+      "inputCheckCode": "471",
+      "inputCheckPrice": 6789,
+      "product": [
+        {
+          "id": 101,
+          "productName": "Nuoc nam ot toi",
+          "productQuantity": 100,
+          "productLocation": "473",
+          "productImage": "https://mamnamngu.com/wp-content/uploads/2024/04/nuoc-mam-nam-ngu-toi-ot-ly-son-banner.png"
+        },
+        {
+          "id": 100,
+          "productName": "Nuoc mam",
+          "productQuantity": 100,
+          "productLocation": "474",
+          "productImage": "https://choviet.tw/cdn/shop/products/namngu900.jpg?v=1658415145"
+        }
+      ]
+    }
+  ]
+}

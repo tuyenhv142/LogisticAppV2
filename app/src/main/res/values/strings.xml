@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">qr_code_project</string>
+    <string name="default_notification_channel_id">qr_code_notifications</string>
+</resources>

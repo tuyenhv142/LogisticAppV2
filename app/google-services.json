@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "63288466221",
+    "project_id": "notification-bdf14",
+    "storage_bucket": "notification-bdf14.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63288466221:android:fb9337b4e12c2aa60651a4",
+        "android_client_info": {
+          "package_name": "com.example.qr_code_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpyta_dGSVsmhD--ogB8HQVCBckUHS6vc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
