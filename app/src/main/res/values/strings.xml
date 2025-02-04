@@ -3,4 +3,8 @@
     <string name="default_notification_channel_id">qr_code_notifications</string>
     <string name="in_bound">In Bound</string>
     <string name="username">Username</string>
+    <string name="outbound">Outbound</string>
+    <string name="inbound">Inbound</string>
+    <string name="pack">Package</string>
+    <string name="swap">Swap product \n location</string>
 </resources>
