@@ -39,7 +39,7 @@
                         android:layout_marginTop="32dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/user_1" />
+                        app:srcCompat="@drawable/ic_image" />
 
                     <TextView
                         android:id="@+id/usernameTv"
@@ -63,7 +63,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/logoutBtn"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/logoutBtn"
-                        app:srcCompat="@drawable/notification" />
+                        app:srcCompat="@drawable/ic_image" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
