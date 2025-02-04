@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     tools:context=".activity.packaged.ConfirmPackageActivity">
 
     <LinearLayout
@@ -19,9 +20,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Product Information"
+            android:background="@drawable/background_green1"
+            android:layout_margin="10dp"
+            android:padding="10dp"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#000"
+            android:textColor="@color/white"
             android:layout_marginBottom="24dp" />
 
         <!-- Main Layout -->
@@ -66,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Product Barcode"
-                    android:textSize="16sp"
+                    android:textSize="22sp"
                     android:textColor="#000" />
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -78,10 +82,10 @@
                     <EditText
                         android:id="@+id/barcodeProductPackageEt"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:hint="Please scan the code"
-                        android:background="#E0E0E0"
+                        android:background="@drawable/background_edittext"
                         android:padding="8dp"
                         android:focusable="false"
                         android:focusableInTouchMode="false" />
@@ -100,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Please scan the barcode"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="#FF0000"
                     android:layout_marginBottom="16dp" />
 
@@ -110,13 +114,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Product Name"
-                    android:textSize="16sp"
+                    android:textSize="22sp"
                     android:textColor="#000" />
                 <EditText
                     android:id="@+id/nameProductPackageEt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#E0E0E0"
+                    android:layout_height="48dp"
+                    android:background="@drawable/background_edittext"
                     android:padding="8dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
@@ -127,13 +131,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Product Quantity"
-                    android:textSize="16sp"
+                    android:textSize="22sp"
                     android:textColor="#000" />
                 <EditText
                     android:id="@+id/quantityProductPackageEt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#E0E0E0"
+                    android:layout_height="48dp"
+                    android:background="@drawable/background_edittext"
                     android:padding="8dp"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
@@ -144,13 +148,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Real Product Quantity"
-                    android:textSize="16sp"
+                    android:textSize="22sp"
                     android:textColor="#000" />
                 <EditText
                     android:id="@+id/realQuantityProductPackageEt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#E0E0E0"
+                    android:layout_height="48dp"
+                    android:background="@drawable/background_edittext"
                     android:padding="8dp"
                     android:inputType="number"
                     android:layout_marginBottom="16dp" />
@@ -166,8 +170,9 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Confirm"
-            android:background="#D3D3D3"
+            android:text="@string/confirm"
+            android:textSize="24sp"
+            android:background="@drawable/background_btn"
             android:textColor="#000" />
     </LinearLayout>
 </ScrollView>
