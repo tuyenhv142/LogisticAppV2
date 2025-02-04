@@ -152,7 +152,7 @@ public class ApiService {
     }
 
     public void submitSwap(int statusId, ApiResponseListener listener) {
-        String url = ApiConstants.SUBMIT_SWAP_LOCATION;
+        String url = ApiConstants.SWAP_LOCATION_SUBMIT;
         StringRequest request = new StringRequest(Request.Method.PUT, url,
                 response -> {
                     try {

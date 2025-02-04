@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String username, String password) {
-        String url = ApiConstants.LOGIN;
+        String url = ApiConstants.ACCOUNT_LOGIN;
         loadingDialog.show();
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 this::parseResponse,

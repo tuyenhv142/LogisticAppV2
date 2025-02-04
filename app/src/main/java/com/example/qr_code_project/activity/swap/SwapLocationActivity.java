@@ -176,7 +176,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
     }
 
     private void sendConfirmationRequest(int swapId) {
-        String url = ApiConstants.CONFIRM_SWAP_LOCATION;
+        String url = ApiConstants.SWAP_LOCATION_CONFIRM;
         Log.d("swapID",""+swapId);
 
         StringRequest request = new StringRequest(Request.Method.PUT, url,
