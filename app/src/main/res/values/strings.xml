@@ -54,4 +54,11 @@
     <string name="quantity_swap">Quantity Swap</string>
     <string name="location_swap">Location Swap</string>
     <string name="swap_to">Please scan location swap</string>
+    <string name="in_bound">In Bound</string>
+    <string name="username">Username</string>
+    <string name="outbound">Outbound</string>
+    <string name="inbound">Inbound</string>
+    <string name="pack">Package</string>
+    <string name="swap">Swap product \n location</string>
+
 </resources>

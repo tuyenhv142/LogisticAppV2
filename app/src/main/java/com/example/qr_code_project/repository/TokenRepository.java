@@ -24,7 +24,7 @@ public class TokenRepository {
         RequestQueue queue = Volley.newRequestQueue(context);
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-        String url = ApiConstants.ADD_TOKEN;
+        String url = ApiConstants.TOKEN_ADD;
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {

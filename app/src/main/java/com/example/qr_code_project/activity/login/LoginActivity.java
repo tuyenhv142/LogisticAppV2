@@ -22,6 +22,7 @@ import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.MainActivity;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.SSLHelper;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameEt;
     private EditText passwordEt;
     private Button loginBtn;
+    private LoadingDialog loadingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,8 @@ public class LoginActivity extends AppCompatActivity {
         usernameEt = findViewById(R.id.usernameEt);
         passwordEt = findViewById(R.id.passwordEt);
         loginBtn = findViewById(R.id.loginBtn);
+
+        loadingDialog = new LoadingDialog(this);
     }
 
     private void saveLoginInfo(String token) {
@@ -88,8 +92,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String username, String password) {
-        String url = ApiConstants.LOGIN;
-
+        String url = ApiConstants.ACCOUNT_LOGIN;
+        loadingDialog.show();
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 this::parseResponse,
                 this::handleError)
@@ -137,11 +141,13 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                showError("Username or Password is not correct!");
             }
         } catch (JSONException e) {
             Log.e("Login_response_error", "Failed to parse JSON response", e);
             showError("Failed to parse response!");
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
@@ -152,6 +158,8 @@ public class LoginActivity extends AppCompatActivity {
     private void handleError(Exception error) {
         Log.e("login_error", "API Error", error);
         Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+
+        loadingDialog.dismiss();
     }
 
 }
