@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MenuButton">
+        <item name="android:layout_width">0dp</item> <!-- Sử dụng 0dp để phân chia đều không gian -->
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_columnWeight">1</item> <!-- Phân chia đều không gian trong cột -->
+        <!-- <item name="android:background">@color/light_gray</item> -->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+</resources>

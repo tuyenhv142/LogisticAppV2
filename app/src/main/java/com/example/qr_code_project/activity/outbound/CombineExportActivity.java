@@ -127,7 +127,7 @@ public class CombineExportActivity extends AppCompatActivity {
 
     //
     private void sendUpdateRequest(Map<String, Object> requestData) {
-        String url = ApiConstants.UPDATE_DELIVERY_URL;
+        String url = ApiConstants.DELIVERY_UPDATE;
         JSONObject jsonObject = new JSONObject(requestData);
         Log.d("CombineExportActivity", "Sending update request: " + jsonObject.toString());
 
