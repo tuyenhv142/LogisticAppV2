@@ -9,7 +9,7 @@ import com.example.qr_code_project.R;
 
 public class LoadingDialog {
     private AlertDialog progressDialog;
-    private Activity activity;
+    private final Activity activity;
 
     public LoadingDialog(Activity activity) {
         this.activity = activity;
@@ -27,7 +27,6 @@ public class LoadingDialog {
         progressDialog = builder.create();
         progressDialog.show();
     }
-
     public void dismiss() {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
