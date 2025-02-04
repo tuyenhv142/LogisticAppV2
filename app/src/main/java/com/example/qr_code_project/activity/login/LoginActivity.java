@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                showError("Username or Password is not correct!");
             }
         } catch (JSONException e) {
             Log.e("Login_response_error", "Failed to parse JSON response", e);
