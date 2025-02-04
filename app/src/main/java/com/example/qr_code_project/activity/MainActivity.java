@@ -18,6 +18,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.example.qr_code_project.QRcodeManager;
@@ -38,13 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private QRcodeManager qrcodeManager;
     private SharedPreferences sharedPreferences;
 
-    private TextView qrCodeTextView = null;
+//    private TextView qrCodeTextView = null;
     private TextView usernameTv;
-    private Button inboundBtn;
-    private Button outboundBtn;
-    private Button packageBtn;
-    private Button logoutBtn;
-    private Button swapProductLocationBtn;
+    private ConstraintLayout inboundBtn, outboundBtn,packageBtn,swapProductLocationBtn;
 
     private final ActivityResultLauncher<String> resultLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(), isGranted->{
@@ -106,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void util(){
-//        qrCodeTextView = findViewById(R.id.qrCodeTextView);
         usernameTv = findViewById(R.id.usernameTv);
         inboundBtn = findViewById(R.id.inboundBtn);
         outboundBtn = findViewById(R.id.outboundBtn);
@@ -115,23 +111,22 @@ public class MainActivity extends AppCompatActivity {
 //        logoutBtn = findViewById(R.id.logoutBtn);
 
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        qrcodeManager = new QRcodeManager(this);
-        usernameTv.setText(sharedPreferences.getString("token","N/A"));
+//        usernameTv.setText(sharedPreferences.getString("token","N/A"));
 
     }
 
     private void utilButton(){
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.apply();
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-
-            }
-        });
+//        logoutBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.clear();
+//                editor.apply();
+//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(intent);
+//
+//            }
+//        });
 
         outboundBtn.setOnClickListener(new View.OnClickListener() {
             @Override
