@@ -106,13 +106,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void util(){
-        qrCodeTextView = findViewById(R.id.qrCodeTextView);
+//        qrCodeTextView = findViewById(R.id.qrCodeTextView);
         usernameTv = findViewById(R.id.usernameTv);
         inboundBtn = findViewById(R.id.inboundBtn);
         outboundBtn = findViewById(R.id.outboundBtn);
         packageBtn = findViewById(R.id.packageBtn);
         swapProductLocationBtn = findViewById(R.id.swapProductLocationBtn);
-        logoutBtn = findViewById(R.id.logoutBtn);
+//        logoutBtn = findViewById(R.id.logoutBtn);
 
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         qrcodeManager = new QRcodeManager(this);
