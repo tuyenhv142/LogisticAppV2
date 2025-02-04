@@ -19,9 +19,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -33,13 +31,13 @@
                     android:layout_height="match_parent">
                     <ImageView
                         android:id="@+id/logoutBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="32dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/user_1" />
+                        app:srcCompat="@drawable/face" />
 
                     <TextView
                         android:id="@+id/usernameTv"
@@ -54,11 +52,10 @@
                         app:layout_constraintStart_toEndOf="@+id/logoutBtn"
                         app:layout_constraintTop_toTopOf="@+id/logoutBtn"
                         app:layout_constraintVertical_bias="0.428" />
-
                     <ImageView
                         android:id="@+id/imageView9"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_marginEnd="32dp"
                         app:layout_constraintBottom_toBottomOf="@+id/logoutBtn"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -68,12 +65,12 @@
 
                 <TextView
                     android:id="@+id/textView8"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginTop="32dp"
-                    android:text="What would you like to \n work today ?"
+                    android:layout_marginBottom="10dp"
+                    android:text="What would you like to work today ?"
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold"
@@ -113,14 +110,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Inbound"
+                        android:text="@string/inbound"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="@+id/imageViewInBound"
                         app:layout_constraintHorizontal_bias="0.512"
                         app:layout_constraintStart_toStartOf="@+id/imageViewInBound"
-                        app:layout_constraintTop_toBottomOf="@+id/imageViewInBound" />
+                        app:layout_constraintTop_toBottomOf="@+id/imageViewInBound"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -149,14 +147,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Outbound"
+                        android:text="@string/outbound"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="@+id/imageViewOutBound"
                         app:layout_constraintHorizontal_bias="0.512"
                         app:layout_constraintStart_toStartOf="@+id/imageViewOutBound"
-                        app:layout_constraintTop_toBottomOf="@+id/imageViewOutBound" />
+                        app:layout_constraintTop_toBottomOf="@+id/imageViewOutBound"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
@@ -195,7 +194,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Package"
+                        android:text="@string/pack"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -231,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:gravity="center"
-                        android:text="Swap product \n location"
+                        android:text="@string/swap"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
