@@ -28,6 +28,9 @@ import com.example.qr_code_project.adapter.ProductAdapter;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.ApiService;
+import com.example.qr_code_project.network.SSLHelper;
+import com.example.qr_code_project.ui.LoadingDialog;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,8 +57,10 @@ public class InboundActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private ArrayList<ProductModal> productArrayList;
     private ProductAdapter productAdapter;
-    private final Map<Integer, Object> realQuantitiesMap = new HashMap<>();
+    private final Map<Integer, Object> productMap = new HashMap<>();
     private ApiService apiService;
+    private LoadingDialog loadingDialog;
+    private boolean isSubmit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,7 @@ public class InboundActivity extends AppCompatActivity {
 
         // Initialize UI components
         initUI();
+        SSLHelper.trustAllCertificates();
 
         //Set event when click submit button
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +85,33 @@ public class InboundActivity extends AppCompatActivity {
                 submit(code,totalRealQuantity);
             }
         });
+
         //Set event when click reset button
         resetBtn.setOnClickListener(v -> resetData());
+
+        if(isSubmit){
+            qrcodeManager.unregister();
+        }
+    }
+    //Scan service
+    @Override
+    protected void onResume() {
+        super.onResume();
+        qrcodeManager.setListener(this::loadInbound);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        qrcodeManager.setListener(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (qrcodeManager != null) {
+            qrcodeManager.unregister();
+        }
     }
 
     //Get data from ConfirmInboundActivity
@@ -96,14 +127,15 @@ public class InboundActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void updateRealQuantities(Intent data) {
         Map<Integer, Object> updatedQuantities =
-                (Map<Integer, Object>) data.getSerializableExtra("realQuantitiesMap");
+                (Map<Integer, Object>) data.getSerializableExtra("productMap");
 
+//        loadingDialog.show();
         if (updatedQuantities != null) {
-            realQuantitiesMap.putAll(updatedQuantities);
+            productMap.putAll(updatedQuantities);
             productAdapter.notifyDataSetChanged();
 
             totalRealQuantity = 0;
-            for (Map.Entry<Integer, Object> entry : realQuantitiesMap.entrySet()) {
+            for (Map.Entry<Integer, Object> entry : productMap.entrySet()) {
                 if (entry.getValue() instanceof Map) {
                     Map<String, Object> info = (Map<String, Object>) entry.getValue();
                     Object value = info.get("actualQuantity");
@@ -123,7 +155,16 @@ public class InboundActivity extends AppCompatActivity {
 
     //Check product commit for submit data
     private void checkAllProductsConfirmed() {
-        submitBtn.setVisibility(realQuantitiesMap.size() == productArrayList.size() ? View.VISIBLE : View.GONE);
+        if(productMap.size() == productArrayList.size()){
+            submitBtn.setVisibility( View.VISIBLE);
+            isSubmit = true;
+        }else {
+            submitBtn.setVisibility( View.GONE);
+            isSubmit = false;
+        }
+
+//        loadingDialog.dismiss();
+
     }
 
     //Reset data for scan again
@@ -136,18 +177,21 @@ public class InboundActivity extends AppCompatActivity {
         totalRealQuantityEt.setText("0");
 
         productArrayList.clear();
-        realQuantitiesMap.clear();
+        productMap.clear();
         totalRealQuantity = 0;
 
         // Update RecyclerView
         if (productAdapter != null) {
             productAdapter.notifyDataSetChanged();
         }
+        // Create scan
+        qrcodeManager = new QRcodeManager(this);
+        qrcodeManager.setListener(this::loadInbound);
 
         // Hide submit button
         submitBtn.setVisibility(View.GONE);
 
-        Toast.makeText(this, "Đã reset dữ liệu. Quét lại mã QR!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Data has been reset. Please scan again!", Toast.LENGTH_SHORT).show();
     }
 
     //Submit data
@@ -168,25 +212,6 @@ public class InboundActivity extends AppCompatActivity {
         });
     }
 
-    //Scan service
-    @Override
-    protected void onResume() {
-        super.onResume();
-        qrcodeManager.setListener(this::loadInbound);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        qrcodeManager.setListener(null);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        qrcodeManager.unregister();
-    }
-
     //UI components
     private void initUI() {
         codeEt = findViewById(R.id.codeEt);
@@ -200,14 +225,15 @@ public class InboundActivity extends AppCompatActivity {
         resetBtn = findViewById(R.id.resetBtn);
 
         qrcodeManager = new QRcodeManager(this);
+        loadingDialog = new LoadingDialog(this);
         requestQueue = Volley.newRequestQueue(this);
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
 
         productsRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
         apiService = new ApiService(this);
 
-        if(realQuantitiesMap.isEmpty()){
+        if(productMap.isEmpty()){
             totalRealQuantityEt.setText("0");
         }
     }
@@ -218,6 +244,12 @@ public class InboundActivity extends AppCompatActivity {
             Toast.makeText(this, "Scan value is empty!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        loadingDialog.show();
+
+//        if (productMap.size() == productArrayList.size() && !productArrayList.isEmpty()) {
+//            qrcodeManager.unregister();
+//        }
 
         String url = ApiConstants.getFindOneCodeInboundUrl(scanValue);
         StringRequest findInbound = new StringRequest(
@@ -238,9 +270,10 @@ public class InboundActivity extends AppCompatActivity {
         };
 
         requestQueue.add(findInbound);
+
     }
 
-    //Data from Api
+    //Process data from Api
     @SuppressLint("NotifyDataSetChanged")
     private void parseResponse(String response) {
         try {
@@ -249,13 +282,21 @@ public class InboundActivity extends AppCompatActivity {
                 JSONObject content = jsonObject.optJSONObject("content");
                 if (content != null) {
                     populateContent(content);
+                    if (!productArrayList.isEmpty()) {
+                        qrcodeManager.unregister();
+                    }
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                showError("Don't have data for this inbound barcode!");
+                if (qrcodeManager != null) {
+                    qrcodeManager.setListener(this::loadInbound);
+                }
             }
         } catch (JSONException e) {
             Log.e(TAG, "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            showError("Failed to load data!");
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
@@ -277,22 +318,23 @@ public class InboundActivity extends AppCompatActivity {
             String location = object.getJSONObject("dataItem")
                     .optString("code",null);
             String code = object.optString("code", "N/A");
-            String image = object.optString("image", "");
+            String image = object.optString("category_image", "N/A");
 
             productArrayList.add(new ProductModal(id, title, quantity, location, code, image));
         }
 
         if (productAdapter == null) {
-            productAdapter = new ProductAdapter(this, productArrayList, realQuantitiesMap,
+            productAdapter = new ProductAdapter(this, productArrayList, productMap,
                     (product, updatedMap) -> {
                         Intent intent = new Intent(InboundActivity.this, ConfirmInboundActivity.class);
                         intent.putExtra("product", product);
-                        intent.putExtra("realQuantitiesMap", new HashMap<>((Map) updatedMap));
+                        intent.putExtra("productMap", new HashMap<>((Map) updatedMap));
                         confirmProductLauncher.launch(intent);
                     });
 
             productsRv.setAdapter(productAdapter);
         } else {
+//            productAdapter.notifyItemRangeRemoved(0, productArrayList.size());
             productAdapter.notifyDataSetChanged();
         }
     }
@@ -305,7 +347,12 @@ public class InboundActivity extends AppCompatActivity {
     //Show error process Api
     private void handleError(Exception error) {
         Log.e(TAG, "API Error", error);
-        Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+        loadingDialog.dismiss();
+        Toast.makeText(this, "An error occurred. Please try again."
+                , Toast.LENGTH_SHORT).show();
+        if (qrcodeManager != null) {
+            qrcodeManager.setListener(this::loadInbound);
+        }
     }
 
 }

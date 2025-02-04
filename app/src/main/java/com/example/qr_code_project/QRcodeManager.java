@@ -1,5 +1,6 @@
 package com.example.qr_code_project;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,8 @@ public class QRcodeManager extends BroadcastReceiver {
     private final static String ACTION = "android.intent.ACTION_DECODE_DATA";
     //Key
     private final static String RECEIVE_STRING = "barcode_string";
+
+    private boolean isReceiverRegistered = false;  // Trạng thái receiver
 
     private final Context context;
     private ScanListener listener;
@@ -28,18 +31,26 @@ public class QRcodeManager extends BroadcastReceiver {
     /**
      * Register to receive Broadcast
      */
+    @SuppressLint("InlinedApi")
     private void initRegister() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ACTION);
+        if (!isReceiverRegistered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTION);
 
-        context.registerReceiver(this, filter);
+            context.registerReceiver(this, filter, Context.RECEIVER_NOT_EXPORTED);
+            isReceiverRegistered = true;
+        }
+
     }
 
     /**
      * Unregister to receive Broadcast
      */
     public void unregister() {
-        context.unregisterReceiver(this);
+        if (isReceiverRegistered) {
+            context.unregisterReceiver(this);
+            isReceiverRegistered = false;
+        }
     }
 
     /**

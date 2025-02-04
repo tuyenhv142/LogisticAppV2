@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Items"
+                    android:hint="0"
                     android:inputType="number" />
 
                 <!-- Total -->
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Total"
+                    android:hint="0"
                     android:inputType="number" />
 
                 <TextView
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Total real quantity" />
+                    android:hint="0" />
 
                 <Button
                     android:id="@+id/resetBtn"

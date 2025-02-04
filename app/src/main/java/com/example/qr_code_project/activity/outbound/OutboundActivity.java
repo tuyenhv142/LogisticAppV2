@@ -25,6 +25,7 @@ import com.example.qr_code_project.adapter.ExportAdapter;
 import com.example.qr_code_project.modal.ExportModal;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.SSLHelper;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +45,8 @@ public class OutboundActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private ArrayList<ExportModal> exportList;
     private ExportAdapter exportAdapter;
+    private int totalProduct;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +67,13 @@ public class OutboundActivity extends AppCompatActivity {
             }
             Intent intent = new Intent(OutboundActivity.this, CombineExportActivity.class);
             intent.putParcelableArrayListExtra("exportList", exportList);
+            intent.putExtra("totalProduct",totalProduct);
             startActivity(intent);
         });
     }
 
     private void loadInbound(String scanValue) {
+        loadingDialog.show();
         if (scanValue == null || scanValue.isEmpty()) {
             Toast.makeText(this, "Scan value is empty!", Toast.LENGTH_SHORT).show();
             return;
@@ -77,6 +82,7 @@ public class OutboundActivity extends AppCompatActivity {
         for (ExportModal modal : exportList) {
             if (modal.getCodeEp().equals(scanValue)) {
                 Toast.makeText(this, "This code already exists!", Toast.LENGTH_SHORT).show();
+                loadingDialog.dismiss();
                 return;
             }
         }
@@ -122,6 +128,8 @@ public class OutboundActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
             showError("Failed to parse response!");
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
@@ -138,18 +146,19 @@ public class OutboundActivity extends AppCompatActivity {
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+        loadingDialog.dismiss();
     }
 
 
     @SuppressLint("NotifyDataSetChanged")
     private void populateContent(JSONObject content) throws JSONException {
 
-        boolean isAction = content.optBoolean("isAction", false);
-
-        if (isAction) {
-            Toast.makeText(this, "This delivery has been picked up. !", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        boolean isAction = content.optBoolean("isAction", false);
+//
+//        if (isAction) {
+//            Toast.makeText(this, "This delivery has been picked up. !", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         int id = content.optInt("id",0);
         String codeEp = content.optString("code", "N/A");
@@ -160,10 +169,7 @@ public class OutboundActivity extends AppCompatActivity {
         int totalExport = exportList.size();
         totalExportEt.setText(String.valueOf(totalExport));
 
-        int totalProduct = 0;
-        for (ExportModal modal : exportList) {
-            totalProduct += modal.getTotalItem();
-        }
+        totalProduct = exportList.stream().mapToInt(ExportModal::getTotalItem).sum();
         totalProductEt.setText(String.valueOf(totalProduct));
 
         if (exportAdapter == null) {
@@ -184,12 +190,13 @@ public class OutboundActivity extends AppCompatActivity {
         totalProductEt = findViewById(R.id.totalProductEt);
         totalRealQuantityEt = findViewById(R.id.totalRealQuantityEt);
         submitCompineBtn = findViewById(R.id.submitCompineBtn);
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         requestQueue = Volley.newRequestQueue(this);
         exportsRv = findViewById(R.id.exportsRv);
         exportList = new ArrayList<>();
         exportsRv.setLayoutManager(new LinearLayoutManager(this));
 
+        loadingDialog = new LoadingDialog(this);
 
     }
 
