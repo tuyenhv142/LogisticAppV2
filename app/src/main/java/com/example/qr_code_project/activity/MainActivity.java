@@ -3,6 +3,7 @@ package com.example.qr_code_project.activity;
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -28,6 +30,7 @@ import com.example.qr_code_project.activity.outbound.OutboundActivity;
 import com.example.qr_code_project.activity.packaged.PackageActivity;
 import com.example.qr_code_project.activity.swap.SwapLocationActivity;
 import com.example.qr_code_project.repository.TokenRepository;
+import com.example.qr_code_project.ui.LoadingDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private Button packageBtn;
     private Button logoutBtn;
     private Button swapProductLocationBtn;
+    private LoadingDialog loadingDialog;
 
     private final ActivityResultLauncher<String> resultLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(), isGranted->{
@@ -75,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)==
                     PackageManager.PERMISSION_GRANTED){
                 getDeviceToken();
+                //request have notification
+//                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
                 Toast.makeText(this, "You need to grant notification permission to receive messages."
                         , Toast.LENGTH_SHORT).show();
@@ -106,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void util(){
-        qrCodeTextView = findViewById(R.id.qrCodeTextView);
+//        qrCodeTextView = findViewById(R.id.qrCodeTextView);
         usernameTv = findViewById(R.id.usernameTv);
         inboundBtn = findViewById(R.id.inboundBtn);
         outboundBtn = findViewById(R.id.outboundBtn);
@@ -117,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         qrcodeManager = new QRcodeManager(this);
         usernameTv.setText(sharedPreferences.getString("token","N/A"));
-
+        loadingDialog = new LoadingDialog(this);
     }
 
     private void utilButton(){
