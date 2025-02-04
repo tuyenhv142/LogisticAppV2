@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.cardview)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase)
+    implementation(libs.gridlayout)
     annotationProcessor(libs.glide.compiler)
     implementation(libs.constraintlayout)
     testImplementation(libs.junit)
