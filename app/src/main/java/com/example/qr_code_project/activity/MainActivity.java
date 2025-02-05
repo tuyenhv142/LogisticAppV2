@@ -214,7 +214,10 @@ public class MainActivity extends AppCompatActivity {
             Log.e("responseValue", "Failed to parse JSON response", e);
             showError("Failed to parse response!");
         }finally {
-            loadingDialog.dismiss();
+            if (loadingDialog != null && !isFinishing() && !isDestroyed()) {
+                loadingDialog.dismiss();
+            }
+
         }
     }
 

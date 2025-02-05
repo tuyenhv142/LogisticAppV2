@@ -35,7 +35,7 @@
 
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView1"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="Product Barcode"
@@ -45,23 +45,22 @@
                 android:layout_marginEnd="30dp"
                 />
 
-                <EditText
-                    android:id="@+id/barcodeEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/baseline_done_24"/>
+            <EditText
+                android:id="@+id/barcodeEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/baseline_done_24"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
 
-                <TextView
-                    android:id="@+id/productBarcodeStatusText"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:text="Please scan the code"
-                    android:textSize="16sp"
-                    android:textColor="#FF0000"
-                    android:textStyle="bold"/>
-
-
-
+            <TextView
+                android:id="@+id/productBarcodeStatusText"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Please scan the code"
+                android:textSize="16sp"
+                android:textColor="#FF0000"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/textView2"
@@ -74,15 +73,17 @@
                 android:textStyle="bold" />
 
 
-                <EditText
-                    android:id="@+id/nameEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+            <EditText
+                android:id="@+id/nameEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                />
 
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView3"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
@@ -91,15 +92,16 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/quantityEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-
+            <EditText
+                android:id="@+id/quantityEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="number"/>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView4"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
@@ -108,16 +110,15 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
-
-                <EditText
-                    android:id="@+id/realQuantityEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-
+            <EditText
+                android:id="@+id/realQuantityEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView5"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="Warehouse Barcode"
@@ -127,20 +128,22 @@
                 android:layout_marginEnd="30dp"
                 />
 
-                <EditText
-                    android:id="@+id/warehouseCodeEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/baseline_done_24"/>
+            <EditText
+                android:id="@+id/warehouseCodeEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/baseline_done_24"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
 
-                <TextView
-                    android:id="@+id/warehouseBarcodeStatusText"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:text="Please scan the code"
-                    android:textSize="16sp"
-                    android:textColor="#FF0000"
-                    android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/warehouseBarcodeStatusText"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="Please scan the code"
+                android:textSize="16sp"
+                android:textColor="#FF0000"
+                android:textStyle="bold"/>
 
 </LinearLayout>
     <com.google.android.material.button.MaterialButton

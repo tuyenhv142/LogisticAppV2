@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +31,7 @@ import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.ApiService;
 import com.example.qr_code_project.network.SSLHelper;
 import com.example.qr_code_project.ui.LoadingDialog;
+import com.google.android.material.textview.MaterialTextView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -46,7 +48,8 @@ public class InboundActivity extends AppCompatActivity {
     private static final String TAG = "InboundActivity";
 
     // Create UI Components
-    private EditText codeEt, titleEt, itemsEt, totalEt, totalRealQuantityEt;
+    private EditText codeEt, titleEt;
+    private TextView itemsEt, totalEt, totalRealQuantityEt;
     private RecyclerView productsRv;
     private Button submitBtn,resetBtn;
 
@@ -117,7 +120,8 @@ public class InboundActivity extends AppCompatActivity {
     //Get data from ConfirmInboundActivity
     @SuppressLint("NotifyDataSetChanged")
     private final ActivityResultLauncher<Intent> confirmProductLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     updateRealQuantities(result.getData());
                 }
@@ -157,6 +161,7 @@ public class InboundActivity extends AppCompatActivity {
     private void checkAllProductsConfirmed() {
         if(productMap.size() == productArrayList.size()){
             submitBtn.setVisibility( View.VISIBLE);
+            resetBtn.setVisibility(View.GONE);
             isSubmit = true;
         }else {
             submitBtn.setVisibility( View.GONE);

@@ -26,7 +26,7 @@ public class ConfirmInboundActivity extends AppCompatActivity {
     private EditText barcodeEt, nameEt, quantityEt,
             realQuantityEt, warehouseCodeEt;
     private Button confirmBtn;
-    private ImageView productBarcodeStatusIcon, warehouseBarcodeStatusIcon;
+//    private ImageView productBarcodeStatusIcon, warehouseBarcodeStatusIcon;
     private TextView productBarcodeStatusText, warehouseBarcodeStatusText;
 
     private QRcodeManager qrCodeManager;
@@ -34,7 +34,6 @@ public class ConfirmInboundActivity extends AppCompatActivity {
     private String scannedProductBarcode = "";
     private String scannedWarehouseBarcode = "";
     private boolean isConfirmed = false;
-    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +80,10 @@ public class ConfirmInboundActivity extends AppCompatActivity {
         realQuantityEt = findViewById(R.id.realQuantityEt);
         warehouseCodeEt = findViewById(R.id.warehouseCodeEt);
         confirmBtn = findViewById(R.id.confirmBtn);
-        productBarcodeStatusIcon = findViewById(R.id.productBarcodeStatusIcon);
-        warehouseBarcodeStatusIcon = findViewById(R.id.warehouseBarcodeStatusIcon);
+//        productBarcodeStatusIcon = findViewById(R.id.productBarcodeStatusIcon);
+//        warehouseBarcodeStatusIcon = findViewById(R.id.warehouseBarcodeStatusIcon);
         productBarcodeStatusText = findViewById(R.id.productBarcodeStatusText);
         warehouseBarcodeStatusText = findViewById(R.id.warehouseBarcodeStatusText);
-        loadingDialog = new LoadingDialog(this);
 
         confirmBtn.setVisibility(View.GONE);
     }
@@ -121,10 +119,10 @@ public class ConfirmInboundActivity extends AppCompatActivity {
     //Check real quantity
     private void handleConfirmation(ProductModal productModal, Map<Integer, Object> productMap) {
         String orderQuantityStr = quantityEt.getText().toString().trim();
-        String realQuantityStr = realQuantityEt.getText().toString().trim();
+        String realQuantityStr = realQuantityEt.getText().toString().replaceAll("[^0-9]", "");
 
         if (realQuantityStr.isEmpty()) {
-            Toast.makeText(this, "Please enter actual quantity!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter actual quantity is number!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -140,8 +138,8 @@ public class ConfirmInboundActivity extends AppCompatActivity {
 
     //UI product scan
     private void updateProductScanStatus(boolean isValid, String message) {
-        productBarcodeStatusIcon.setVisibility(View.VISIBLE);
-        productBarcodeStatusIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24 : R.drawable.baseline_cancel_24);
+//        productBarcodeStatusIcon.setVisibility(View.VISIBLE);
+//        productBarcodeStatusIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24 : R.drawable.baseline_cancel_24);
         productBarcodeStatusText.setVisibility(View.VISIBLE);
         productBarcodeStatusText.setText(message);
         productBarcodeStatusText.setTextColor(isValid ? Color.GREEN : Color.RED);
@@ -149,8 +147,8 @@ public class ConfirmInboundActivity extends AppCompatActivity {
 
     //UI warehouse scan
     private void updateWarehouseScanStatus(boolean isValid, String message) {
-        warehouseBarcodeStatusIcon.setVisibility(View.VISIBLE);
-        warehouseBarcodeStatusIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24 : R.drawable.baseline_cancel_24);
+//        warehouseBarcodeStatusIcon.setVisibility(View.VISIBLE);
+//        warehouseBarcodeStatusIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24 : R.drawable.baseline_cancel_24);
         warehouseBarcodeStatusText.setVisibility(View.VISIBLE);
         warehouseBarcodeStatusText.setText(message);
         warehouseBarcodeStatusText.setTextColor(isValid ? Color.GREEN : Color.RED);
