@@ -81,8 +81,8 @@ public class ConfirmInboundActivity extends AppCompatActivity {
         realQuantityEt = findViewById(R.id.realQuantityEt);
         warehouseCodeEt = findViewById(R.id.warehouseCodeEt);
         confirmBtn = findViewById(R.id.confirmBtn);
-        productBarcodeStatusIcon = findViewById(R.id.productBarcodeStatusIcon);
-        warehouseBarcodeStatusIcon = findViewById(R.id.warehouseBarcodeStatusIcon);
+//        productBarcodeStatusIcon = findViewById(R.id.productBarcodeStatusIcon);
+//        warehouseBarcodeStatusIcon = findViewById(R.id.warehouseBarcodeStatusIcon);
         productBarcodeStatusText = findViewById(R.id.productBarcodeStatusText);
         warehouseBarcodeStatusText = findViewById(R.id.warehouseBarcodeStatusText);
         loadingDialog = new LoadingDialog(this);
