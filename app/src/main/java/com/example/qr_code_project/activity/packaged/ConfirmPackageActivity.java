@@ -103,6 +103,20 @@ public class ConfirmPackageActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        qrCodeManager.setListener(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (qrCodeManager != null) {
+            qrCodeManager.unregister();
+        }
+    }
+
     //Show warning when quantity and real quantity don't same
     private void showConfirmationDialog(int orderQuantity, int actualQuantity,
                                         ProductModal productModal,
@@ -136,7 +150,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         productMap.put(productModal.getId(), productInfo);
 
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("realQuantitiesMap", new HashMap<>(productMap));
+        resultIntent.putExtra("productMap", new HashMap<>(productMap));
         setResult(RESULT_OK, resultIntent);
         finish();
 
@@ -150,6 +164,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         if (scannedProductBarcode != null && scannedProductBarcode.equals(barcodeProductPackageEt
                 .getText().toString().trim())) {
             updateProductScanStatus(true, "Product barcode is valid.");
+            qrCodeManager.unregister();
             confirmProductPackageBtn.setEnabled(true);
             confirmProductPackageBtn.setText("Confirm Product");
         } else {
