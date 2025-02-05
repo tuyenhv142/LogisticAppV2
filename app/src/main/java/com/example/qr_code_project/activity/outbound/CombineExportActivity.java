@@ -26,6 +26,7 @@ import com.example.qr_code_project.adapter.ProductAdapter;
 import com.example.qr_code_project.modal.ExportModal;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,10 +44,11 @@ public class CombineExportActivity extends AppCompatActivity {
     private RecyclerView combinedExportsRv;
     private ProductAdapter productAdapter;
     private SharedPreferences sharedPreferences;
-    private final Map<Integer, Object> realQuantitiesMap = new HashMap<>();
+    private final Map<Integer, Object> productMap = new HashMap<>();
     private ArrayList<ExportModal> deliveryList = new ArrayList<>();
     private ArrayList<ProductModal> productList = new ArrayList<>();
     private final Map<Integer, ArrayList<ProductModal>> deliveryProductsMap = new HashMap<>();
+    private LoadingDialog loadingDialog;
     //check all request update confirm
     private int pendingRequests = 0;
     private int successfulRequests = 0;
@@ -65,13 +67,16 @@ public class CombineExportActivity extends AppCompatActivity {
         // Take a list export from Intent
         ArrayList<ExportModal> exportList = getIntent().getParcelableArrayListExtra("exportList");
 
+
         if (exportList != null && !exportList.isEmpty()) {
             deliveryList.addAll(exportList);
             totalExportCombineEt.setText(String.valueOf(exportList.size()));
 
             for (ExportModal export : exportList) {
                 loadProductExport(export.getCodeEp());
-                totalProductCombineEt.setText(String.valueOf(productList.size()));
+//                totalProductCombineEt.setText(String.valueOf(productList.size()));
+                int totalProduct = exportList.stream().mapToInt(ExportModal::getTotalItem).sum();
+                totalProductCombineEt.setText(String.valueOf(totalProduct));
             }
         } else {
             Toast.makeText(this, "Export list is empty!", Toast.LENGTH_SHORT).show();
@@ -89,7 +94,8 @@ public class CombineExportActivity extends AppCompatActivity {
                 if (productsForThisDelivery != null) {
                     for (ProductModal product : productsForThisDelivery) {
                         // Get location and area from realQuantitiesMap
-                        Map<Integer, Object> realQuantityInfo = (Map<Integer, Object>) realQuantitiesMap.get(product.getId());
+                        Map<Integer, Object> realQuantityInfo =
+                                (Map<Integer, Object>) productMap.get(product.getId());
 
                         if (realQuantityInfo != null) {
                             Object location = realQuantityInfo.get("location");
@@ -104,12 +110,14 @@ public class CombineExportActivity extends AppCompatActivity {
                                 productData.put("area", area);
 
                                 productListForDelivery.add(productData);
-                                Log.d("CombineExportActivity", "Added product to request: " + productData);
+                                Log.d("CombineExportActivity",
+                                        "Added product to request: " + productData);
                             }
                         }
                     }
                 } else {
-                    Log.e("CombineExportActivity", "No products found for delivery " + export.getId());
+                    Log.e("CombineExportActivity",
+                            "No products found for delivery " + export.getId());
                 }
 
                 // Create object JSON for send API
@@ -131,6 +139,7 @@ public class CombineExportActivity extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject(requestData);
         Log.d("CombineExportActivity", "Sending update request: " + jsonObject.toString());
 
+        loadingDialog.show();
         pendingRequests++; //Cout request pending
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, jsonObject,
@@ -139,16 +148,21 @@ public class CombineExportActivity extends AppCompatActivity {
                         if (response.getBoolean("success")) {
                             successfulRequests++; // cout request success
                         } else {
-                            Toast.makeText(CombineExportActivity.this, "Update fail!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CombineExportActivity.this
+                                    , "Update fail!", Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(CombineExportActivity.this, "Server not response!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CombineExportActivity.this,
+                                "Server not response!", Toast.LENGTH_SHORT).show();
+                    }finally {
+                        loadingDialog.dismiss();
                     }
                     checkAllRequestsCompleted();
                 },
                 error -> {
-                    Toast.makeText(CombineExportActivity.this, "Error send request!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CombineExportActivity.this
+                            , "Error send request!", Toast.LENGTH_SHORT).show();
                     checkAllRequestsCompleted();
                 }) {
             @Override
@@ -169,14 +183,18 @@ public class CombineExportActivity extends AppCompatActivity {
     private void checkAllRequestsCompleted() {
         pendingRequests--;
 
+        loadingDialog.show();
         if (pendingRequests == 0) { // Check all of request done
             if (successfulRequests > 0) {
+                loadingDialog.dismiss();
                 Toast.makeText(CombineExportActivity.this, "Update successfully!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CombineExportActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
+
             } else {
+                loadingDialog.dismiss();
                 Toast.makeText(CombineExportActivity.this, "Update fail all!", Toast.LENGTH_SHORT).show();
             }
         }
@@ -192,13 +210,13 @@ public class CombineExportActivity extends AppCompatActivity {
                                     .getSerializableExtra("realQuantitiesMap");
 
                     if (returnedMap != null) {
-                        realQuantitiesMap.putAll(returnedMap);
+                        productMap.putAll(returnedMap);
 
                         if (productAdapter != null) {
                             productAdapter.notifyDataSetChanged();
 
                             int totalRealQuantity = 0;
-                            for (Map.Entry<Integer, Object> entry : realQuantitiesMap.entrySet()) {
+                            for (Map.Entry<Integer, Object> entry : productMap.entrySet()) {
                                 if (entry.getValue() instanceof Map) {
                                     Map<String, Object> info = (Map<String, Object>) entry.getValue();
                                     Object value = info.get("actualQuantity");
@@ -221,6 +239,7 @@ public class CombineExportActivity extends AppCompatActivity {
     private void loadProductExport(String codeEp) {
         String url = ApiConstants.getFindOneCodeDeliveryUrl(codeEp);
 
+        loadingDialog.show();
         @SuppressLint("NotifyDataSetChanged")
         StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
             try {
@@ -229,7 +248,6 @@ public class CombineExportActivity extends AppCompatActivity {
                     JSONObject content = jsonObject.optJSONObject("content");
                     if (content != null) {
                         int delivery = content.optInt("id",0);
-                        int totalProduct = 0;
                         JSONArray products = content.optJSONArray("products");
 
                         if (products != null) {
@@ -238,7 +256,6 @@ public class CombineExportActivity extends AppCompatActivity {
                                 int id = object.optInt("id");
                                 String title = object.optString("title", "N/A");
                                 int quantity = object.optInt("quantityDelivery");
-                                totalProduct += quantity;
                                 String code = object.optString("code", "N/A");
                                 String image = object.optString("image", "");
 
@@ -260,7 +277,6 @@ public class CombineExportActivity extends AppCompatActivity {
                                             code,
                                             image
                                     );
-                                    totalProductCombineEt.setText(String.valueOf(totalProduct));
                                     productList.add(newProduct);
 //                                    deliveryProductsMap.get(delivery).add(newProduct);
 //                                    Log.d("CombineExportActivity", "Products for delivery " + delivery + ": " + deliveryProductsMap.get(delivery));
@@ -268,18 +284,19 @@ public class CombineExportActivity extends AppCompatActivity {
                                 }
                                 ArrayList<ProductModal> productListForThisDelivery = new ArrayList<>(productList);
                                 deliveryProductsMap.put(delivery, productListForThisDelivery);
-                                Log.d("CombineExportActivity", "Mapped products for delivery " + delivery + ": " + productListForThisDelivery);
+                                Log.d("CombineExportActivity", "Mapped products for delivery "
+                                        + delivery + ": " + productListForThisDelivery);
 
                             }
 
                             if (productAdapter == null) {
-                                productAdapter = new ProductAdapter(this, productList, realQuantitiesMap,
+                                productAdapter = new ProductAdapter(this, productList, productMap,
                                         (product, updatedMap) -> {
                                             Intent intent = new Intent(
                                                     CombineExportActivity.this,
                                                     ConfirmOutboundActivity.class);
                                             intent.putExtra("product", product);
-                                            intent.putExtra("realQuantitiesMap",
+                                            intent.putExtra("productMap",
                                                     new HashMap<>((Map) updatedMap));
                                             confirmProductLauncher.launch(intent);
                                         });
@@ -293,8 +310,13 @@ public class CombineExportActivity extends AppCompatActivity {
                 }
             } catch (JSONException e) {
                 Toast.makeText(this, "Failed to parse product data!", Toast.LENGTH_SHORT).show();
+            }finally {
+                loadingDialog.dismiss();
             }
-        }, error -> Toast.makeText(this, "Failed to load products!", Toast.LENGTH_SHORT).show()) {
+        }, error -> {
+            loadingDialog.dismiss();
+            Toast.makeText(this, "Failed to load products!", Toast.LENGTH_SHORT).show();
+        }) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
@@ -318,6 +340,7 @@ public class CombineExportActivity extends AppCompatActivity {
         submitOutboundBtn = findViewById(R.id.submitOutboundBtn);
 
         combinedExportsRv.setLayoutManager(new LinearLayoutManager(this));
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+        loadingDialog = new LoadingDialog(this);
     }
 }

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.qr_code_project.QRcodeManager;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.modal.ProductModal;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
     private String scannedProductBarcode = "";
 
     private ProductModal productModal;
-    private Map<Integer, Object> realQuantitiesMap;
+    private Map<Integer, Object> productMap;
     private boolean isConfirmed = false;
 
     @Override
@@ -55,11 +56,11 @@ public class ConfirmPackageActivity extends AppCompatActivity {
             finish();
             return;
         }
-        Object realQuantitiesObj = getIntent().getSerializableExtra("realQuantitiesMap");
-        if (realQuantitiesObj instanceof Map) {
-            realQuantitiesMap = (Map<Integer, Object>) realQuantitiesObj;
+        Object productMapObj = getIntent().getSerializableExtra("productMap");
+        if (productMapObj instanceof Map) {
+            productMap = (Map<Integer, Object>) productMapObj;
         } else {
-            realQuantitiesMap = new HashMap<>();
+            productMap = new HashMap<>();
         }
 
 
@@ -73,12 +74,12 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         qrCodeManager.setListener(this::handleScannedData);
 
         // Process when click submit
-        Map<Integer, Object> finalRealQuantitiesMap = realQuantitiesMap;
-        confirmProductPackageBtn.setOnClickListener(v -> handleConfirmation(productModal, finalRealQuantitiesMap));
+        Map<Integer, Object> finalProductMap = productMap;
+        confirmProductPackageBtn.setOnClickListener(v -> handleConfirmation(productModal, finalProductMap));
 
     }
     //Check real quantity
-    private void handleConfirmation(ProductModal productModal, Map<Integer, Object> realQuantitiesMap) {
+    private void handleConfirmation(ProductModal productModal, Map<Integer, Object> productMap) {
         String orderQuantityStr = quantityProductPackageEt.getText().toString().trim();
         String realQuantityStr = realQuantityProductPackageEt.getText().toString().trim();
 
@@ -92,9 +93,9 @@ public class ConfirmPackageActivity extends AppCompatActivity {
             int actualQuantity = Integer.parseInt(realQuantityStr);
 
             if (actualQuantity != orderQuantity) {
-                showConfirmationDialog(orderQuantity, actualQuantity, productModal, realQuantitiesMap);
+                showConfirmationDialog(orderQuantity, actualQuantity, productModal, productMap);
             } else {
-                confirmProduct(productModal, realQuantitiesMap, actualQuantity);
+                confirmProduct(productModal, productMap, actualQuantity);
             }
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Invalid quantity! Please enter a valid number.", Toast.LENGTH_SHORT).show();
@@ -105,14 +106,14 @@ public class ConfirmPackageActivity extends AppCompatActivity {
     //Show warning when quantity and real quantity don't same
     private void showConfirmationDialog(int orderQuantity, int actualQuantity,
                                         ProductModal productModal,
-                                        Map<Integer, Object> realQuantitiesMap) {
+                                        Map<Integer, Object> productMap) {
         if (!isFinishing()) {
             new android.app.AlertDialog.Builder(this)
                     .setTitle("Warning")
                     .setMessage("The actual quantity (" + actualQuantity +
                             ") does not match the order quantity (" + orderQuantity +
                             "). Do you still want to confirm?")
-                    .setPositiveButton("Yes", (dialog, which) -> confirmProduct(productModal, realQuantitiesMap, actualQuantity))
+                    .setPositiveButton("Yes", (dialog, which) -> confirmProduct(productModal, productMap, actualQuantity))
                     .setNegativeButton("No", (dialog, which) -> {
                         dialog.dismiss();
                         realQuantityProductPackageEt.setText("");
@@ -123,7 +124,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
     }
 
     //Confirm product
-    private void confirmProduct(ProductModal productModal, Map<Integer, Object> realQuantitiesMap, int actualQuantity) {
+    private void confirmProduct(ProductModal productModal, Map<Integer, Object> productMap, int actualQuantity) {
         confirmProductPackageBtn.setEnabled(false);
 
         Map<String, Object> productInfo = new HashMap<>();
@@ -132,10 +133,10 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         productInfo.put("areaId", 0);
         productInfo.put("location", 0);
 
-        realQuantitiesMap.put(productModal.getId(), productInfo);
+        productMap.put(productModal.getId(), productInfo);
 
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("realQuantitiesMap", new HashMap<>(realQuantitiesMap));
+        resultIntent.putExtra("realQuantitiesMap", new HashMap<>(productMap));
         setResult(RESULT_OK, resultIntent);
         finish();
 

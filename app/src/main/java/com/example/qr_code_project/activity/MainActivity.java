@@ -2,17 +2,13 @@ package com.example.qr_code_project.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,18 +24,15 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.example.qr_code_project.QRcodeManager;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.inbound.InboundActivity;
 import com.example.qr_code_project.activity.login.LoginActivity;
 import com.example.qr_code_project.activity.outbound.OutboundActivity;
 import com.example.qr_code_project.activity.packaged.PackageActivity;
 import com.example.qr_code_project.activity.swap.SwapLocationActivity;
-import com.example.qr_code_project.adapter.SwapLocationAdapter;
-import com.example.qr_code_project.modal.SwapModal;
 import com.example.qr_code_project.network.ApiConstants;
-import com.example.qr_code_project.repository.TokenRepository;
+import com.example.qr_code_project.network.SSLHelper;
+import com.example.qr_code_project.service.TokenRepository;
 import com.example.qr_code_project.ui.LoadingDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,13 +40,11 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -78,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SSLHelper.trustAllCertificates();
 
         util();
 
@@ -138,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
         loadingDialog = new LoadingDialog(this);
-        sharedPreferences = getSharedPreferences("UserPrefs"
+        sharedPreferences = getSharedPreferences("AccountToken"
                 , MODE_PRIVATE);
     }
 

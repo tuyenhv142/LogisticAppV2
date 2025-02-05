@@ -36,6 +36,7 @@ import com.example.qr_code_project.modal.ExportModal;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.modal.SwapModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +54,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
     private RequestQueue requestQueue;
     private ArrayList<SwapModal> swapArrayList;
     private SwapLocationAdapter swapLocationAdapter;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +70,16 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
     private void util(){
         swapLocationsRv = findViewById(R.id.swapLocationsRv);
 
+        loadingDialog = new LoadingDialog(this);
         requestQueue = Volley.newRequestQueue(this);
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         swapLocationsRv.setLayoutManager(new LinearLayoutManager(this));
         swapArrayList = new ArrayList<>();
     }
 
     private void loadSwapPlan(){
         String url = ApiConstants.SWAP_LOCATION;
+        loadingDialog.show();
         StringRequest request = new StringRequest(
                 Request.Method.GET,url,
                 this::parseResponse,
@@ -110,6 +114,8 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
             showError("Failed to parse response!");
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
@@ -157,6 +163,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
         } else if (error instanceof com.android.volley.NoConnectionError) {
             errorMsg = "No internet connection!";
         }
+        loadingDialog.dismiss();
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
     }

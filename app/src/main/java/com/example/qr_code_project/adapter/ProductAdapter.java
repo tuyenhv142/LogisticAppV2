@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.modal.ProductModal;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,14 +27,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPo
 
     private final Context context;
     private final ArrayList<ProductModal> productModals;
-    private final Map<Integer, Object> realQuantitiesMap;
+    private final Map<Integer, Object> productMap;
     private final OnProductClickListener onProductClickListener;
 
     public ProductAdapter(Context context, ArrayList<ProductModal> productModals,
-                          Map<Integer, Object> realQuantitiesMap, OnProductClickListener listener) {
+                          Map<Integer, Object> productMap, OnProductClickListener listener) {
         this.context = context;
         this.productModals = productModals;
-        this.realQuantitiesMap = realQuantitiesMap;
+        this.productMap = productMap;
         this.onProductClickListener = listener;
     }
 
@@ -55,7 +56,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPo
             int productQuantity = productModal.getQuantity();
             String productLocation = productModal.getLocation();
 
-            if (realQuantitiesMap.containsKey(productId)) {
+            if (productMap.containsKey(productId)) {
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.green));
             } else {
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
@@ -63,14 +64,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPo
 
             // Tải hình ảnh sản phẩm
             String imageUrl = productModal.getImage();
-            if (imageUrl != null && !imageUrl.isEmpty()) {
-                Glide.with(context)
-                        .load(imageUrl)
-                        .placeholder(R.drawable.ic_image)
-                        .error(R.drawable.ic_image)
-                        .into(holder.image);
-            } else {
-                holder.image.setImageResource(R.drawable.ic_image);
+            try {
+                if (!imageUrl.isEmpty()) {
+                    Picasso.get()
+                            .load(imageUrl)
+                            .placeholder(R.drawable.ic_image)
+                            .error(R.drawable.ic_image)
+                            .fit()
+                            .centerCrop()
+                            .into(holder.image);
+                } else {
+                    holder.image.setImageResource(R.drawable.ic_image);
+                }
+            } catch (Exception e) {
+                Log.e("PicassoError", "Error loading image", e);
             }
 
             // Gán dữ liệu vào các TextView
@@ -81,10 +88,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPo
 
             // Xử lý khi người dùng click vào item
             holder.itemView.setOnClickListener(v -> {
-                if (realQuantitiesMap.containsKey(productId)) {
+                if (productMap.containsKey(productId)) {
                     Toast.makeText(context, "This product has already been confirmed!", Toast.LENGTH_SHORT).show();
                 } else {
-                    onProductClickListener.onProductClick(productModal, realQuantitiesMap);
+                    onProductClickListener.onProductClick(productModal, productMap);
                 }
             });
         }
@@ -112,6 +119,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPo
     }
 
     public interface OnProductClickListener {
-        void onProductClick(ProductModal product, Map<Integer, Object> realQuantitiesMap);
+        void onProductClick(ProductModal product, Map<Integer, Object> productMap);
     }
 }

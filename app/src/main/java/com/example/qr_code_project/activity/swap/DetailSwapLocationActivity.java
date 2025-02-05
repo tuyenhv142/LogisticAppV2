@@ -29,6 +29,7 @@ import com.example.qr_code_project.activity.inbound.InboundActivity;
 import com.example.qr_code_project.adapter.ProductAdapter;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +56,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private QRcodeManager qrCodeManager;
     private boolean isConfirmed = false;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +169,8 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         productBarcodeStatus2Text = findViewById(R.id.productBarcodeStatus2Text);
 
         requestQueue = Volley.newRequestQueue(this);
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+        loadingDialog = new LoadingDialog(this);
 
         continueConfirmProductBtn.setEnabled(false);
     }
@@ -257,6 +260,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
     private void fetchProductLocation(String code, boolean isOldLocation) {
         String url = ApiConstants.getFindCodeLocationProductUrl(code);
+        loadingDialog.show();
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 response -> parseResponseProductLocation(response, isOldLocation),
@@ -297,16 +301,26 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
                     }
                 }
             } else {
+                Toast.makeText(this,"Data null",Toast.LENGTH_SHORT).show();
+                if (isOldLocation){
+                    updateProductLocation1ScanStatus(true, "Can skip this code");
+                }else {
+                    updateProductLocation2ScanStatus(true, "Can skip this code");
+                }
+
                 Log.d("error", "Unknown error");
             }
         } catch (JSONException e) {
             Toast.makeText(this, "Failed to parse response!", Toast.LENGTH_SHORT).show();
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
     //Show error process Api
     private void handleError(Exception error) {
         Log.e("SwapLocation", "API Error", error);
+        loadingDialog.dismiss();
         Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
     }
 

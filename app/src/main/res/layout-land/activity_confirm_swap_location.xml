@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="16dp">
 
     <TextView
@@ -17,7 +17,6 @@
         android:textSize="30sp"
         android:textStyle="bold"
         android:padding="10dp"
-        android:layout_marginTop="15dp"
         android:background="@drawable/background_green1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +90,7 @@
         <EditText
             android:id="@+id/quantityProductLocation2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="Quantity"
             android:padding="10dp"
             android:layout_marginBottom="5dp"
@@ -100,7 +99,7 @@
         <EditText
             android:id="@+id/codeProductLocation2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:hint="Code"
             android:padding="10dp"
             android:background="@drawable/background_edittext"/>
@@ -177,7 +176,7 @@
         android:id="@+id/confirmSwapBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="26dp"
         android:text="Confirm"
         android:textSize="18sp"
         android:background="@drawable/background_btn"

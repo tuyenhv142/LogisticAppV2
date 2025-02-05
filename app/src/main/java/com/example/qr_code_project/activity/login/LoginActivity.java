@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", null);
         if (token != null) {
             Intent intent = new Intent(this, MainActivity.class);
@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveLoginInfo(String token) {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putString("token", token);
@@ -121,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(request);
     }
+//    create password
 
     @SuppressLint("NotifyDataSetChanged")
     private void parseResponse(String response) {

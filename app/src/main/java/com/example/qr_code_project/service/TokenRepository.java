@@ -1,4 +1,4 @@
-package com.example.qr_code_project.repository;
+package com.example.qr_code_project.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,7 +7,6 @@ import android.util.Log;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.qr_code_project.network.ApiConstants;
@@ -23,7 +22,7 @@ public class TokenRepository {
     public static void sendTokenToServer(Context context, String token) {
         RequestQueue queue = Volley.newRequestQueue(context);
         SharedPreferences sharedPreferences =
-                context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                context.getSharedPreferences("AccountToken", Context.MODE_PRIVATE);
         String url = ApiConstants.TOKEN_ADD;
 
         StringRequest request = new StringRequest(Request.Method.POST, url,

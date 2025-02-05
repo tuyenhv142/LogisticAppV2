@@ -20,6 +20,7 @@ import com.example.qr_code_project.R;
 import com.example.qr_code_project.adapter.ProductAdapter;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +38,7 @@ public class ExportDetailActivity extends AppCompatActivity {
     private ArrayList<ProductModal> productList;
     private ProductAdapter productAdapter;
     private SharedPreferences sharedPreferences;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +104,15 @@ public class ExportDetailActivity extends AppCompatActivity {
                 }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
+            }finally {
+                loadingDialog.dismiss();
             }
 
-        }, error -> Toast.makeText(this, "Failed to load products!", Toast.LENGTH_SHORT).show())
+
+        }, error -> {
+            Toast.makeText(this, "Failed to load products!", Toast.LENGTH_SHORT).show();
+            loadingDialog.dismiss();
+        })
         {
             @Override
             public Map<String, String> getHeaders() {
@@ -128,7 +136,8 @@ public class ExportDetailActivity extends AppCompatActivity {
         totalExportEt = findViewById(R.id.totalExportEt);
         returnBtn = findViewById(R.id.returnBtn);
         productExportRv = findViewById(R.id.productExportRv);
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         productExportRv.setLayoutManager(new LinearLayoutManager(this));
+        loadingDialog = new LoadingDialog(this);
     }
 }
