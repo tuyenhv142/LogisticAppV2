@@ -29,6 +29,7 @@ import com.example.qr_code_project.adapter.ProductAdapter;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.ApiService;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,8 +54,9 @@ public class PackageActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private ArrayList<ProductModal> productArrayList;
     private ProductAdapter productAdapter;
-    private final Map<Integer, Object> realQuantitiesMap = new HashMap<>();
+    private final Map<Integer, Object> productMap = new HashMap<>();
     private ApiService apiService;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +126,7 @@ public class PackageActivity extends AppCompatActivity {
         totalRQProductPackageEt.setText("0");
 
         productArrayList.clear();
-        realQuantitiesMap.clear();
+        productMap.clear();
         totalRealQuantity = 0;
 
         // Update RecyclerView
@@ -168,14 +170,14 @@ public class PackageActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void updateRealQuantities(Intent data) {
         Map<Integer, Object> updatedQuantities =
-                (Map<Integer, Object>) data.getSerializableExtra("realQuantitiesMap");
+                (Map<Integer, Object>) data.getSerializableExtra("productMap");
 
         if (updatedQuantities != null) {
-            realQuantitiesMap.putAll(updatedQuantities);
+            productMap.putAll(updatedQuantities);
             productAdapter.notifyDataSetChanged();
 
             totalRealQuantity = 0;
-            for (Map.Entry<Integer, Object> entry : realQuantitiesMap.entrySet()) {
+            for (Map.Entry<Integer, Object> entry : productMap.entrySet()) {
                 if (entry.getValue() instanceof Map) {
                     Map<String, Object> info = (Map<String, Object>) entry.getValue();
                     Object value = info.get("actualQuantity");
@@ -194,7 +196,7 @@ public class PackageActivity extends AppCompatActivity {
     }
 
     private void checkAllProductsConfirmed() {
-        submitPackageBtn.setVisibility(realQuantitiesMap.size() == productArrayList.size() ? View.VISIBLE : View.GONE);
+        submitPackageBtn.setVisibility(productMap.size() == productArrayList.size() ? View.VISIBLE : View.GONE);
     }
 
     private void loadPackage(String scanValue) {
@@ -202,6 +204,7 @@ public class PackageActivity extends AppCompatActivity {
             Toast.makeText(this, "Scan value is empty!", Toast.LENGTH_SHORT).show();
             return;
         }
+        loadingDialog.show();
 
         String url = ApiConstants.getFindOneCodeDeliveryUrl(scanValue);
         StringRequest findInbound = new StringRequest(
@@ -239,6 +242,8 @@ public class PackageActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Log.e("package", "Failed to parse JSON response", e);
             showError("Failed to parse response!");
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
@@ -272,7 +277,7 @@ public class PackageActivity extends AppCompatActivity {
         }
 
         if (productAdapter == null) {
-            productAdapter = new ProductAdapter(this, productArrayList, realQuantitiesMap,
+            productAdapter = new ProductAdapter(this, productArrayList, productMap,
                     (product, updatedMap) -> {
                         Intent intent = new Intent(PackageActivity.this, ConfirmPackageActivity.class);
                         intent.putExtra("product", product);
@@ -288,6 +293,7 @@ public class PackageActivity extends AppCompatActivity {
 
     private void handleError(Exception error) {
         Log.e("Package", "API Error", error);
+        loadingDialog.dismiss();
         showError( "An error occurred. Please try again.");
     }
 
@@ -308,13 +314,14 @@ public class PackageActivity extends AppCompatActivity {
 
         qrcodeManager = new QRcodeManager(this);
         requestQueue = Volley.newRequestQueue(this);
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
 
         productPackagesRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
         apiService = new ApiService(this);
+        loadingDialog = new LoadingDialog(this);
 
-        if(realQuantitiesMap.isEmpty()){
+        if(productMap.isEmpty()){
             totalRQProductPackageEt.setText("0");
         }
     }

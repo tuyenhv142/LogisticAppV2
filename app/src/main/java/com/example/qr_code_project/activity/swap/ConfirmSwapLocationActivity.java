@@ -28,6 +28,7 @@ import com.example.qr_code_project.activity.MainActivity;
 import com.example.qr_code_project.activity.packaged.PackageActivity;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.ApiService;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +54,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private String scannedLocation1 = "";
     private String scannedLocation2= "";
     private ApiService apiService;
+    private LoadingDialog loadingDialog;
 
     private int statusId;
     @Override
@@ -60,7 +62,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_confirm_swap_location);
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
 
         product1Location = sharedPreferences.getString("product1_location", "N/A");
         product2Location = sharedPreferences.getString("product2_location", "N/A");
@@ -82,9 +84,11 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                     , Toast.LENGTH_SHORT).show();
             return;
         }
+        loadingDialog.show();
         apiService.submitSwap(swapId, new ApiService.ApiResponseListener() {
             @Override
             public void onSuccess(String response) {
+                loadingDialog.dismiss();
                 Toast.makeText(ConfirmSwapLocationActivity.this, response, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(ConfirmSwapLocationActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -93,6 +97,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
+                loadingDialog.dismiss();
                 Toast.makeText(ConfirmSwapLocationActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -175,11 +180,13 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         confirmSwapBtn.setEnabled(false);
         apiService = new ApiService(this);
+        loadingDialog = new LoadingDialog(this);
 
     }
 
     private void fetchProductLocation(String code, boolean isOldLocation) {
         String url = ApiConstants.getFindCodeLocationProductUrl(code);
+        loadingDialog.show();
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 response -> parseResponseProductLocation(response, isOldLocation),
@@ -224,11 +231,14 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
             }
         } catch (JSONException e) {
             Toast.makeText(this, "Failed to parse response!", Toast.LENGTH_SHORT).show();
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
     private void handleError(Exception error) {
         Log.e("SwapLocation", "API Error", error);
+        loadingDialog.dismiss();
         Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
     }
 

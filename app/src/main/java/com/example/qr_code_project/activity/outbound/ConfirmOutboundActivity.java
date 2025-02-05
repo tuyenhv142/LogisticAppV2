@@ -22,6 +22,7 @@ import com.example.qr_code_project.QRcodeManager;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     private String code;
     private int areaId;
     private int location;
+    private LoadingDialog loadingDialog;
 
     private boolean isConfirmed = false;
 
@@ -69,15 +71,15 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         nameOutboundEt.setText(productModal.getTitle());
         quantityOutboundEt.setText(String.valueOf(productModal.getQuantity()));
 
-        Map<Integer, Object>  realQuantitiesMap =
-                (Map<Integer, Object> ) getIntent().getSerializableExtra("realQuantitiesMap");
-        if (realQuantitiesMap == null) {
-            realQuantitiesMap = new HashMap<>();
+        Map<Integer, Object>  productMap =
+                (Map<Integer, Object> ) getIntent().getSerializableExtra("productMap");
+        if (productMap == null) {
+            productMap = new HashMap<>();
         }
 
-        Map<Integer, Object>  finalRealQuantitiesMap = realQuantitiesMap;
+        Map<Integer, Object>  finalProductMap = productMap;
 
-        confirmOutboundBtn.setOnClickListener(v -> handleConfirmation(productModal, finalRealQuantitiesMap));
+        confirmOutboundBtn.setOnClickListener(v -> handleConfirmation(productModal, finalProductMap));
     }
 
     // Initialize views and shared preferences
@@ -94,8 +96,9 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         productBarcodeStatusOutboundText = findViewById(R.id.productBarcodeStatusOutboundText);
         warehouseBarcodeStatusOutboundText = findViewById(R.id.warehouseBarcodeStatusOutboundText);
 
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         requestQueue = Volley.newRequestQueue(this);
+        loadingDialog = new LoadingDialog(this);
 
         confirmOutboundBtn.setVisibility(View.GONE);
     }
@@ -105,7 +108,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         qrCodeManager.setListener(this::handleScannedData);
     }
 
-    private void handleConfirmation(ProductModal productModal, Map<Integer, Object> realQuantitiesMap) {
+    private void handleConfirmation(ProductModal productModal, Map<Integer, Object> productMap) {
         String orderQuantityStr = quantityOutboundEt.getText().toString().trim();
         String realQuantityStr = realQuantityOutboundEt.getText().toString().trim();
 
@@ -118,9 +121,9 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         int actualQuantity = Integer.parseInt(realQuantityStr);
 
         if (actualQuantity != orderQuantity) {
-            showConfirmationDialog(orderQuantity, actualQuantity, productModal, realQuantitiesMap);
+            showConfirmationDialog(orderQuantity, actualQuantity, productModal, productMap);
         } else {
-            confirmProduct(productModal, realQuantitiesMap, actualQuantity);
+            confirmProduct(productModal, productMap, actualQuantity);
         }
     }
 
@@ -154,6 +157,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
 
     private void fetchWarehouseLocation(String code) {
         String url = ApiConstants.getFindOneCodeProductUrl(code);
+        loadingDialog.show();
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 this::parseResponse,
@@ -186,6 +190,8 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
             }
         } catch (JSONException e) {
             Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
@@ -213,7 +219,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         Toast.makeText(this,"No warehouse has enough products for the order.",Toast.LENGTH_SHORT).show();
     }
 
-    private void confirmProduct(ProductModal productModal, Map<Integer, Object>  realQuantitiesMap, int actualQuantity) {
+    private void confirmProduct(ProductModal productModal, Map<Integer, Object>  productMap, int actualQuantity) {
         isConfirmed = true;
         confirmOutboundBtn.setEnabled(false);
 
@@ -223,10 +229,10 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         productInfo.put("areaId", areaId);
         productInfo.put("location", location);
 
-        realQuantitiesMap.put(productModal.getId(), productInfo);
+        productMap.put(productModal.getId(), productInfo);
 
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("realQuantitiesMap", new HashMap<>(realQuantitiesMap));
+        resultIntent.putExtra("productMap", new HashMap<>(productMap));
         setResult(RESULT_OK, resultIntent);
         finish();
 
@@ -234,14 +240,14 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     }
 
     private void showConfirmationDialog(int orderQuantity, int actualQuantity, ProductModal productModal,
-                                        Map<Integer, Object>  realQuantitiesMap) {
+                                        Map<Integer, Object>  productMap) {
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Warning")
                 .setMessage("The actual quantity (" + actualQuantity +
                         ") does not match the order quantity (" + orderQuantity +
                         "). Do you still want to confirm?")
                 .setPositiveButton("Yes", (dialog, which) ->
-                        confirmProduct(productModal, realQuantitiesMap, actualQuantity))
+                        confirmProduct(productModal, productMap, actualQuantity))
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
@@ -265,6 +271,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     }
 
     private void handleError(Throwable error) {
+        loadingDialog.dismiss();
         Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
     }
 

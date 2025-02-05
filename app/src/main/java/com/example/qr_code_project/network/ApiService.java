@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +33,7 @@ public class ApiService {
     public ApiService(Context context) {
         this.context = context;
         this.requestQueue = Volley.newRequestQueue(context);
-        this.sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        this.sharedPreferences = context.getSharedPreferences("AccountToken", Context.MODE_PRIVATE);
     }
 
     public void submitInbound(String code, int quantity, ApiResponseListener listener) {
@@ -153,6 +154,7 @@ public class ApiService {
 
     public void submitSwap(int statusId, ApiResponseListener listener) {
         String url = ApiConstants.SWAP_LOCATION_SUBMIT;
+
         StringRequest request = new StringRequest(Request.Method.PUT, url,
                 response -> {
                     try {

@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.qr_code_project.repository.TokenRepository;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
 public class FirebaseMessaging extends FirebaseMessagingService {
