@@ -159,8 +159,6 @@
                     android:id="@+id/realQuantityOutboundEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     android:inputType="number"
                     />
 
@@ -208,18 +206,17 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/confirmOutboundBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="16dp"
         android:text="Confirm"
         android:textSize="24sp"
         android:textStyle="bold"
         app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear5" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

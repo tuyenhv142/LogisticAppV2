@@ -207,7 +207,7 @@ public class CombineExportActivity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Map<Integer ,Object> returnedMap =
                             (HashMap<Integer,Object>) result.getData()
-                                    .getSerializableExtra("realQuantitiesMap");
+                                    .getSerializableExtra("productMap");
 
                     if (returnedMap != null) {
                         productMap.putAll(returnedMap);
