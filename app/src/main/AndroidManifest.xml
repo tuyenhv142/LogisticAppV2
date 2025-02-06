@@ -9,6 +9,7 @@
 
     <application
         android:allowBackup="true"
+        android:configChanges="orientation|screenSize"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -17,11 +18,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Qr_code_project"
-        android:configChanges="orientation|screenSize"
         tools:targetApi="31">
         <activity
+            android:name=".activity.swap.UnSuccessSwapLocationActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape"/>
+        <activity
             android:name=".activity.login.ForgetPasswordActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape"/>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
@@ -42,57 +47,56 @@
 
         <activity
             android:name=".activity.swap.ConfirmSwapLocationActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.swap.DetailSwapLocationActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.swap.SwapLocationActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.packaged.ConfirmPackageActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.packaged.PackageActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.outbound.ConfirmOutboundActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.outbound.CombineExportActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.outbound.ExportDetailActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.outbound.OutboundActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.inbound.ConfirmInboundActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.inbound.InboundActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="sensorLandscape"
-
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".activity.login.LoginActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

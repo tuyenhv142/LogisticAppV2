@@ -30,6 +30,7 @@ import com.example.qr_code_project.activity.login.LoginActivity;
 import com.example.qr_code_project.activity.outbound.OutboundActivity;
 import com.example.qr_code_project.activity.packaged.PackageActivity;
 import com.example.qr_code_project.activity.swap.SwapLocationActivity;
+import com.example.qr_code_project.activity.swap.UnSuccessSwapLocationActivity;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.SSLHelper;
 import com.example.qr_code_project.service.TokenRepository;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private TextView usernameTv;
-    private ImageView imageAccountIv,logoutBtn;
+    private ImageView imageAccountIv,logoutBtn,planUnSuccessBtn;
     private ConstraintLayout inboundBtn, outboundBtn
             ,packageBtn,swapProductLocationBtn;
     private RequestQueue requestQueue;
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
     private void util(){
         usernameTv = findViewById(R.id.usernameTv);
         imageAccountIv = findViewById(R.id.imageAccountIv);
+        planUnSuccessBtn = findViewById(R.id.planUnSuccessBtn);
         logoutBtn = findViewById(R.id.logoutBtn);
         inboundBtn = findViewById(R.id.inboundBtn);
         outboundBtn = findViewById(R.id.outboundBtn);
@@ -146,6 +148,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }
+        });
+
+//        unSuccessSwapLocationsRv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, UnSuccessSwapLocationActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
+        planUnSuccessBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UnSuccessSwapLocationActivity.class);
+            startActivity(intent);
         });
 
         outboundBtn.setOnClickListener(new View.OnClickListener() {

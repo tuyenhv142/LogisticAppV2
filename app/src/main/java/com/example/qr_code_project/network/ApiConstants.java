@@ -18,6 +18,7 @@ public class ApiConstants {
     public static final String PACKAGE_SUBMIT = DELIVERY+"CheckPack";
     public static final String DELIVERY_UPDATE = DELIVERY+"UpdateActionLocation";
     public static final String SWAP_LOCATION = SWAP+"FindAll?page=1&pageSize=20";
+    public static final String SWAP_LOCATION_CLAIM = SWAP+"FindConfirmationByAccount?page=1&pageSize=20";
     public static final String SWAP_LOCATION_CONFIRM = SWAP+"UpdatePlanConfirmation";
     public static final String SWAP_LOCATION_SUBMIT = STATUS+"UpdateStatus";
     public static final String TOKEN_ADD = BASE_URL+"UserTokenApp/AddToken";
