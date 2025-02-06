@@ -271,8 +271,15 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     }
 
     private void handleError(Throwable error) {
+        String errorMsg = "An error occurred. Please try again.";
+        if (error instanceof com.android.volley.TimeoutError) {
+            errorMsg = "Request timed out. Please check your connection.";
+        } else if (error instanceof com.android.volley.NoConnectionError) {
+            errorMsg = "No internet connection!";
+        }
+        Log.e("API Error", error.getMessage(), error);
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         loadingDialog.dismiss();
-        Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
