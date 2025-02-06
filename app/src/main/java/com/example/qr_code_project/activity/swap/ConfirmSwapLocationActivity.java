@@ -18,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -204,6 +205,12 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                30000, // Thời gian timeout (30 giây)
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Số lần retry mặc định
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT // Hệ số nhân backoff
+        ));
         requestQueue.add(request);
     }
 

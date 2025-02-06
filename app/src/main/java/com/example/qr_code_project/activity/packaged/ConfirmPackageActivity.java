@@ -26,7 +26,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
     private EditText barcodeProductPackageEt, nameProductPackageEt
             , quantityProductPackageEt, realQuantityProductPackageEt;
     private Button confirmProductPackageBtn;
-    private ImageView productBarcodePackageStatusIcon ;
+//    private ImageView productBarcodePackageStatusIcon ;
     private TextView productBarcodePackageStatusText ;
 
     private QRcodeManager qrCodeManager;
@@ -173,8 +173,8 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         }
     }
     private void updateProductScanStatus(boolean isValid, String message) {
-        productBarcodePackageStatusIcon.setVisibility(View.VISIBLE);
-        productBarcodePackageStatusIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24 : R.drawable.baseline_cancel_24);
+//        productBarcodePackageStatusIcon.setVisibility(View.VISIBLE);
+//        productBarcodePackageStatusIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24 : R.drawable.baseline_cancel_24);
         productBarcodePackageStatusText.setVisibility(View.VISIBLE);
         productBarcodePackageStatusText.setText(message);
         productBarcodePackageStatusText.setTextColor(isValid ? Color.GREEN : Color.RED);
@@ -187,7 +187,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         quantityProductPackageEt = findViewById(R.id.quantityProductPackageEt);
         realQuantityProductPackageEt = findViewById(R.id.realQuantityProductPackageEt);
         confirmProductPackageBtn = findViewById(R.id.confirmProductPackageBtn);
-        productBarcodePackageStatusIcon = findViewById(R.id.productBarcodePackageStatusIcon);
+//        productBarcodePackageStatusIcon = findViewById(R.id.productBarcodePackageStatusIcon);
         productBarcodePackageStatusText = findViewById(R.id.productBarcodePackageStatusText);
 
         confirmProductPackageBtn.setEnabled(false);

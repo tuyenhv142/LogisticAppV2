@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -42,10 +43,12 @@ import java.util.Objects;
 
 public class PackageActivity extends AppCompatActivity {
 
-    private EditText codePackageEt, titlePackageEt, itemPackagesEt
+    private EditText codePackageEt, titlePackageEt;
+    private TextView itemPackagesEt
             , totalProductPackageEt, totalRQProductPackageEt;
     private RecyclerView productPackagesRv;
-    private Button submitPackageBtn,resetPackageBtn;
+    private Button submitPackageBtn;
+    private Button resetPackageBtn;
 
     private int totalRealQuantity;
     private int deliveryId;
@@ -64,17 +67,17 @@ public class PackageActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_package);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Package product");
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        toolbar.setTitle("Package product");
+//        setSupportActionBar(toolbar);
 
         initUI();
 
         // Hiển thị nút quay lại
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setHomeButtonEnabled(true);
+//        }
 
         //Set event when click submit button
         submitPackageBtn.setOnClickListener(new View.OnClickListener() {
@@ -111,18 +114,18 @@ public class PackageActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        finish();
+//        return true;
+//    }
 
     @SuppressLint("NotifyDataSetChanged")
     private void resetData() {
         codePackageEt.setText("");
         titlePackageEt.setText("");
-        itemPackagesEt.setText("");
-        totalProductPackageEt.setText("");
+        itemPackagesEt.setText("0");
+        totalProductPackageEt.setText("0");
         totalRQProductPackageEt.setText("0");
 
         productArrayList.clear();
