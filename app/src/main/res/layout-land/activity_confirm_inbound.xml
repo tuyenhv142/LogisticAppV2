@@ -47,17 +47,17 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="30dp"
-                android:layout_marginEnd="30dp"
-                />
+                android:layout_marginEnd="30dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/barcodeEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/baseline_done_24"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
 
@@ -69,8 +69,8 @@
                     android:textSize="16sp"
                     android:textColor="#FF0000"
                     android:textStyle="bold"/>
-
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -100,11 +100,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    />
-
-
+                    android:focusableInTouchMode="false" />
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -136,9 +134,8 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:inputType="number"/>
-
-
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -148,6 +145,7 @@
             android:layout_marginEnd="100dp"
             android:layout_marginBottom="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -166,11 +164,9 @@
                     android:id="@+id/realQuantityEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    />
-
-
+                    android:inputType="number" />
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -188,17 +184,17 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="30sp"
-                android:layout_marginEnd="30dp"
-                />
+                android:layout_marginEnd="30dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <EditText
                     android:id="@+id/warehouseCodeEt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/baseline_done_24"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
 
@@ -210,9 +206,10 @@
                     android:textSize="16sp"
                     android:textColor="#FF0000"
                     android:textStyle="bold"/>
-
             </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -226,6 +223,6 @@
         app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

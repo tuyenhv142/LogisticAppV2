@@ -204,7 +204,7 @@
             android:layout_height="wrap_content"
             android:text="Product List"
             android:textSize="20sp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:textAlignment="center"/>
         <androidx.recyclerview.widget.RecyclerView
