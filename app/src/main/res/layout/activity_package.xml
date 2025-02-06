@@ -59,9 +59,8 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="2"
-                    android:background="@drawable/background_edittext"
-                    android:hint="Code"
                     android:focusable="false"
+                    android:hint="0"
                     android:inputType="text" />
             </LinearLayout>
 
@@ -86,8 +85,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="2"
-                    android:background="@drawable/background_edittext"
-                    android:hint="Title"
+                    android:hint="title"
                     android:focusable="false"
                     android:inputType="text" />
             </LinearLayout>
@@ -113,8 +111,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="2"
-                    android:background="@drawable/background_edittext"
-                    android:hint="Items"
+                    android:hint="0"
                     android:focusable="false"
                     android:inputType="number" />
             </LinearLayout>
@@ -140,8 +137,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="2"
-                    android:background="@drawable/background_edittext"
-                    android:hint="Total"
+                    android:hint="0"
                     android:focusable="false"
                     android:inputType="number" />
             </LinearLayout>
@@ -167,8 +163,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="2"
-                    android:background="@drawable/background_edittext"
-                    android:hint="Total real quantity"
+                    android:hint="0"
                     android:focusable="false" />
             </LinearLayout>
 
