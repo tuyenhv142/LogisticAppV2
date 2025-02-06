@@ -36,7 +36,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     private EditText barcodeOutboundEt, nameOutboundEt, quantityOutboundEt, realQuantityOutboundEt
             , warehouseCodeOutboundEt;
     private Button confirmOutboundBtn;
-    private ImageView productBarcodeStatusOutboundIcon, warehouseBarcodeStatusOutboundIcon;
+//    private ImageView productBarcodeStatusOutboundIcon, warehouseBarcodeStatusOutboundIcon;
     private TextView productBarcodeStatusOutboundText, warehouseBarcodeStatusOutboundText;
 
     private QRcodeManager qrCodeManager;
@@ -91,8 +91,8 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         warehouseCodeOutboundEt = findViewById(R.id.warehouseCodeOutboundEt);
         confirmOutboundBtn = findViewById(R.id.confirmOutboundBtn);
 
-        productBarcodeStatusOutboundIcon = findViewById(R.id.productBarcodeStatusOutboundIcon);
-        warehouseBarcodeStatusOutboundIcon = findViewById(R.id.warehouseBarcodeStatusOutboundIcon);
+//        productBarcodeStatusOutboundIcon = findViewById(R.id.productBarcodeStatusOutboundIcon);
+//        warehouseBarcodeStatusOutboundIcon = findViewById(R.id.warehouseBarcodeStatusOutboundIcon);
         productBarcodeStatusOutboundText = findViewById(R.id.productBarcodeStatusOutboundText);
         warehouseBarcodeStatusOutboundText = findViewById(R.id.warehouseBarcodeStatusOutboundText);
 
@@ -253,26 +253,33 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     }
 
     private void updateProductScanStatus(boolean isValid, String message) {
-        productBarcodeStatusOutboundIcon.setVisibility(View.VISIBLE);
-        productBarcodeStatusOutboundIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24
-                : R.drawable.baseline_cancel_24);
+//        productBarcodeStatusOutboundIcon.setVisibility(View.VISIBLE);
+//        productBarcodeStatusOutboundIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24
+//                : R.drawable.baseline_cancel_24);
         productBarcodeStatusOutboundText.setVisibility(View.VISIBLE);
         productBarcodeStatusOutboundText.setText(message);
         productBarcodeStatusOutboundText.setTextColor(isValid ? Color.GREEN : Color.RED);
     }
 
     private void updateWarehouseScanStatus(boolean isValid, String message) {
-        warehouseBarcodeStatusOutboundIcon.setVisibility(View.VISIBLE);
-        warehouseBarcodeStatusOutboundIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24
-                : R.drawable.baseline_cancel_24);
+//        warehouseBarcodeStatusOutboundIcon.setVisibility(View.VISIBLE);
+//        warehouseBarcodeStatusOutboundIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24
+//                : R.drawable.baseline_cancel_24);
         warehouseBarcodeStatusOutboundText.setVisibility(View.VISIBLE);
         warehouseBarcodeStatusOutboundText.setText(message);
         warehouseBarcodeStatusOutboundText.setTextColor(isValid ? Color.GREEN : Color.RED);
     }
 
     private void handleError(Throwable error) {
+        String errorMsg = "An error occurred. Please try again.";
+        if (error instanceof com.android.volley.TimeoutError) {
+            errorMsg = "Request timed out. Please check your connection.";
+        } else if (error instanceof com.android.volley.NoConnectionError) {
+            errorMsg = "No internet connection!";
+        }
+        Log.e("API Error", error.getMessage(), error);
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         loadingDialog.dismiss();
-        Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
     }
 
     @Override

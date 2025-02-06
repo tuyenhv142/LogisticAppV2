@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -140,29 +141,25 @@ public class CombineExportActivity extends AppCompatActivity {
         Log.d("CombineExportActivity", "Sending update request: " + jsonObject.toString());
 
         loadingDialog.show();
-        pendingRequests++; //Cout request pending
+        pendingRequests++; //Count request pending
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, jsonObject,
                 response -> {
                     try {
                         if (response.getBoolean("success")) {
-                            successfulRequests++; // cout request success
+                            successfulRequests++; // count request success
                         } else {
-                            Toast.makeText(CombineExportActivity.this
-                                    , "Update fail!", Toast.LENGTH_SHORT).show();
+                            Log.d("CombineExportActivity", "Update fail!");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(CombineExportActivity.this,
-                                "Server not response!", Toast.LENGTH_SHORT).show();
+                        Log.d("CombineExportActivity", "Server not response!");
                     }finally {
                         loadingDialog.dismiss();
                     }
                     checkAllRequestsCompleted();
                 },
                 error -> {
-                    Toast.makeText(CombineExportActivity.this
-                            , "Error send request!", Toast.LENGTH_SHORT).show();
                     checkAllRequestsCompleted();
                 }) {
             @Override
@@ -200,123 +197,53 @@ public class CombineExportActivity extends AppCompatActivity {
         }
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
     private final ActivityResultLauncher<Intent> confirmProductLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    Map<Integer ,Object> returnedMap =
-                            (HashMap<Integer,Object>) result.getData()
-                                    .getSerializableExtra("realQuantitiesMap");
-
-                    if (returnedMap != null) {
-                        productMap.putAll(returnedMap);
-
-                        if (productAdapter != null) {
-                            productAdapter.notifyDataSetChanged();
-
-                            int totalRealQuantity = 0;
-                            for (Map.Entry<Integer, Object> entry : productMap.entrySet()) {
-                                if (entry.getValue() instanceof Map) {
-                                    Map<String, Object> info = (Map<String, Object>) entry.getValue();
-                                    Object value = info.get("actualQuantity");
-
-                                    if (value instanceof Number) {
-                                        totalRealQuantity += ((Number) value).intValue();
-                                    } else {
-                                        Log.e("CombineExportActivity"
-                                                , "actualQuantity is not a number: " + value);
-                                    }
-                                }
-                            }
-                            totalRealQuantityCombineEt.setText(String.valueOf(totalRealQuantity));
-                        }
-                    }
+                    getDataFromIntent(result);
 
                 }
             });
+
+    private void getDataFromIntent(ActivityResult result) {
+        Map<Integer ,Object> returnedMap =
+                (HashMap<Integer,Object>) result.getData()
+                        .getSerializableExtra("productMap");
+
+        if (returnedMap != null) {
+            productMap.putAll(returnedMap);
+
+            if (productAdapter != null) {
+                productAdapter.notifyDataSetChanged();
+
+                int totalRealQuantity = 0;
+                for (Map.Entry<Integer, Object> entry : productMap.entrySet()) {
+                    if (entry.getValue() instanceof Map) {
+                        Map<String, Object> info = (Map<String, Object>) entry.getValue();
+                        Object value = info.get("actualQuantity");
+
+                        if (value instanceof Number) {
+                            totalRealQuantity += ((Number) value).intValue();
+                        } else {
+                            Log.e("CombineExportActivity"
+                                    , "actualQuantity is not a number: " + value);
+                        }
+                    }
+                }
+                totalRealQuantityCombineEt.setText(String.valueOf(totalRealQuantity));
+            }
+        }
+    }
 
     private void loadProductExport(String codeEp) {
         String url = ApiConstants.getFindOneCodeDeliveryUrl(codeEp);
 
         loadingDialog.show();
         @SuppressLint("NotifyDataSetChanged")
-        StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                if (jsonObject.getBoolean("success")) {
-                    JSONObject content = jsonObject.optJSONObject("content");
-                    if (content != null) {
-                        int delivery = content.optInt("id",0);
-                        JSONArray products = content.optJSONArray("products");
-
-                        if (products != null) {
-                            for (int i = 0; i < products.length(); i++) {
-                                JSONObject object = products.getJSONObject(i);
-                                int id = object.optInt("id");
-                                String title = object.optString("title", "N/A");
-                                int quantity = object.optInt("quantityDelivery");
-                                String code = object.optString("code", "N/A");
-                                String image = object.optString("image", "");
-
-                                boolean found = false;
-                                for (ProductModal product : productList) {
-                                    if (product.getId() == id) {
-                                        product.setQuantity(product.getQuantity() + quantity);
-                                        found = true;
-                                        break;
-                                    }
-                                }
-
-                                if (!found) {
-                                    ProductModal newProduct = new ProductModal(
-                                            id,
-                                            title,
-                                            quantity,
-                                            null,
-                                            code,
-                                            image
-                                    );
-                                    productList.add(newProduct);
-//                                    deliveryProductsMap.get(delivery).add(newProduct);
-//                                    Log.d("CombineExportActivity", "Products for delivery " + delivery + ": " + deliveryProductsMap.get(delivery));
-
-                                }
-                                ArrayList<ProductModal> productListForThisDelivery = new ArrayList<>(productList);
-                                deliveryProductsMap.put(delivery, productListForThisDelivery);
-                                Log.d("CombineExportActivity", "Mapped products for delivery "
-                                        + delivery + ": " + productListForThisDelivery);
-
-                            }
-
-                            if (productAdapter == null) {
-                                productAdapter = new ProductAdapter(this, productList, productMap,
-                                        (product, updatedMap) -> {
-                                            Intent intent = new Intent(
-                                                    CombineExportActivity.this,
-                                                    ConfirmOutboundActivity.class);
-                                            intent.putExtra("product", product);
-                                            intent.putExtra("productMap",
-                                                    new HashMap<>((Map) updatedMap));
-                                            confirmProductLauncher.launch(intent);
-                                        });
-
-                                combinedExportsRv.setAdapter(productAdapter);
-                            } else {
-                                productAdapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                }
-            } catch (JSONException e) {
-                Toast.makeText(this, "Failed to parse product data!", Toast.LENGTH_SHORT).show();
-            }finally {
-                loadingDialog.dismiss();
-            }
-        }, error -> {
-            loadingDialog.dismiss();
-            Toast.makeText(this, "Failed to load products!", Toast.LENGTH_SHORT).show();
-        }) {
+        StringRequest request = new StringRequest(Request.Method.GET, url, 
+                this::parseResponse,
+                this::handleError) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
@@ -330,6 +257,97 @@ public class CombineExportActivity extends AppCompatActivity {
         };
 
         Volley.newRequestQueue(this).add(request);
+    }
+
+    private void parseResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            if (jsonObject.getBoolean("success")) {
+                JSONObject content = jsonObject.optJSONObject("content");
+                if (content != null) {
+                    populateContent(content);
+                }
+            }
+        } catch (JSONException e) {
+            Toast.makeText(this, "Failed to load product data!", Toast.LENGTH_SHORT).show();
+        }finally {
+            loadingDialog.dismiss();
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void populateContent(JSONObject content) throws JSONException {
+        int delivery = content.optInt("id",0);
+        JSONArray products = content.optJSONArray("products");
+
+        if (products != null) {
+            for (int i = 0; i < products.length(); i++) {
+                JSONObject object = products.getJSONObject(i);
+                int id = object.optInt("id");
+                String title = object.optString("title", "N/A");
+                int quantity = object.optInt("quantityDelivery");
+                String code = object.optString("code", "N/A");
+                String image = object.optString("image", "");
+
+                boolean found = false;
+                for (ProductModal product : productList) {
+                    if (product.getId() == id) {
+                        product.setQuantity(product.getQuantity() + quantity);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    ProductModal newProduct = new ProductModal(
+                            id,
+                            title,
+                            quantity,
+                            null,
+                            code,
+                            image
+                    );
+                    productList.add(newProduct);
+                    //                                    deliveryProductsMap.get(delivery).add(newProduct);
+                    //                                    Log.d("CombineExportActivity", "Products for delivery " + delivery + ": " + deliveryProductsMap.get(delivery));
+
+                }
+                ArrayList<ProductModal> productListForThisDelivery = new ArrayList<>(productList);
+                deliveryProductsMap.put(delivery, productListForThisDelivery);
+                Log.d("CombineExportActivity", "Mapped products for delivery "
+                        + delivery + ": " + productListForThisDelivery);
+
+            }
+
+            if (productAdapter == null) {
+                productAdapter = new ProductAdapter(this, productList, productMap,
+                        (product, updatedMap) -> {
+                            Intent intent = new Intent(
+                                    CombineExportActivity.this,
+                                    ConfirmOutboundActivity.class);
+                            intent.putExtra("product", product);
+                            intent.putExtra("productMap",
+                                    new HashMap<>((Map) updatedMap));
+                            confirmProductLauncher.launch(intent);
+                        });
+
+                combinedExportsRv.setAdapter(productAdapter);
+            } else {
+                productAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    private void handleError(Throwable error) {
+        String errorMsg = "An error occurred. Please try again.";
+        if (error instanceof com.android.volley.TimeoutError) {
+            errorMsg = "Request timed out. Please check your connection.";
+        } else if (error instanceof com.android.volley.NoConnectionError) {
+            errorMsg = "No internet connection!";
+        }
+        Log.e("API Error", error.getMessage(), error);
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+        loadingDialog.dismiss();
     }
 
     private void util(){

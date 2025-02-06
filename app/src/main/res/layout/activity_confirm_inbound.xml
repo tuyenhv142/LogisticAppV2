@@ -8,31 +8,37 @@
     tools:context=".activity.inbound.ConfirmInboundActivity">
 
     <TextView
-    android:id="@+id/titleTextView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:text="Product Information"
-    android:textAlignment="center"
-    android:textColor="@color/black"
-    android:textSize="40sp"
-    android:textStyle="bold"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"/>
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Product Information"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <LinearLayout
-        android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintTop_toBottomOf="@id/titleTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="30dp">
 
             <TextView
                 android:id="@+id/textView1"
@@ -45,22 +51,37 @@
                 android:layout_marginEnd="30dp"
                 />
 
-            <EditText
-                android:id="@+id/barcodeEt"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/baseline_done_24"
-                android:focusable="false"
-                android:focusableInTouchMode="false" />
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/barcodeEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="text" />
 
-            <TextView
-                android:id="@+id/productBarcodeStatusText"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:text="Please scan the code"
-                android:textSize="16sp"
-                android:textColor="#FF0000"
-                android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/productBarcodeStatusText"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Please scan the code"
+                    android:textSize="16sp"
+                    android:textColor="#FF0000"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView2"
@@ -72,15 +93,31 @@
                 android:textSize="30dp"
                 android:textStyle="bold" />
 
-
-            <EditText
-                android:id="@+id/nameEt"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+
+                <EditText
+                    android:id="@+id/nameEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="text"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView3"
@@ -92,14 +129,31 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/quantityEt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:inputType="number"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/quantityEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="number" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="300dp"
@@ -110,12 +164,32 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/realQuantityEt"
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/realQuantityEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="number"
+                    />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="30dp">
 
             <TextView
                 android:id="@+id/textView5"
@@ -128,13 +202,18 @@
                 android:layout_marginEnd="30dp"
                 />
 
-            <EditText
-                android:id="@+id/warehouseCodeEt"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/baseline_done_24"
-                android:focusable="false"
-                android:focusableInTouchMode="false" />
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/warehouseCodeEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="text"
+                    />
 
             <TextView
                 android:id="@+id/warehouseBarcodeStatusText"
@@ -145,17 +224,21 @@
                 android:textColor="#FF0000"
                 android:textStyle="bold"/>
 
-</LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/confirmBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:text="Confirm"
         android:textSize="30sp"
         android:textStyle="bold"
         app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear1"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

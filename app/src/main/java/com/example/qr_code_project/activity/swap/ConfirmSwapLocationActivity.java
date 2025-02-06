@@ -186,6 +186,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
 
     private void fetchProductLocation(String code, boolean isOldLocation) {
         String url = ApiConstants.getFindCodeLocationProductUrl(code);
+        Log.d("url_getFindCodeLocationProductUrl",url);
         loadingDialog.show();
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
