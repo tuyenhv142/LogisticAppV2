@@ -351,10 +351,15 @@ public class InboundActivity extends AppCompatActivity {
 
     //Show error process Api
     private void handleError(Exception error) {
-        Log.e(TAG, "API Error", error);
+        String errorMsg = "An error occurred. Please try again.";
+        if (error instanceof com.android.volley.TimeoutError) {
+            errorMsg = "Request timed out. Please check your connection.";
+        } else if (error instanceof com.android.volley.NoConnectionError) {
+            errorMsg = "No internet connection!";
+        }
+        Log.e("API Error", error.getMessage(), error);
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         loadingDialog.dismiss();
-        Toast.makeText(this, "An error occurred. Please try again."
-                , Toast.LENGTH_SHORT).show();
         if (qrcodeManager != null) {
             qrcodeManager.setListener(this::loadInbound);
         }

@@ -133,6 +133,8 @@ public class PackageActivity extends AppCompatActivity {
         if (productAdapter != null) {
             productAdapter.notifyDataSetChanged();
         }
+        qrcodeManager = new QRcodeManager(this);
+        qrcodeManager.setListener(this::loadPackage);
 
         // Hide submit button
         submitPackageBtn.setVisibility(View.GONE);
@@ -235,9 +237,15 @@ public class PackageActivity extends AppCompatActivity {
                 JSONObject content = jsonObject.optJSONObject("content");
                 if (content != null) {
                     populateContent(content);
+                    if (!productArrayList.isEmpty()) {
+                        qrcodeManager.unregister();
+                    }
                 }
             } else {
                 showError(jsonObject.optString("error", "Unknown error"));
+                if (qrcodeManager != null) {
+                    qrcodeManager.setListener(this::loadPackage);
+                }
             }
         } catch (JSONException e) {
             Log.e("package", "Failed to parse JSON response", e);
@@ -281,7 +289,7 @@ public class PackageActivity extends AppCompatActivity {
                     (product, updatedMap) -> {
                         Intent intent = new Intent(PackageActivity.this, ConfirmPackageActivity.class);
                         intent.putExtra("product", product);
-                        intent.putExtra("realQuantitiesMap", new HashMap<>((Map) updatedMap));
+                        intent.putExtra("productMap", new HashMap<>((Map) updatedMap));
                         confirmProductLauncher.launch(intent);
                     });
 
@@ -295,6 +303,9 @@ public class PackageActivity extends AppCompatActivity {
         Log.e("Package", "API Error", error);
         loadingDialog.dismiss();
         showError( "An error occurred. Please try again.");
+        if (qrcodeManager != null) {
+            qrcodeManager.setListener(this::loadPackage);
+        }
     }
 
     private void showError(String message) {
