@@ -59,6 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Please login with your information"
+                android:textSize="16sp"
                 android:alpha="0.7"/>
             <View
                 android:layout_width="wrap_content"
@@ -67,6 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Username"
+                android:textSize="20sp"
                 android:alpha="0.7"
                 android:textStyle="bold"/>
             <EditText
@@ -82,6 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Password"
+                android:textSize="20sp"
                 android:alpha="0.7"
                 android:textStyle="bold"/>
             <EditText
@@ -94,17 +97,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="70px"
                 >
-<!--                <CheckBox-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Remember me"-->
-<!--                    android:layout_centerVertical="true"-->
-<!--                    android:alpha="0.7"/>-->
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remember me"
+                    android:layout_centerVertical="true"
+                    android:alpha="0.7"/>
                 <TextView
                     android:id="@+id/forgetPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="I forgot my password"
+                    android:textColor="@color/teal_200"
+                    android:textSize="16sp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"/>
             </RelativeLayout>
@@ -116,6 +121,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:text="Login"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
                     app:cornerRadius="32dp"
                     android:layout_marginBottom="100px"/>
             <View
