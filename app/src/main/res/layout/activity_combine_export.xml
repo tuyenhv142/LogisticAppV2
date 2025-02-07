@@ -52,7 +52,6 @@
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
-            />
 
             <EditText
                 android:id="@+id/totalExportCombineEt"
@@ -96,7 +95,6 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="number" />
-
 
         </LinearLayout>
 
@@ -153,7 +151,7 @@
             android:layout_height="wrap_content"
             android:text="Export receipt list"
             android:textSize="40sp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:textAlignment="center"/>
         <androidx.recyclerview.widget.RecyclerView

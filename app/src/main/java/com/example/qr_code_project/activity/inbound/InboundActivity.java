@@ -30,6 +30,7 @@ import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.ApiService;
 import com.example.qr_code_project.network.SSLHelper;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 import com.google.android.material.textview.MaterialTextView;
 import com.squareup.picasso.Picasso;
@@ -64,6 +65,7 @@ public class InboundActivity extends AppCompatActivity {
     private ApiService apiService;
     private LoadingDialog loadingDialog;
     private boolean isSubmit = false;
+    private final TokenManager tokenManager = new TokenManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,7 @@ public class InboundActivity extends AppCompatActivity {
 
         // Initialize UI components
         initUI();
+
         SSLHelper.trustAllCertificates();
 
         //Set event when click submit button
@@ -266,7 +269,9 @@ public class InboundActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (tokenManager.isTokenExpired()) {
+                    tokenManager.clearTokenAndLogout();
+                }else {
                     headers.put("Authorization", "Bearer " + token);
                 }
                 headers.put("Content-Type", "application/json");
