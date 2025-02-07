@@ -30,6 +30,7 @@ import com.example.qr_code_project.adapter.ProductAdapter;
 import com.example.qr_code_project.modal.ProductModal;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.ApiService;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONArray;
@@ -60,6 +61,7 @@ public class PackageActivity extends AppCompatActivity {
     private final Map<Integer, Object> productMap = new HashMap<>();
     private ApiService apiService;
     private LoadingDialog loadingDialog;
+    private final TokenManager tokenManager = new TokenManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +75,14 @@ public class PackageActivity extends AppCompatActivity {
 
         initUI();
 
-        // Hiển thị nút quay lại
 //        if (getSupportActionBar() != null) {
 //            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //            getSupportActionBar().setHomeButtonEnabled(true);
 //        }
+        utilBtn();
+    }
 
-        //Set event when click submit button
+    private void utilBtn() {
         submitPackageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,8 +144,6 @@ public class PackageActivity extends AppCompatActivity {
 
         // Hide submit button
         submitPackageBtn.setVisibility(View.GONE);
-
-        showError("Please press scan!");
     }
 
     @Override
@@ -166,7 +167,8 @@ public class PackageActivity extends AppCompatActivity {
     //Get data from ConfirmPackageActivity
     @SuppressLint("NotifyDataSetChanged")
     private final ActivityResultLauncher<Intent> confirmProductLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult()
+                    , result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     updateRealQuantities(result.getData());
                 }
@@ -221,8 +223,10 @@ public class PackageActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
+                }else {
+                    tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
                 return headers;
@@ -245,14 +249,15 @@ public class PackageActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                Toast.makeText(this,jsonObject.optString("error"
+                        , "Unknown error"),Toast.LENGTH_SHORT).show();
                 if (qrcodeManager != null) {
                     qrcodeManager.setListener(this::loadPackage);
                 }
             }
         } catch (JSONException e) {
             Log.e("package", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -303,16 +308,18 @@ public class PackageActivity extends AppCompatActivity {
     }
 
     private void handleError(Exception error) {
-        Log.e("Package", "API Error", error);
+        String errorMsg = "An error occurred. Please try again.";
+        if (error instanceof com.android.volley.TimeoutError) {
+            errorMsg = "Request timed out. Please check your connection.";
+        } else if (error instanceof com.android.volley.NoConnectionError) {
+            errorMsg = "No internet connection!";
+        }
+        Log.e("API Error", error.getMessage(), error);
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         loadingDialog.dismiss();
-        showError( "An error occurred. Please try again.");
         if (qrcodeManager != null) {
             qrcodeManager.setListener(this::loadPackage);
         }
-    }
-
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void initUI() {
