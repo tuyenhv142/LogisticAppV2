@@ -61,7 +61,7 @@ public class PackageActivity extends AppCompatActivity {
     private final Map<Integer, Object> productMap = new HashMap<>();
     private ApiService apiService;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,7 +336,7 @@ public class PackageActivity extends AppCompatActivity {
         qrcodeManager = new QRcodeManager(this);
         requestQueue = Volley.newRequestQueue(this);
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
-
+        tokenManager = new TokenManager(this);
         productPackagesRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
         apiService = new ApiService(this);

@@ -54,7 +54,7 @@ public class CombineExportActivity extends AppCompatActivity {
     //check all request update confirm
     private int pendingRequests = 0;
     private int successfulRequests = 0;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -375,5 +375,6 @@ public class CombineExportActivity extends AppCompatActivity {
         loadingDialog = new LoadingDialog(this);
         productList = new ArrayList<>();
         deliveryList = new ArrayList<>();
+        tokenManager = new TokenManager(this);
     }
 }

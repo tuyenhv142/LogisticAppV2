@@ -59,7 +59,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
     private QRcodeManager qrCodeManager;
     private boolean isConfirmed = false;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +187,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         loadingDialog = new LoadingDialog(this);
-
+        tokenManager = new TokenManager(this);
         continueConfirmProductBtn.setEnabled(false);
     }
 

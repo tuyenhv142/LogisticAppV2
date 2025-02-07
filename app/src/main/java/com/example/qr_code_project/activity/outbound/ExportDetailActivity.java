@@ -40,7 +40,7 @@ public class ExportDetailActivity extends AppCompatActivity {
     private ArrayList<ProductModal> productList;
     private SharedPreferences sharedPreferences;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,5 +165,6 @@ public class ExportDetailActivity extends AppCompatActivity {
         productExportRv.setLayoutManager(new LinearLayoutManager(this));
         loadingDialog = new LoadingDialog(this);
         productList = new ArrayList<>();
+        tokenManager = new TokenManager(this);
     }
 }

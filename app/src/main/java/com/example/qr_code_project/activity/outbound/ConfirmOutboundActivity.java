@@ -49,7 +49,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     private int areaId;
     private int location;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     private boolean isConfirmed = false;
 
@@ -96,7 +96,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         realQuantityOutboundEt = findViewById(R.id.realQuantityOutboundEt);
         warehouseCodeOutboundEt = findViewById(R.id.warehouseCodeOutboundEt);
         confirmOutboundBtn = findViewById(R.id.confirmOutboundBtn);
-
+        confirmOutboundBtn.setVisibility(View.GONE);
 //        productBarcodeStatusOutboundIcon = findViewById(R.id.productBarcodeStatusOutboundIcon);
 //        warehouseBarcodeStatusOutboundIcon = findViewById(R.id.warehouseBarcodeStatusOutboundIcon);
         productBarcodeStatusOutboundText = findViewById(R.id.productBarcodeStatusOutboundText);
@@ -105,8 +105,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         requestQueue = Volley.newRequestQueue(this);
         loadingDialog = new LoadingDialog(this);
-
-        confirmOutboundBtn.setVisibility(View.GONE);
+        tokenManager = new TokenManager(this);
     }
 
     private void setupQRManager() {

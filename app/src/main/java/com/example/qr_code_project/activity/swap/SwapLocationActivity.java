@@ -56,7 +56,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
     private ArrayList<SwapModal> swapArrayList;
     private SwapLocationAdapter swapLocationAdapter;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +77,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         swapLocationsRv.setLayoutManager(new LinearLayoutManager(this));
         swapArrayList = new ArrayList<>();
+        tokenManager = new TokenManager(this);
     }
 
     private void loadSwapPlan(){

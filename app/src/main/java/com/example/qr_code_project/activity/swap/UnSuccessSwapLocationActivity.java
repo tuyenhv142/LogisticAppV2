@@ -43,7 +43,7 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
     private ArrayList<SwapModal> swapArrayList;
     private SwapLocationAdapter swapLocationAdapter;
     private RecyclerView unSuccessSwapLocationsRv;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +56,7 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
     }
 
     private void util(){
+        tokenManager = new TokenManager(this);
         loadingDialog = new LoadingDialog(this);
         sharedPreferences = getSharedPreferences("AccountToken",MODE_PRIVATE);
         unSuccessSwapLocationsRv = findViewById(R.id.unSuccessSwapLocationsRv);

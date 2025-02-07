@@ -31,7 +31,6 @@ public class ConfirmPackageActivity extends AppCompatActivity {
 
     private QRcodeManager qrCodeManager;
     private String scannedProductBarcode = "";
-
     private ProductModal productModal;
     private Map<Integer, Object> productMap;
 

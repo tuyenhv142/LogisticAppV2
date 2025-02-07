@@ -57,7 +57,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private String scannedLocation2= "";
     private ApiService apiService;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     private int statusId;
     private int swapId;
@@ -190,7 +190,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         confirmSwapBtn.setEnabled(false);
         apiService = new ApiService(this);
         loadingDialog = new LoadingDialog(this);
-
+        tokenManager = new TokenManager(this);
     }
 
     private void fetchProductLocation(String code, boolean isOldLocation) {

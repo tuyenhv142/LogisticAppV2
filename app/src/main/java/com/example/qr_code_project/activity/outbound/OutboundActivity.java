@@ -47,7 +47,7 @@ public class OutboundActivity extends AppCompatActivity {
     private ArrayList<ExportModal> exportList;
     private ExportAdapter exportAdapter;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,7 +217,7 @@ public class OutboundActivity extends AppCompatActivity {
         exportsRv.setLayoutManager(new LinearLayoutManager(this));
         loadingDialog = new LoadingDialog(this);
         qrcodeManager = new QRcodeManager(this);
-
+        tokenManager = new TokenManager(this);
     }
 
 }

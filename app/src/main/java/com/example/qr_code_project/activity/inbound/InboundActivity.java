@@ -65,7 +65,7 @@ public class InboundActivity extends AppCompatActivity {
     private ApiService apiService;
     private LoadingDialog loadingDialog;
     private boolean isSubmit = false;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,11 +236,10 @@ public class InboundActivity extends AppCompatActivity {
         loadingDialog = new LoadingDialog(this);
         requestQueue = Volley.newRequestQueue(this);
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
-
         productsRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
         apiService = new ApiService(this);
-
+        tokenManager = new TokenManager(this);
         if(productMap.isEmpty()){
             totalRealQuantityEt.setText("0");
         }
