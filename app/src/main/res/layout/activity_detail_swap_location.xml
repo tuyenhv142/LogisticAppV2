@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="10dp"
-        android:background="@drawable/background_green1"
         android:text="Take product from location"
         android:textSize="22sp"
         android:textStyle="bold" />
