@@ -89,7 +89,7 @@
                             android:id="@+id/textView3"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
-                            android:text="Please scan the code"
+                            android:text="@string/please_scan_the_code"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -110,7 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:text="Title"
+                        android:text="@string/title"
                         android:textSize="22sp" />
 
                     <EditText
@@ -167,7 +167,7 @@
                         android:id="@+id/textView8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total number of products: "
+                        android:text="@string/total_number_of_products"
                         android:textSize="22sp"
                         android:textStyle="bold"/>
 
@@ -193,7 +193,7 @@
                         android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Real product quantity: "
+                        android:text="@string/real_product_quantity"
                         android:textSize="22sp"
                         android:textStyle="bold"/>
 
@@ -252,7 +252,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Product list"
+                android:text="@string/product_list"
                 android:textSize="20sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
