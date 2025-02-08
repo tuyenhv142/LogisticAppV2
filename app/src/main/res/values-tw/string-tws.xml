@@ -54,10 +54,9 @@
     <string name="quantity_swap">交換數量</string>
     <string name="location_swap">位置交換</string>
     <string name="swap_to">請掃描交換位置</string>
-    <string name="in_bound">入庫</string>
     <string name="username">用戶名</string>
-    <string name="outbound">出庫</string>
-    <string name="inbound">入庫</string>
+    <string name="outbound">揀貨</string>
+    <string name="inbound">進貨上架</string>
     <string name="pack">包裝</string>
     <string name="swap">交換產品\n位置</string>
 
