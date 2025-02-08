@@ -1,4 +1,4 @@
-package com.example.qr_code_project.network;
+package com.example.qr_code_project.data.helper;
 
 import android.annotation.SuppressLint;
 

@@ -9,9 +9,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,11 +17,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.qr_code_project.R;
-import com.example.qr_code_project.adapter.SwapLocationAdapter;
-import com.example.qr_code_project.modal.SwapModal;
-import com.example.qr_code_project.network.ApiConstants;
-import com.example.qr_code_project.service.TokenManager;
-import com.example.qr_code_project.ui.LoadingDialog;
+import com.example.qr_code_project.data.adapter.SwapLocationAdapter;
+import com.example.qr_code_project.data.modal.SwapModal;
+import com.example.qr_code_project.data.network.ApiConstants;
+import com.example.qr_code_project.data.manager.TokenManager;
+import com.example.qr_code_project.data.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;

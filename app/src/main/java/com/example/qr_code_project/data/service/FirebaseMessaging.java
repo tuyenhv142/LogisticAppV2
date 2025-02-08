@@ -1,4 +1,4 @@
-package com.example.qr_code_project.service;
+package com.example.qr_code_project.data.service;
 
 import android.util.Log;
 

@@ -1,4 +1,4 @@
-package com.example.qr_code_project.adapter;
+package com.example.qr_code_project.data.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qr_code_project.R;
-import com.example.qr_code_project.modal.ExportModal;
+import com.example.qr_code_project.data.modal.ExportModal;
 
 import java.util.ArrayList;
 

@@ -6,14 +6,11 @@ import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.qr_code_project.R;
-import com.example.qr_code_project.ui.LoadingDialog;
+import com.example.qr_code_project.data.ui.LoadingDialog;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.qr_code_project.modal;
+package com.example.qr_code_project.data.modal;
 
 public class SwapModal {
     private int id;

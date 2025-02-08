@@ -1,4 +1,4 @@
-package com.example.qr_code_project.modal;
+package com.example.qr_code_project.data.modal;
 
 import java.io.Serializable;
 import java.util.ArrayList;

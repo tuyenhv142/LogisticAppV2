@@ -1,4 +1,4 @@
-package com.example.qr_code_project.modal;
+package com.example.qr_code_project.data.modal;
 
 import android.os.Parcel;
 import android.os.Parcelable;

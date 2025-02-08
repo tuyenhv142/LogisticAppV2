@@ -1,6 +1,5 @@
 package com.example.qr_code_project.activity.swap;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,23 +14,16 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.qr_code_project.QRcodeManager;
+import com.example.qr_code_project.data.manager.QRcodeManager;
 import com.example.qr_code_project.R;
-import com.example.qr_code_project.activity.inbound.ConfirmInboundActivity;
-import com.example.qr_code_project.activity.inbound.InboundActivity;
-import com.example.qr_code_project.adapter.ProductAdapter;
-import com.example.qr_code_project.modal.ProductModal;
-import com.example.qr_code_project.network.ApiConstants;
-import com.example.qr_code_project.service.TokenManager;
-import com.example.qr_code_project.ui.LoadingDialog;
+import com.example.qr_code_project.data.network.ApiConstants;
+import com.example.qr_code_project.data.manager.TokenManager;
+import com.example.qr_code_project.data.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +31,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class DetailSwapLocationActivity extends AppCompatActivity {
 

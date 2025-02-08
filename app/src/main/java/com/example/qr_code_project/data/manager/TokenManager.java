@@ -1,4 +1,4 @@
-package com.example.qr_code_project.service;
+package com.example.qr_code_project.data.manager;
 
 import android.content.Context;
 import android.content.Intent;

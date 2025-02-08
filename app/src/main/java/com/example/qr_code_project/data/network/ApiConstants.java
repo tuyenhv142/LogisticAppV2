@@ -1,4 +1,4 @@
-package com.example.qr_code_project.network;
+package com.example.qr_code_project.data.network;
 
 public class ApiConstants {
     public static final String BASE_URL = "https://172.20.10.2:7142/api/";
