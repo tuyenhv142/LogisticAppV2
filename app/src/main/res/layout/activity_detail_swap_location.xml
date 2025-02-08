@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="10dp"
-        android:text="Take product from location"
+        android:text="@string/warehouse_info"
         android:textSize="28sp"
         android:textStyle="bold" />
 
@@ -160,7 +160,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/enter_name"
+                    android:hint="@string/name"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
             </LinearLayout>
@@ -184,7 +184,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/enter_quantity"
+                    android:hint="@string/quantity"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
             </LinearLayout>
@@ -376,7 +376,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:hint="@string/enter_name"
+                    android:hint="@string/name"
                     android:focusable="false"
                     android:focusableInTouchMode="false" />
             </LinearLayout>
@@ -401,7 +401,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:hint="@string/enter_quantity"
+                    android:hint="@string/quantity"
                     android:focusable="false"
                     android:focusableInTouchMode="false" />
             </LinearLayout>
@@ -453,6 +453,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/background_btn"
-        android:text="Continue"
+        android:text="@string/continue1"
         android:layout_gravity="center"/>
 </LinearLayout>

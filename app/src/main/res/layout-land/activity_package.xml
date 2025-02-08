@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:text="Code"
+                        android:text="@string/code"
                         android:textSize="22sp" />
                     <LinearLayout
                         android:layout_width="0dp"

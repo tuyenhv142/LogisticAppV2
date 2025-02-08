@@ -8,6 +8,7 @@
     <string name="list_product">產品列表</string>
     <string name="reset">重置</string>
     <string name="submit">提交</string>
+    <string name="code">料號</string>
 
     <!--    Swap-->
     <string name="plan_list">計劃列表</string>
@@ -27,6 +28,7 @@
     <string name="edit_area">區域</string>
     <string name="edit_area2">區域 2</string>
     <string name="product_name">產品名稱：</string>
+    <string name="name">品名</string>
     <string name="product_id">產品代碼：</string>
     <string name="quantity">數量：</string>
     <string name="swap_to_location">交換到位置</string>
@@ -60,5 +62,9 @@
     <string name="inbound">入庫</string>
     <string name="pack">包裝</string>
     <string name="swap">交換產品\n位置</string>
+    <string name="product_location1">儲位號碼: 1</string>
+    <string name="product_location2">儲位號碼: 2</string>
+    <string name="code_new">新儲位號碼</string>
+    <string name="continue1">繼續</string>
 
 </resources>
