@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +17,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.qr_code_project.QRcodeManager;
+import com.example.qr_code_project.data.manager.QRcodeManager;
 import com.example.qr_code_project.R;
-import com.example.qr_code_project.modal.ProductModal;
-import com.example.qr_code_project.network.ApiConstants;
-import com.example.qr_code_project.service.TokenManager;
-import com.example.qr_code_project.ui.LoadingDialog;
+import com.example.qr_code_project.data.modal.ProductModal;
+import com.example.qr_code_project.data.network.ApiConstants;
+import com.example.qr_code_project.data.manager.TokenManager;
+import com.example.qr_code_project.data.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +48,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     private int areaId;
     private int location;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     private boolean isConfirmed = false;
 
@@ -96,7 +95,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         realQuantityOutboundEt = findViewById(R.id.realQuantityOutboundEt);
         warehouseCodeOutboundEt = findViewById(R.id.warehouseCodeOutboundEt);
         confirmOutboundBtn = findViewById(R.id.confirmOutboundBtn);
-
+        confirmOutboundBtn.setVisibility(View.GONE);
 //        productBarcodeStatusOutboundIcon = findViewById(R.id.productBarcodeStatusOutboundIcon);
 //        warehouseBarcodeStatusOutboundIcon = findViewById(R.id.warehouseBarcodeStatusOutboundIcon);
         productBarcodeStatusOutboundText = findViewById(R.id.productBarcodeStatusOutboundText);
@@ -105,8 +104,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         requestQueue = Volley.newRequestQueue(this);
         loadingDialog = new LoadingDialog(this);
-
-        confirmOutboundBtn.setVisibility(View.GONE);
+        tokenManager = new TokenManager(this);
     }
 
     private void setupQRManager() {

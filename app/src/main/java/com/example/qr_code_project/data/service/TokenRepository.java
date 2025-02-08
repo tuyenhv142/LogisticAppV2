@@ -1,4 +1,4 @@
-package com.example.qr_code_project.service;
+package com.example.qr_code_project.data.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,7 +9,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.qr_code_project.network.ApiConstants;
+import com.example.qr_code_project.data.manager.TokenManager;
+import com.example.qr_code_project.data.network.ApiConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;

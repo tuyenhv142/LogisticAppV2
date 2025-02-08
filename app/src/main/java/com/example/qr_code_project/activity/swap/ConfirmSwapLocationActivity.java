@@ -14,23 +14,19 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.qr_code_project.QRcodeManager;
+import com.example.qr_code_project.data.manager.QRcodeManager;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.MainActivity;
-import com.example.qr_code_project.activity.packaged.PackageActivity;
-import com.example.qr_code_project.network.ApiConstants;
-import com.example.qr_code_project.network.ApiService;
-import com.example.qr_code_project.service.TokenManager;
-import com.example.qr_code_project.ui.LoadingDialog;
+import com.example.qr_code_project.data.network.ApiConstants;
+import com.example.qr_code_project.data.network.ApiService;
+import com.example.qr_code_project.data.manager.TokenManager;
+import com.example.qr_code_project.data.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,7 +53,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private String scannedLocation2= "";
     private ApiService apiService;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     private int statusId;
     private int swapId;
@@ -190,7 +186,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         confirmSwapBtn.setEnabled(false);
         apiService = new ApiService(this);
         loadingDialog = new LoadingDialog(this);
-
+        tokenManager = new TokenManager(this);
     }
 
     private void fetchProductLocation(String code, boolean isOldLocation) {

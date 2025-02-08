@@ -1,4 +1,4 @@
-package com.example.qr_code_project.ui;
+package com.example.qr_code_project.data.ui;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

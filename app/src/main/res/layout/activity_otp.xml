@@ -47,14 +47,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter OTP"
+                android:text="@string/enter_otp"
                 android:textColor="@color/my_primary"
                 android:textSize="32sp"
                 android:textStyle="bold"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="A verification code has been sent to your email."
+                android:text="@string/a_verification_code_has_been_sent_to_your_email"
                 android:textSize="16sp"
                 android:alpha="0.7"/>
 
@@ -73,7 +73,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Resend Code"
+                    android:text="@string/resend_code"
                     android:textSize="16sp"
                     android:textColor="@color/teal_200"
                     android:layout_alignParentEnd="true"
@@ -85,7 +85,7 @@
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="Verify OTP"
+                android:text="@string/verify_otp"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:cornerRadius="32dp"

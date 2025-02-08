@@ -6,17 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.qr_code_project.QRcodeManager;
+import com.example.qr_code_project.data.manager.QRcodeManager;
 import com.example.qr_code_project.R;
-import com.example.qr_code_project.modal.ProductModal;
-import com.example.qr_code_project.ui.LoadingDialog;
+import com.example.qr_code_project.data.modal.ProductModal;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +29,6 @@ public class ConfirmPackageActivity extends AppCompatActivity {
 
     private QRcodeManager qrCodeManager;
     private String scannedProductBarcode = "";
-
     private ProductModal productModal;
     private Map<Integer, Object> productMap;
 

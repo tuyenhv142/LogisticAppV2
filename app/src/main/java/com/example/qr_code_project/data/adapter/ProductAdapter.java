@@ -1,4 +1,4 @@
-package com.example.qr_code_project.adapter;
+package com.example.qr_code_project.data.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,14 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.qr_code_project.R;
-import com.example.qr_code_project.modal.ProductModal;
+import com.example.qr_code_project.data.modal.ProductModal;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPost> {
 

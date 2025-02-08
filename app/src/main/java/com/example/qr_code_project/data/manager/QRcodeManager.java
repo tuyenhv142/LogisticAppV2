@@ -1,4 +1,4 @@
-package com.example.qr_code_project;
+package com.example.qr_code_project.data.manager;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;

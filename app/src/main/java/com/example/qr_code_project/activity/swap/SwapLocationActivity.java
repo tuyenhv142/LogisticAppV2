@@ -10,34 +10,19 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.qr_code_project.R;
-import com.example.qr_code_project.activity.MainActivity;
-import com.example.qr_code_project.activity.inbound.ConfirmInboundActivity;
-import com.example.qr_code_project.activity.inbound.InboundActivity;
-import com.example.qr_code_project.activity.login.LoginActivity;
-import com.example.qr_code_project.activity.outbound.ExportDetailActivity;
-import com.example.qr_code_project.activity.outbound.OutboundActivity;
-import com.example.qr_code_project.adapter.ExportAdapter;
-import com.example.qr_code_project.adapter.ProductAdapter;
-import com.example.qr_code_project.adapter.SwapLocationAdapter;
-import com.example.qr_code_project.modal.ExportModal;
-import com.example.qr_code_project.modal.ProductModal;
-import com.example.qr_code_project.modal.SwapModal;
-import com.example.qr_code_project.network.ApiConstants;
-import com.example.qr_code_project.service.TokenManager;
-import com.example.qr_code_project.ui.LoadingDialog;
+import com.example.qr_code_project.data.adapter.SwapLocationAdapter;
+import com.example.qr_code_project.data.modal.SwapModal;
+import com.example.qr_code_project.data.network.ApiConstants;
+import com.example.qr_code_project.data.manager.TokenManager;
+import com.example.qr_code_project.data.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +41,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
     private ArrayList<SwapModal> swapArrayList;
     private SwapLocationAdapter swapLocationAdapter;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +62,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         swapLocationsRv.setLayoutManager(new LinearLayoutManager(this));
         swapArrayList = new ArrayList<>();
+        tokenManager = new TokenManager(this);
     }
 
     private void loadSwapPlan(){

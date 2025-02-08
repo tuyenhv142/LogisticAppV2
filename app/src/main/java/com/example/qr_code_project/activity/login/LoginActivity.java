@@ -21,9 +21,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.MainActivity;
-import com.example.qr_code_project.network.ApiConstants;
-import com.example.qr_code_project.network.SSLHelper;
-import com.example.qr_code_project.ui.LoadingDialog;
+import com.example.qr_code_project.data.network.ApiConstants;
+import com.example.qr_code_project.data.helper.SSLHelper;
+import com.example.qr_code_project.data.ui.LoadingDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;

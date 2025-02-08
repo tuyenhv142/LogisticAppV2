@@ -16,7 +16,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="200dp"
         android:layout_marginBottom="40dp"
-        android:text="InBound"
+        android:text="@string/inbound"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="48sp"
@@ -49,7 +49,7 @@
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:text="Receipt Barcode"
+                android:text="@string/receipt_barcode"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -62,15 +62,14 @@
                 <EditText
                     android:id="@+id/codeEt"
                     android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/baseline_done_24" />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="Please scan the code"
-                    android:textColor="@color/black"
+                    android:text="@string/please_scan_the_code"
+                    android:textColor="#FF0000"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -87,7 +86,7 @@
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:text="Receipt Name"
+                android:text="@string/receipt_name"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -109,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:text="Number of products :"
+                android:text="@string/number_of_products"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -137,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:text="Total number of Products : "
+                android:text="@string/total_number_of_products"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -164,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:text="Real Product Quantity :"
+                android:text="@string/real_product_quantity"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -190,7 +189,7 @@
         android:layout_height="400dp"
         android:orientation="vertical"
         android:layout_gravity="center"
-        android:background="@color/teal_200"
+        android:background="@drawable/background_green1"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="30dp"
@@ -202,9 +201,9 @@
             android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Product List"
+            android:text="@string/product_list"
             android:textSize="20sp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textAlignment="center"/>
         <androidx.recyclerview.widget.RecyclerView
@@ -224,7 +223,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:text="Confirm"
+        android:text="@string/confirm"
         android:textSize="24sp"
         android:textStyle="bold"
         app:cornerRadius="15dp"
@@ -240,7 +239,7 @@
         android:layout_marginBottom="40dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:text="Reset"
+        android:text="@string/reset"
         android:textSize="24sp"
         android:textStyle="bold"
         app:cornerRadius="15dp"

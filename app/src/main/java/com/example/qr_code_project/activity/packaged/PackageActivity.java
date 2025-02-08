@@ -15,7 +15,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,15 +22,15 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.qr_code_project.QRcodeManager;
+import com.example.qr_code_project.data.manager.QRcodeManager;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.MainActivity;
-import com.example.qr_code_project.adapter.ProductAdapter;
-import com.example.qr_code_project.modal.ProductModal;
-import com.example.qr_code_project.network.ApiConstants;
-import com.example.qr_code_project.network.ApiService;
-import com.example.qr_code_project.service.TokenManager;
-import com.example.qr_code_project.ui.LoadingDialog;
+import com.example.qr_code_project.data.adapter.ProductAdapter;
+import com.example.qr_code_project.data.modal.ProductModal;
+import com.example.qr_code_project.data.network.ApiConstants;
+import com.example.qr_code_project.data.network.ApiService;
+import com.example.qr_code_project.data.manager.TokenManager;
+import com.example.qr_code_project.data.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +60,7 @@ public class PackageActivity extends AppCompatActivity {
     private final Map<Integer, Object> productMap = new HashMap<>();
     private ApiService apiService;
     private LoadingDialog loadingDialog;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,7 +335,7 @@ public class PackageActivity extends AppCompatActivity {
         qrcodeManager = new QRcodeManager(this);
         requestQueue = Volley.newRequestQueue(this);
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
-
+        tokenManager = new TokenManager(this);
         productPackagesRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
         apiService = new ApiService(this);

@@ -22,18 +22,16 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.qr_code_project.QRcodeManager;
+import com.example.qr_code_project.data.manager.QRcodeManager;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.MainActivity;
-import com.example.qr_code_project.adapter.ProductAdapter;
-import com.example.qr_code_project.modal.ProductModal;
-import com.example.qr_code_project.network.ApiConstants;
-import com.example.qr_code_project.network.ApiService;
-import com.example.qr_code_project.network.SSLHelper;
-import com.example.qr_code_project.service.TokenManager;
-import com.example.qr_code_project.ui.LoadingDialog;
-import com.google.android.material.textview.MaterialTextView;
-import com.squareup.picasso.Picasso;
+import com.example.qr_code_project.data.adapter.ProductAdapter;
+import com.example.qr_code_project.data.modal.ProductModal;
+import com.example.qr_code_project.data.network.ApiConstants;
+import com.example.qr_code_project.data.network.ApiService;
+import com.example.qr_code_project.data.helper.SSLHelper;
+import com.example.qr_code_project.data.manager.TokenManager;
+import com.example.qr_code_project.data.ui.LoadingDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +63,7 @@ public class InboundActivity extends AppCompatActivity {
     private ApiService apiService;
     private LoadingDialog loadingDialog;
     private boolean isSubmit = false;
-    private final TokenManager tokenManager = new TokenManager(this);
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,11 +234,10 @@ public class InboundActivity extends AppCompatActivity {
         loadingDialog = new LoadingDialog(this);
         requestQueue = Volley.newRequestQueue(this);
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
-
         productsRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
         apiService = new ApiService(this);
-
+        tokenManager = new TokenManager(this);
         if(productMap.isEmpty()){
             totalRealQuantityEt.setText("0");
         }
