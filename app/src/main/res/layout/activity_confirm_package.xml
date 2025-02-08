@@ -5,7 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
     tools:context=".activity.packaged.ConfirmPackageActivity">
 
     <LinearLayout
@@ -20,12 +19,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Product Information"
-            android:background="@drawable/background_green1"
             android:layout_margin="10dp"
             android:padding="10dp"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:layout_marginBottom="24dp" />
 
         <!-- Main Layout -->
@@ -66,12 +64,7 @@
                 android:orientation="vertical">
 
                 <!-- Product Barcode -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Product Barcode"
-                    android:textSize="22sp"
-                    android:textColor="#000" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -79,86 +72,114 @@
                     android:gravity="center_vertical"
                     android:layout_marginBottom="8dp">
 
-                    <EditText
-                        android:id="@+id/barcodeProductPackageEt"
+                    <TextView
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Please scan the code"
-                        android:background="@drawable/background_edittext"
-                        android:padding="8dp"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false" />
+                        android:layout_marginStart="25dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="Product Barcode"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:textColor="#000" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:orientation="vertical">
+                        <EditText
+                            android:id="@+id/barcodeProductPackageEt"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:hint="Please scan the code"
+                            android:padding="8dp"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false" />
+                        <TextView
+                            android:id="@+id/productBarcodePackageStatusText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Please scan the barcode"
+                            android:padding="8dp"
+                            android:textSize="16sp"
+                            android:textColor="#FF0000"
+                            android:layout_marginBottom="16dp" />
+                    </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/productBarcodePackageStatusIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="8dp"
-                        android:src="@drawable/baseline_cancel_24"
-                        android:contentDescription="Status Icon"
-                        android:visibility="gone" />
+
                 </LinearLayout>
-                <TextView
-                    android:id="@+id/productBarcodePackageStatusText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Please scan the barcode"
-                    android:textSize="16sp"
-                    android:textColor="#FF0000"
-                    android:layout_marginBottom="16dp" />
-
 
                 <!-- Product Name -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Product Name"
-                    android:textSize="22sp"
-                    android:textColor="#000" />
-                <EditText
-                    android:id="@+id/nameProductPackageEt"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@drawable/background_edittext"
-                    android:padding="8dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:layout_marginBottom="16dp" />
-
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Product Name"
+                        android:layout_marginStart="25dp"
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:textColor="#000" />
+                    <EditText
+                        android:id="@+id/nameProductPackageEt"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="2"
+                        android:padding="8dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:layout_marginBottom="16dp" />
+                </LinearLayout>
                 <!-- Product Quantity -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Product Quantity"
-                    android:textSize="22sp"
-                    android:textColor="#000" />
-                <EditText
-                    android:id="@+id/quantityProductPackageEt"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@drawable/background_edittext"
-                    android:padding="8dp"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:layout_marginBottom="16dp" />
-
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Product Quantity"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:layout_marginStart="25dp"
+                        android:textColor="#000" />
+                    <EditText
+                        android:id="@+id/quantityProductPackageEt"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="2"
+                        android:padding="8dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:layout_marginBottom="16dp" />
+                </LinearLayout>
                 <!-- Real Product Quantity -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Real Product Quantity"
-                    android:textSize="22sp"
-                    android:textColor="#000" />
-                <EditText
-                    android:id="@+id/realQuantityProductPackageEt"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@drawable/background_edittext"
-                    android:padding="8dp"
-                    android:inputType="number"
-                    android:layout_marginBottom="16dp" />
-
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Real Product Quantity"
+                        android:layout_weight="1"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="25dp"
+                        android:textColor="#000" />
+                    <EditText
+                        android:id="@+id/realQuantityProductPackageEt"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="2"
+                        android:padding="8dp"
+                        android:inputType="number"
+                        android:layout_marginBottom="16dp" />
+                </LinearLayout>
                 <!-- Warehouse Code -->
 
             </LinearLayout>
@@ -173,6 +194,6 @@
             android:text="@string/confirm"
             android:textSize="24sp"
             android:background="@drawable/background_btn"
-            android:textColor="#000" />
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </ScrollView>

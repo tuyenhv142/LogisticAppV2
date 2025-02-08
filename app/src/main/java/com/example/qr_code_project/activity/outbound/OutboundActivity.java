@@ -25,6 +25,7 @@ import com.example.qr_code_project.adapter.ExportAdapter;
 import com.example.qr_code_project.modal.ExportModal;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.SSLHelper;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.ui.LoadingDialog;
 
 import org.json.JSONException;
@@ -36,8 +37,8 @@ import java.util.Map;
 
 public class OutboundActivity extends AppCompatActivity {
 
-    private EditText totalExportEt,totalProductEt,totalRealQuantityEt;
-    private Button submitCompineBtn;
+    private EditText totalExportEt,totalProductEt;
+    private Button submitCombineBtn;
     private RecyclerView exportsRv;
 
     private QRcodeManager qrcodeManager;
@@ -45,8 +46,8 @@ public class OutboundActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private ArrayList<ExportModal> exportList;
     private ExportAdapter exportAdapter;
-    private int totalProduct;
     private LoadingDialog loadingDialog;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +59,37 @@ public class OutboundActivity extends AppCompatActivity {
 
         utils();
 
-        qrcodeManager = new QRcodeManager(this);
+        utilBtn();
+    }
 
-        submitCompineBtn.setOnClickListener(v -> {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        qrcodeManager.setListener(this::loadInbound);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        qrcodeManager.setListener(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //Unregister to receive Broadcast
+        qrcodeManager.unregister();
+    }
+
+    private void utilBtn() {
+        submitCombineBtn.setOnClickListener(v -> {
             if (exportList.isEmpty()) {
-                Toast.makeText(OutboundActivity.this, "No products to combine!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OutboundActivity.this, "No products to combine!"
+                        , Toast.LENGTH_SHORT).show();
                 return;
             }
             Intent intent = new Intent(OutboundActivity.this, CombineExportActivity.class);
             intent.putParcelableArrayListExtra("exportList", exportList);
-            intent.putExtra("totalProduct",totalProduct);
             startActivity(intent);
         });
     }
@@ -96,14 +118,16 @@ public class OutboundActivity extends AppCompatActivity {
         String url = ApiConstants.getFindOneCodeDeliveryUrl(scanValue);
         return new StringRequest(
                 Request.Method.GET, url,
-                OutboundActivity.this::parseResponse,
-                OutboundActivity.this::handleError
+                this::responseData,
+                this::handleError
         ) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (tokenManager.isTokenExpired()) {
+                    tokenManager.clearTokenAndLogout();
+                }else {
                     headers.put("Authorization", "Bearer " + token);
                 }
                 headers.put("Content-Type", "application/json");
@@ -114,27 +138,24 @@ public class OutboundActivity extends AppCompatActivity {
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private void parseResponse(String response) {
+    private void responseData(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONObject content = jsonObject.optJSONObject("content");
                 if (content != null) {
-                    populateContent(content);
+                    content(content);
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                Toast.makeText(this,"Failed to load outbound"
+                        ,Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
-    }
-
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void handleError(Exception error) {
@@ -149,9 +170,8 @@ public class OutboundActivity extends AppCompatActivity {
         loadingDialog.dismiss();
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
-    private void populateContent(JSONObject content) throws JSONException {
+    private void content(JSONObject content) throws JSONException {
 
 //        boolean isAction = content.optBoolean("isAction", false);
 //
@@ -169,12 +189,13 @@ public class OutboundActivity extends AppCompatActivity {
         int totalExport = exportList.size();
         totalExportEt.setText(String.valueOf(totalExport));
 
-        totalProduct = exportList.stream().mapToInt(ExportModal::getTotalItem).sum();
+        int totalProduct = exportList.stream().mapToInt(ExportModal::getTotalItem).sum();
         totalProductEt.setText(String.valueOf(totalProduct));
 
         if (exportAdapter == null) {
             exportAdapter = new ExportAdapter(this, exportList, exportModal -> {
-                Intent intent = new Intent(OutboundActivity.this, ExportDetailActivity.class);
+                Intent intent = new Intent(OutboundActivity.this
+                        , ExportDetailActivity.class);
                 intent.putExtra("codeEp", exportModal.getCodeEp());
                 startActivity(intent);
             });
@@ -184,40 +205,19 @@ public class OutboundActivity extends AppCompatActivity {
         }
     }
 
-
     private void utils() {
         totalExportEt = findViewById(R.id.totalExportEt);
         totalProductEt = findViewById(R.id.totalProductEt);
-        totalRealQuantityEt = findViewById(R.id.totalRealQuantityEt);
-        submitCompineBtn = findViewById(R.id.submitCompineBtn);
+//        totalRealQuantityEt = findViewById(R.id.totalRealQuantityEt);
+        submitCombineBtn = findViewById(R.id.submitCompineBtn);
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         requestQueue = Volley.newRequestQueue(this);
         exportsRv = findViewById(R.id.exportsRv);
         exportList = new ArrayList<>();
         exportsRv.setLayoutManager(new LinearLayoutManager(this));
-
         loadingDialog = new LoadingDialog(this);
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        qrcodeManager.setListener(this::loadInbound);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        qrcodeManager.setListener(null);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //Unregister to receive Broadcast
-        qrcodeManager.unregister();
+        qrcodeManager = new QRcodeManager(this);
+        tokenManager = new TokenManager(this);
     }
 
 }

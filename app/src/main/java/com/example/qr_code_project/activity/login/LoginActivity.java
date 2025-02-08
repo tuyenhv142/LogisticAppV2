@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,16 +38,26 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEt;
     private Button loginBtn;
     private LoadingDialog loadingDialog;
+    private TextView forgetPasswordTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
+        //skip check SSL
         SSLHelper.trustAllCertificates();
 
         util();
 
+        utilBtn();
+    }
+
+    private void utilBtn() {
+        forgetPasswordTv.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ForgetPasswordActivity.class);
+            startActivity(intent);
+        });
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameEt = findViewById(R.id.usernameEt);
         passwordEt = findViewById(R.id.passwordEt);
         loginBtn = findViewById(R.id.loginBtn);
+        forgetPasswordTv = findViewById(R.id.forgetPasswordTv);
 
         loadingDialog = new LoadingDialog(this);
     }
@@ -95,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         String url = ApiConstants.ACCOUNT_LOGIN;
         loadingDialog.show();
         StringRequest request = new StringRequest(Request.Method.POST, url,
-                this::parseResponse,
+                this::responseAPI,
                 this::handleError)
         {
             @Override
@@ -105,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                     params.put("username", username);
                     params.put("password", password);
                 } catch (JSONException e) {
-                    e.getMessage();
+                    Log.d("LoginActivity", Objects.requireNonNull(e.getMessage()));
                 }
                 Log.d("Request Body", params.toString());
                 return params.toString().getBytes();
@@ -121,10 +134,9 @@ public class LoginActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(request);
     }
-//    create password
 
     @SuppressLint("NotifyDataSetChanged")
-    private void parseResponse(String response) {
+    private void responseAPI(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
@@ -142,24 +154,26 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             } else {
-                showError("Username or Password is not correct!");
+                Toast.makeText(this,"Username or Password is not correct!"
+                        ,Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("Login_response_error", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
     }
 
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
     private void handleError(Exception error) {
-        Log.e("login_error", "API Error", error);
-        Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
-
+        String errorMsg = "An error occurred. Please try again.";
+        if (error instanceof com.android.volley.TimeoutError) {
+            errorMsg = "Request timed out. Please check your connection.";
+        } else if (error instanceof com.android.volley.NoConnectionError) {
+            errorMsg = "No internet connection!";
+        }
+        Log.e("API Error", error.getMessage(), error);
+        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         loadingDialog.dismiss();
     }
 

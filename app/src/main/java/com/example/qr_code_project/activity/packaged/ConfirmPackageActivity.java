@@ -26,15 +26,13 @@ public class ConfirmPackageActivity extends AppCompatActivity {
     private EditText barcodeProductPackageEt, nameProductPackageEt
             , quantityProductPackageEt, realQuantityProductPackageEt;
     private Button confirmProductPackageBtn;
-    private ImageView productBarcodePackageStatusIcon ;
+//    private ImageView productBarcodePackageStatusIcon ;
     private TextView productBarcodePackageStatusText ;
 
     private QRcodeManager qrCodeManager;
     private String scannedProductBarcode = "";
-
     private ProductModal productModal;
     private Map<Integer, Object> productMap;
-    private boolean isConfirmed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +42,11 @@ public class ConfirmPackageActivity extends AppCompatActivity {
 
         util();
 
-        // Get data from PackageActivity
-//        ProductModal productModal = (ProductModal) getIntent().getSerializableExtra("product");
-//        Map<Integer, Integer> realQuantitiesMap =
-//                (Map<Integer, Integer>) getIntent().getSerializableExtra("realQuantitiesMap");
+        getDataFromIntent();
+
+    }
+
+    private void getDataFromIntent() {
         Object productObj = getIntent().getSerializableExtra("product");
         if (productObj instanceof ProductModal) {
             productModal = (ProductModal) productObj;
@@ -76,8 +75,8 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         // Process when click submit
         Map<Integer, Object> finalProductMap = productMap;
         confirmProductPackageBtn.setOnClickListener(v -> handleConfirmation(productModal, finalProductMap));
-
     }
+
     //Check real quantity
     private void handleConfirmation(ProductModal productModal, Map<Integer, Object> productMap) {
         String orderQuantityStr = quantityProductPackageEt.getText().toString().trim();
@@ -98,9 +97,24 @@ public class ConfirmPackageActivity extends AppCompatActivity {
                 confirmProduct(productModal, productMap, actualQuantity);
             }
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Invalid quantity! Please enter a valid number.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid quantity! Please enter a valid number."
+                    , Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        qrCodeManager.setListener(null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (qrCodeManager != null) {
+            qrCodeManager.unregister();
+        }
     }
 
     //Show warning when quantity and real quantity don't same
@@ -124,7 +138,8 @@ public class ConfirmPackageActivity extends AppCompatActivity {
     }
 
     //Confirm product
-    private void confirmProduct(ProductModal productModal, Map<Integer, Object> productMap, int actualQuantity) {
+    private void confirmProduct(ProductModal productModal, Map<Integer, Object> productMap,
+                                int actualQuantity) {
         confirmProductPackageBtn.setEnabled(false);
 
         Map<String, Object> productInfo = new HashMap<>();
@@ -136,7 +151,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         productMap.put(productModal.getId(), productInfo);
 
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("realQuantitiesMap", new HashMap<>(productMap));
+        resultIntent.putExtra("productMap", new HashMap<>(productMap));
         setResult(RESULT_OK, resultIntent);
         finish();
 
@@ -150,6 +165,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         if (scannedProductBarcode != null && scannedProductBarcode.equals(barcodeProductPackageEt
                 .getText().toString().trim())) {
             updateProductScanStatus(true, "Product barcode is valid.");
+            qrCodeManager.unregister();
             confirmProductPackageBtn.setEnabled(true);
             confirmProductPackageBtn.setText("Confirm Product");
         } else {
@@ -157,9 +173,10 @@ public class ConfirmPackageActivity extends AppCompatActivity {
             scannedProductBarcode = "";
         }
     }
+
     private void updateProductScanStatus(boolean isValid, String message) {
-        productBarcodePackageStatusIcon.setVisibility(View.VISIBLE);
-        productBarcodePackageStatusIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24 : R.drawable.baseline_cancel_24);
+//        productBarcodePackageStatusIcon.setVisibility(View.VISIBLE);
+//        productBarcodePackageStatusIcon.setImageResource(isValid ? R.drawable.baseline_gpp_good_24 : R.drawable.baseline_cancel_24);
         productBarcodePackageStatusText.setVisibility(View.VISIBLE);
         productBarcodePackageStatusText.setText(message);
         productBarcodePackageStatusText.setTextColor(isValid ? Color.GREEN : Color.RED);
@@ -172,7 +189,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         quantityProductPackageEt = findViewById(R.id.quantityProductPackageEt);
         realQuantityProductPackageEt = findViewById(R.id.realQuantityProductPackageEt);
         confirmProductPackageBtn = findViewById(R.id.confirmProductPackageBtn);
-        productBarcodePackageStatusIcon = findViewById(R.id.productBarcodePackageStatusIcon);
+//        productBarcodePackageStatusIcon = findViewById(R.id.productBarcodePackageStatusIcon);
         productBarcodePackageStatusText = findViewById(R.id.productBarcodePackageStatusText);
 
         confirmProductPackageBtn.setEnabled(false);

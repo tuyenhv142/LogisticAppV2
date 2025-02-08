@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -24,14 +25,19 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.auth0.android.jwt.JWT;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.inbound.InboundActivity;
 import com.example.qr_code_project.activity.login.LoginActivity;
 import com.example.qr_code_project.activity.outbound.OutboundActivity;
 import com.example.qr_code_project.activity.packaged.PackageActivity;
 import com.example.qr_code_project.activity.swap.SwapLocationActivity;
+import com.example.qr_code_project.activity.swap.UnSuccessSwapLocationActivity;
+import com.example.qr_code_project.adapter.SwapLocationAdapter;
+import com.example.qr_code_project.modal.SwapModal;
 import com.example.qr_code_project.network.ApiConstants;
 import com.example.qr_code_project.network.SSLHelper;
+import com.example.qr_code_project.service.TokenManager;
 import com.example.qr_code_project.service.TokenRepository;
 import com.example.qr_code_project.ui.LoadingDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,21 +46,25 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private TextView usernameTv;
-    private ImageView imageAccountIv,logoutBtn;
+    private ImageView imageAccountIv,logoutBtn,planUnSuccessBtn;
     private ConstraintLayout inboundBtn, outboundBtn
             ,packageBtn,swapProductLocationBtn;
     private RequestQueue requestQueue;
     private LoadingDialog loadingDialog;
+    private TokenManager tokenManager;
 
     private final ActivityResultLauncher<String> resultLauncher
             = registerForActivityResult(
@@ -79,8 +89,11 @@ public class MainActivity extends AppCompatActivity {
         firebaseMessaging();
 
         loadAccountProfile();
+
+        loadSwapUnSuccessPlan();
     }
 
+    //check grant notification permission
     private void firebaseMessaging() {
         if (FirebaseApp.getApps(this).isEmpty()) {
             FirebaseApp.initializeApp(this);
@@ -101,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //send device token
     private void getDeviceToken() {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -123,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
     private void util(){
         usernameTv = findViewById(R.id.usernameTv);
         imageAccountIv = findViewById(R.id.imageAccountIv);
+        planUnSuccessBtn = findViewById(R.id.planUnSuccessBtn);
         logoutBtn = findViewById(R.id.logoutBtn);
         inboundBtn = findViewById(R.id.inboundBtn);
         outboundBtn = findViewById(R.id.outboundBtn);
@@ -131,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
         loadingDialog = new LoadingDialog(this);
+        tokenManager = new TokenManager(this);
         sharedPreferences = getSharedPreferences("AccountToken"
                 , MODE_PRIVATE);
     }
@@ -146,6 +162,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }
+        });
+
+        planUnSuccessBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this
+                    , UnSuccessSwapLocationActivity.class);
+            startActivity(intent);
         });
 
         outboundBtn.setOnClickListener(new View.OnClickListener() {
@@ -181,14 +203,16 @@ public class MainActivity extends AppCompatActivity {
         String url = ApiConstants.ACCOUNT_PROFILE;
         StringRequest request = new StringRequest(
                 Request.Method.GET,url,
-                this::parseResponse,
+                this::responseData,
                 this::handleError
         ) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
-                if (token != null) {
+                if (tokenManager.isTokenExpired()) {
+                    tokenManager.clearTokenAndLogout();
+                } else {
                     headers.put("Authorization", "Bearer " + token);
                 }
                 headers.put("Content-Type", "application/json");
@@ -199,20 +223,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void parseResponse(String response) {
+    private void responseData(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONObject content = jsonObject.optJSONObject("content");
                 if (content != null) {
-                    populateContent(content);
+                    contentAccount(content);
                 }
             } else {
-                showError(jsonObject.optString("error", "Unknown error"));
+                Toast.makeText(this, jsonObject.optString("error"
+                        , "Unknown error"),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
         }finally {
             if (loadingDialog != null && !isFinishing() && !isDestroyed()) {
                 loadingDialog.dismiss();
@@ -222,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void populateContent(JSONObject content) throws JSONException {
+    private void contentAccount(JSONObject content) throws JSONException {
 
         String username = content.optString("username", "N/A");
         String image = content.optString("image", "");
@@ -251,11 +276,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
     private void handleError(Exception error) {
         String errorMsg = "An error occurred. Please try again.";
         if (error instanceof com.android.volley.TimeoutError) {
@@ -266,6 +286,74 @@ public class MainActivity extends AppCompatActivity {
         Log.e("API Error", error.getMessage(), error);
         loadingDialog.dismiss();
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadSwapUnSuccessPlan(){
+        String url = ApiConstants.SWAP_LOCATION_CLAIM;
+        loadingDialog.show();
+        StringRequest request = new StringRequest(
+                Request.Method.GET,url,
+                this::responseUnSuccess,
+                this::handleError
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", null);
+                if (tokenManager.isTokenExpired()) {
+                    tokenManager.clearTokenAndLogout();
+                }else {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void responseUnSuccess(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            if (jsonObject.getBoolean("success")) {
+                JSONObject content = jsonObject.optJSONObject("content");
+                if (content != null) {
+                    contentUnSuccess(content);
+                }
+            } else {
+                Toast.makeText(this,jsonObject.optString("error"
+                        , "Unknown error"),Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            Log.e("responseValue", "Failed to parse JSON response", e);
+            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+        }finally {
+            loadingDialog.dismiss();
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void contentUnSuccess(JSONObject content) throws JSONException {
+        JSONArray swapLocations = content.optJSONArray("data");
+
+        if (swapLocations != null && swapLocations.length() > 0) {
+            showUnSuccessPlanDialog(swapLocations.length());
+        }
+    }
+
+    //send warning have swap plan not done
+    private void showUnSuccessPlanDialog(int quantity) {
+        new AlertDialog.Builder(this)
+                .setTitle("Notification")
+                .setMessage("You have "+quantity+" unfinished Swap product location. Would you like to see details?")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    Intent intent = new Intent(MainActivity.this, UnSuccessSwapLocationActivity.class);
+                    startActivity(intent);
+                })
+                .setNegativeButton("Later", (dialog, which) -> dialog.dismiss())
+                .setCancelable(false)
+                .show();
     }
 
 }
