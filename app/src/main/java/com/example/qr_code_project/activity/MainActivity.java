@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     private void util(){
         usernameTv = findViewById(R.id.usernameTv);
         imageAccountIv = findViewById(R.id.imageAccountIv);
-        menuButton = findViewById(R.id.menuButton);
+        menuButton = findViewById(R.id.menuButtons);
         inboundBtn = findViewById(R.id.inboundBtn);
         outboundBtn = findViewById(R.id.outboundBtn);
         packageBtn = findViewById(R.id.packageBtn);
@@ -217,11 +217,11 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage("Are you sure logout?")
                 .setPositiveButton("Logout", (dialog, which) -> {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.clear();
+                    editor.remove("token");
                     editor.apply();
 
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 })
@@ -328,11 +328,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         loadingDialog.dismiss();
@@ -396,8 +396,8 @@ public class MainActivity extends AppCompatActivity {
     //send warning have swap plan not done
     private void showUnSuccessPlanDialog(int quantity) {
         new AlertDialog.Builder(this)
-                .setTitle("Notification")
-                .setMessage("You have "+quantity+" unfinished Swap product location. Would you like to see details?")
+                .setTitle(getString(R.string.dialog_title))
+                .setMessage(quantity+" "+getString(R.string.dialog_mes_unsucess))
                 .setPositiveButton("OK", (dialog, which) -> {
                     Intent intent = new Intent(MainActivity.this, UnSuccessSwapLocationActivity.class);
                     startActivity(intent);

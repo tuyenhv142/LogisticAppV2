@@ -8,7 +8,7 @@
     <string name="list_product">Product List</string>
     <string name="reset">Reset</string>
     <string name="submit">Submit</string>
-    <string name="code">Code</string>
+    <string name="pack_code">Code</string>
 
     <!--    Swap-->
     <string name="plan_list">Plan List</string>
@@ -61,15 +61,15 @@
     <string name="inbound">Inbound</string>
     <string name="pack">Package</string>
     <string name="swap">Swap product \n location</string>
-    <string name="receipt_barcode">Receipt Barcode</string>
-    <string name="receipt_name">Receipt Name</string>
+    <string name="receipt_barcode">Barcode</string>
+    <string name="receipt_name">Name</string>
     <string name="please_scan_the_code">Please scan the code</string>
     <string name="number_of_products">Number of products :</string>
-    <string name="total_number_of_products">Total number of Products :</string>
+    <string name="total_number_of_products">Total number of products :</string>
     <string name="real_product_quantity">Real Product Quantity :</string>
     <string name="product_list">Product List</string>
-    <string name="export_receipt_details">Export receipt details</string>
-    <string name="returns">Return</string>
+    <string name="export_receipt_details">Export detail</string>
+    <string name="returns">Back</string>
     <string name="product_information">Product Information</string>
     <string name="product_barcodes">Product Barcode</string>
     <string name="product_names">Product Name</string>
@@ -78,13 +78,13 @@
     <string name="warehouse_barcodes">Warehouse Barcode</string>
     <string name="forgot_password">Forgot password</string>
     <string name="please_enter_your_email_n_to_verify_your_password_reset">Please enter your email \n to verify your password reset</string>
-    <string name="email_address">Email Address</string>
-    <string name="send">Send</string>
+    <string name="email_address">Email</string>
+    <string name="send">Next</string>
     <string name="welcome">Welcome</string>
     <string name="please_login_with_your_information">Please login with your information</string>
     <string name="password">Password</string>
     <string name="remember_me">Remember me</string>
-    <string name="i_forgot_my_password">I forgot my password</string>
+    <string name="i_forgot_my_password">Forget password</string>
     <string name="login">Login</string>
     <string name="what_would_you_like_to_n_work_today">What would you like to \n work today ?</string>
     <string name="reset_password">Reset Password</string>
@@ -95,10 +95,10 @@
     <string name="a_verification_code_has_been_sent_to_your_email">A verification code has been sent to your email.</string>
     <string name="resend_code">Resend Code</string>
     <string name="verify_otp">Verify OTP</string>
-    <string name="total_number_of_export_receipt">Total number of export receipt :</string>
+    <string name="total_number_of_export_receipt">Total number of export :</string>
     <string name="total_actual_quantity_of_the_product">Total actual quantity of the product :</string>
     <string name="combine">Combine</string>
-    <string name="export_receipt_list">Export receipt list</string>
+    <string name="export_receipt_list">Export list</string>
     <string name="total_number_of_export">Total number of export :</string>
     <string name="total_real_product_quantity">Total real product quantity :</string>
     <string name="code">Code</string>
@@ -120,5 +120,33 @@
     <string name="code_new">Product Location Code New</string>
     <string name="continue1">Continue</string>
 
+
+    //Toast
+    <string name="login_fail">Failed to parse response!</string>
+    <string name="login_success">Login successful!</string>
+    <string name="login_wrong">Username or Password is not correct!</string>
+    <string name="login_empty">Username or password is empty!</string>
+    <string name="error_timeout">Request timed out. Please check your connection.</string>
+    <string name="error_no_connection">No internet connection!</string>
+    <string name="error_parse">An error occurred. Please try again.</string>
+    <string name="dialog_title">Notification</string>
+    <string name="dialog_mes_unsucess">unfinished Swap product location. Would you like to see details?</string>
+    <string name="response_fail">Failed to parse response!</string>
+
+    //Outbound Toast
+    <string name="combine_toast">No products to combine!</string>
+    <string name="real_quantity_outbout">Please enter actual quantity!</string>
+    <string name="product_barcode_valid">Product barcode is valid.</string>
+    <string name="invalid_product_barcode">Invalid product barcode! Please scan again.</string>
+    <string name="warehouse_barcode_valid">Warehouse barcode is valid.</string>
+    <string name="invalid_warehouse_barcode">Invalid warehouse barcode! Please scan again.</string>
+    <string name="no_warehouse">No warehouse has enough products for the order.</string>
+    <string name="product_confirmed_successfully">Product confirmed successfully!</string>
+    <string name="warning">Warning</string>
+    <string name="order_quantity_mismatch">The actual quantity does not match the order quantity. Do you still want to confirm?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="please_scan_again">Please scan again.</string>
 
 </resources>

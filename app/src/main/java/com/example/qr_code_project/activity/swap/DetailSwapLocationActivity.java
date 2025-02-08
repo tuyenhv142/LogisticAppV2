@@ -332,11 +332,11 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
     //Show error process Api
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         loadingDialog.dismiss();
         Log.e("API Error", error.getMessage(), error);

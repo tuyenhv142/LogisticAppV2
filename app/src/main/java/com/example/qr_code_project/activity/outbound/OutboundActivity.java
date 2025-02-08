@@ -84,7 +84,7 @@ public class OutboundActivity extends AppCompatActivity {
     private void utilBtn() {
         submitCombineBtn.setOnClickListener(v -> {
             if (exportList.isEmpty()) {
-                Toast.makeText(OutboundActivity.this, "No products to combine!"
+                Toast.makeText(OutboundActivity.this, getString(R.string.combine_toast)
                         , Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -136,7 +136,6 @@ public class OutboundActivity extends AppCompatActivity {
         };
     }
 
-
     @SuppressLint("NotifyDataSetChanged")
     private void responseData(String response) {
         try {
@@ -147,23 +146,23 @@ public class OutboundActivity extends AppCompatActivity {
                     content(content);
                 }
             } else {
-                Toast.makeText(this,"Failed to load outbound"
+                Toast.makeText(this,getString(R.string.response_fail)
                         ,Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.response_fail),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
     }
 
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
