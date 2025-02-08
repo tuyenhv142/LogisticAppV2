@@ -97,13 +97,13 @@ public class OutboundActivity extends AppCompatActivity {
     private void loadInbound(String scanValue) {
         loadingDialog.show();
         if (scanValue == null || scanValue.isEmpty()) {
-            Toast.makeText(this, "Scan value is empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.scan_value_empty), Toast.LENGTH_SHORT).show();
             return;
         }
 
         for (ExportModal modal : exportList) {
             if (modal.getCodeEp().equals(scanValue)) {
-                Toast.makeText(this, "This code already exists!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.exists), Toast.LENGTH_SHORT).show();
                 loadingDialog.dismiss();
                 return;
             }

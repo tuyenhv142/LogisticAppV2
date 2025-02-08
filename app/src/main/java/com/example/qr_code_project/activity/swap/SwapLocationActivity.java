@@ -104,7 +104,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -167,10 +167,10 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
 
     private void showConfirmationDialog(int swapId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Confirm Task")
-                .setMessage("Do you want to accept this task ?")
-                .setPositiveButton("Yes", (dialog, which) -> sendConfirmationRequest(swapId))
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+        builder.setTitle(getString(R.string.confirm_task))
+                .setMessage(getString(R.string.accept))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> sendConfirmationRequest(swapId))
+                .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -185,18 +185,18 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
                     jsonObject = new JSONObject(response);
 //                    if (jsonObject.getBoolean("content")) {
                     if (jsonObject.getBoolean("success")) {
-                        Toast.makeText(this, "Confirmed successfully!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.confirm_success), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(this, DetailSwapLocationActivity.class);
                         intent.putExtra("swapId", swapId);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
             },
-            error -> Toast.makeText(this, "Error confirming task", Toast.LENGTH_SHORT).show()
+            error -> Toast.makeText(this, getString(R.string.error_confirm), Toast.LENGTH_SHORT).show()
         )
         {
             @Override

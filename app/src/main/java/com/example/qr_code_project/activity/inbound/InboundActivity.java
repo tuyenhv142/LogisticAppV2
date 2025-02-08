@@ -81,7 +81,7 @@ public class InboundActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String code = codeEt.getText().toString();
                 if(totalRealQuantity == 0){
-                    Toast.makeText(InboundActivity.this,"Real quantity is  null"
+                    Toast.makeText(InboundActivity.this,getString(R.string.real_quantity_null)
                             ,Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -196,7 +196,7 @@ public class InboundActivity extends AppCompatActivity {
         // Hide submit button
         submitBtn.setVisibility(View.GONE);
 
-        Toast.makeText(this, "Data has been reset. Please scan again!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.data_reset), Toast.LENGTH_SHORT).show();
     }
 
     //Submit data
@@ -278,7 +278,7 @@ public class InboundActivity extends AppCompatActivity {
     //Get data Inbound from Api
     private void loadInbound(String scanValue) {
         if (scanValue == null || scanValue.isEmpty()) {
-            Toast.makeText(this, "Scan value is empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.not_value), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -326,14 +326,14 @@ public class InboundActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                showError("Don't have data for this inbound barcode!");
+                showError(getString(R.string.not_data));
                 if (qrcodeManager != null) {
                     qrcodeManager.setListener(this::loadInbound);
                 }
             }
         } catch (JSONException e) {
             Log.e(TAG, "Failed to parse JSON response", e);
-            showError("Failed to load data!");
+            showError(getString(R.string.fail_load_data));
         }finally {
             loadingDialog.dismiss();
         }

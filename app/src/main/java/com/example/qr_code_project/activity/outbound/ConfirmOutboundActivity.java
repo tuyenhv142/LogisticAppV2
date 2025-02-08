@@ -67,7 +67,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     private void getDateFromIntent() {
         ProductModal productModal = (ProductModal) getIntent().getSerializableExtra("product");
         if (productModal == null) {
-            Toast.makeText(this, "Product data is missing!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.missing), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }

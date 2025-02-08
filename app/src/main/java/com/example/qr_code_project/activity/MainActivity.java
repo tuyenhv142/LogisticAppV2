@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     PackageManager.PERMISSION_GRANTED){
                 getDeviceToken();
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                Toast.makeText(this, "You need to grant notification permission to receive messages."
+                Toast.makeText(this, getString(R.string.notification)
                         , Toast.LENGTH_SHORT).show();
             }else {
                 resultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
@@ -213,9 +213,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void showLogoutConfirmationDialog() {
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Confirm logout")
-                .setMessage("Are you sure logout?")
-                .setPositiveButton("Logout", (dialog, which) -> {
+                .setTitle(getString(R.string.confirm_logout))
+                .setMessage(getString(R.string.sure_logout))
+                .setPositiveButton(getString(R.string.logout), (dialog, which) -> {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.remove("token");
                     editor.apply();
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(getString(R.string.canel), (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(getString(R.string.canel), (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -284,11 +284,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else {
                 Toast.makeText(this, jsonObject.optString("error"
-                        , "Unknown error"),Toast.LENGTH_SHORT).show();
+                        , getString(R.string.unknown_error)),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
         }finally {
             if (loadingDialog != null && !isFinishing() && !isDestroyed()) {
                 loadingDialog.dismiss();
@@ -374,11 +374,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else {
                 Toast.makeText(this,jsonObject.optString("error"
-                        , "Unknown error"),Toast.LENGTH_SHORT).show();
+                        , getString(R.string.unknown_error)),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }

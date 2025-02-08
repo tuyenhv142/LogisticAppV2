@@ -97,11 +97,11 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
                 }
             } else {
                 Toast.makeText(this,jsonObject.optString("error"
-                        , "Unknown error"),Toast.LENGTH_SHORT).show();
+                        , getString(R.string.unknown_error)),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }

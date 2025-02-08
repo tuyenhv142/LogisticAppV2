@@ -86,7 +86,7 @@ public class PackageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String code = codePackageEt.getText().toString();
                 if(deliveryId == 0){
-                    Toast.makeText(PackageActivity.this,"Real quantity is  null"
+                    Toast.makeText(PackageActivity.this,getString(R.string.real_quantity_null)
                             ,Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -299,7 +299,7 @@ public class PackageActivity extends AppCompatActivity {
         boolean isAction = content.optBoolean("isPack", false);
 
         if (isAction) {
-            Toast.makeText(this, "This delivery has been packaged !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.packaged), Toast.LENGTH_SHORT).show();
             return;
         }
         deliveryId = content.optInt("id",0);

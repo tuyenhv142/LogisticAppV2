@@ -157,5 +157,53 @@
     <string name="unknown_error">Unknown error</string>
     <string name="success_response">Success</string>
     <string name="warning_package">Please scan both location barcodes before confirming!</string>
+    <string name="not_value">Scan value is empty!</string>
+    <string name="not_data">Dont have data for this inbound barcode!</string>
+    <string name="fail_load_data">"Failed to load data!"</string>
+    <string name="data_reset">Data has been reset. Please scan again!</string>
+    <string name="packaged">This delivery has been packaged !</string>
+    <string name="confirming">Please scan both product barcodes before confirming!</string>
+    <string name="swapId_empty">Error swapId is empty!</string>
+    <string name="swap_confirmed">Product swap confirmed!</string>
 
+    //UnSucces
+    <string name="location_correct">Location barcode is correct.</string>
+    <string name="scan_again_location">Invalid location barcode! Please scan again.</string>
+    <string name="product_correct">Product barcode is correct.</string>
+    <string name="data_null">Data null</string>
+    <string name="skip_code">Can skip this code</string>
+    <string name="confirm_task">Confirm Task</string>
+    <string name="accept">Do you want to accept this task ?</string>
+    <string name="confirm_success">Confirmed successfully!</string>
+
+    //Main
+    <string name="error">Error</string>
+    <string name="error_confirm">Error confirming task</string>
+    <string name="confirm_logout">Confirm logout</string>
+    <string name="sure_logout">Are you sure logout?</string>
+    <string name="notification">"You need to grant notification permission to receive messages."</string>
+    <string name="logout">"Logout"</string>
+    <string name="canel">Cancel</string>
+
+    //Product adapter
+    <string name="already">This product has already been confirmed!</string>
+
+    //Confirm Package
+    <string name="invalid_product">Invalid product data!</string>
+    <string name="invalid_quantity">Invalid quantity! Please enter a valid number.</string>
+    <string name="exists">This code already exists!</string>
+
+    //outbound
+    <string name="missing">Product data is missing!</string>
+    <string name="export_empty">Export list is empty!</string>
+    <string name="update">Update successfully!</string>
+    <string name="update_fail">Update fail all!</string>
+
+    //inbound
+    <string name="enter_actual_quantity">Please enter actual quantity is number!</string>
+
+    //Token manager
+    <string name="swap_unsuccess_title">Your swap location unsuccess</string>
+    <string name="change_language">Change language</string>
+    <string name="swap_location_unsuccess">Swap location unsuccess</string>
 </resources>

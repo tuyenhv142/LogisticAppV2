@@ -11,7 +11,7 @@
         android:id="@+id/includeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your swap location unsuccess"
+        android:text="@string/swap_unsuccess_title"
         android:textSize="30sp"
         android:textStyle="bold"
         android:layout_marginTop="20dp"
