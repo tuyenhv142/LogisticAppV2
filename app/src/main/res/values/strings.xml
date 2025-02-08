@@ -99,11 +99,11 @@
     <string name="export_receipt_list">Export receipt list</string>
     <string name="total_number_of_export">Total number of export :</string>
     <string name="total_real_product_quantity">Total real product quantity :</string>
-    <string name="code">Code</string>
-    <string name="title">Title</string>
+    <string name="code">Code:</string>
+    <string name="title">Title:</string>
     <string name="loading">Loading...</string>
-    <string name="items">Items</string>
-    <string name="total_items">Total Items</string>
+    <string name="items">Items:</string>
+    <string name="total_items">Total Items: </string>
     <string name="old_location_code">Old Location Code</string>
     <string name="new_location_code">New Location Code</string>
     <string name="warehouse_old">Warehouse Old</string>
