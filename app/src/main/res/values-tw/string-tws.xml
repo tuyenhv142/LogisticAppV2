@@ -17,7 +17,7 @@
     <string name="edit_warehouse2">倉庫 2</string>
     <string name="plan_information">計劃資訊</string>
     <string name="confirm">確認</string>
-    <string name="location">位置代碼：</string>
+    <string name="location">儲位：</string>
     <string name="location_code">掃描位置</string>
     <string name="location_code2">掃描位置 2</string>
     <string name="enter_location">輸入位置</string>
@@ -105,8 +105,8 @@
     <string name="export_receipt_list">導出列表</string>
     <string name="total_number_of_export">出口總數：</string>
     <string name="total_real_product_quantity">實際產品數量總計：</string>
-    <string name="code">代碼</string>
-    <string name="title">標題</string>
+    <string name="code">料號 :</string>
+    <string name="title">品名 :</string>
     <string name="loading">加載中...</string>
     <string name="items">項目</string>
     <string name="total_items">項目總數</string>
@@ -147,5 +147,13 @@
     <string name="confirmation">確認</string>
     <string name="please_scan_again">請重新掃描。</string>
 
+    //Package Toast
+    <string name="scan_value_empty">Scan value is empty!</string>
+    <string name="real_quantity_null">Real quantity is null</string>
+    <string name="failed_parse_response">Failed to parse response!</string>
+    <string name="this_delivery_packaged">This delivery has been packaged!</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="success_response">Success</string>
+    <string name="warning_package">Please scan both location barcodes before confirming!</string>
 
 </resources>

@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -28,7 +29,6 @@ import com.example.qr_code_project.activity.MainActivity;
 import com.example.qr_code_project.data.adapter.ProductAdapter;
 import com.example.qr_code_project.data.modal.ProductModal;
 import com.example.qr_code_project.data.network.ApiConstants;
-import com.example.qr_code_project.data.network.ApiService;
 import com.example.qr_code_project.data.helper.SSLHelper;
 import com.example.qr_code_project.data.manager.TokenManager;
 import com.example.qr_code_project.data.ui.LoadingDialog;
@@ -60,7 +60,6 @@ public class InboundActivity extends AppCompatActivity {
     private ArrayList<ProductModal> productArrayList;
     private ProductAdapter productAdapter;
     private final Map<Integer, Object> productMap = new HashMap<>();
-    private ApiService apiService;
     private LoadingDialog loadingDialog;
     private boolean isSubmit = false;
     private TokenManager tokenManager;
@@ -202,20 +201,54 @@ public class InboundActivity extends AppCompatActivity {
 
     //Submit data
     private void submit(String code, int quantity) {
-        apiService.submitInbound(code, quantity, new ApiService.ApiResponseListener() {
+        loadingDialog.show();
+        String url = ApiConstants.INBOUND_SUBMIT;
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean isSuccess = jsonObject.getBoolean("success");
+                        String message = jsonObject.optString("error", "Unknown error");
+
+                        if (isSuccess) {
+                            Toast.makeText(InboundActivity.this, response, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(InboundActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(InboundActivity.this, getString(R.string.failed_parse_response),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                },
+                this::handleError) {
             @Override
-            public void onSuccess(String response) {
-                Toast.makeText(InboundActivity.this, response, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(InboundActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject params = new JSONObject();
+                try {
+                    params.put("code", code);
+                    params.put("actualQuantity", quantity);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "Request Body: " + params.toString());
+                return params.toString().getBytes();
             }
 
             @Override
-            public void onError(String error) {
-                Toast.makeText(InboundActivity.this, error, Toast.LENGTH_SHORT).show();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", null);
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                headers.put("Content-Type", "application/json");
+                return headers;
             }
-        });
+        };
+
+        requestQueue.add(request);
     }
 
     //UI components
@@ -236,7 +269,6 @@ public class InboundActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         productsRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
-        apiService = new ApiService(this);
         tokenManager = new TokenManager(this);
         if(productMap.isEmpty()){
             totalRealQuantityEt.setText("0");

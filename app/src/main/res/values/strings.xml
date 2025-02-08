@@ -149,4 +149,13 @@
     <string name="confirmation">Confirmation</string>
     <string name="please_scan_again">Please scan again.</string>
 
+    //Package Toast
+    <string name="scan_value_empty">Scan value is empty!</string>
+    <string name="real_quantity_null">Real quantity is null</string>
+    <string name="failed_parse_response">Failed to parse response!</string>
+    <string name="this_delivery_packaged">This delivery has been packaged!</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="success_response">Success</string>
+    <string name="warning_package">Please scan both location barcodes before confirming!</string>
+
 </resources>

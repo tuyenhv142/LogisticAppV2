@@ -165,7 +165,6 @@ public class ConfirmPackageActivity extends AppCompatActivity {
             updateProductScanStatus(true, "Product barcode is valid.");
             qrCodeManager.unregister();
             confirmProductPackageBtn.setEnabled(true);
-            confirmProductPackageBtn.setText("Confirm Product");
         } else {
             updateProductScanStatus(false, "Invalid product barcode! Please scan again.");
             scannedProductBarcode = "";
@@ -191,7 +190,6 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         productBarcodePackageStatusText = findViewById(R.id.productBarcodePackageStatusText);
 
         confirmProductPackageBtn.setEnabled(false);
-        confirmProductPackageBtn.setText("Scan barcode to enable");
 
     }
 }
