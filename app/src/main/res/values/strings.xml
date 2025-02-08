@@ -3,11 +3,12 @@
     <string name="default_notification_channel_id">qr_code_notifications</string>
 
     <!--    Package-->
-    <string name="pack_title">Packing Receipt Information</string>
+    <string name="pack_title">Title</string>
     <string name="quantity_product">Product Quantity</string>
-    <string name="list_product">List Product</string>
+    <string name="list_product">Product List</string>
     <string name="reset">Reset</string>
     <string name="submit">Submit</string>
+    <string name="code">Code</string>
 
     <!--    Swap-->
     <string name="plan_list">Plan List</string>
@@ -27,6 +28,7 @@
     <string name="edit_area">Area</string>
     <string name="edit_area2">Area 2</string>
     <string name="product_name">Product Name: </string>
+    <string name="name">Name</string>
     <string name="product_id">Product Code:</string>
     <string name="quantity">Quantity: </string>
     <string name="swap_to_location">Swap to location</string>
@@ -112,5 +114,11 @@
     <string name="warehouse_new">Warehouse New</string>
     <string name="floor_new">Floor New</string>
     <string name="area_new">Area New</string>
+
+    <string name="product_location1">Product Location: 1</string>
+    <string name="product_location2">Product Location: 2</string>
+    <string name="code_new">Product Location Code New</string>
+    <string name="continue1">Continue</string>
+
 
 </resources>
