@@ -198,6 +198,7 @@
     <string name="export_empty">Export list is empty!</string>
     <string name="update">Update successfully!</string>
     <string name="update_fail">Update fail all!</string>
+    <string name="has_been_pick_up">This delivery has been picked up!</string>
 
     //inbound
     <string name="enter_actual_quantity">Please enter actual quantity is number!</string>

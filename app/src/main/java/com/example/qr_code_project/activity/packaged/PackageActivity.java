@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -146,6 +147,12 @@ public class PackageActivity extends AppCompatActivity {
             }
         };
 
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -246,7 +253,7 @@ public class PackageActivity extends AppCompatActivity {
         loadingDialog.show();
 
         String url = ApiConstants.getFindOneCodeDeliveryUrl(scanValue);
-        StringRequest findInbound = new StringRequest(
+        StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 this::parseResponse,
                 this::handleError
@@ -265,7 +272,13 @@ public class PackageActivity extends AppCompatActivity {
             }
         };
 
-        requestQueue.add(findInbound);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        requestQueue.add(request);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -327,7 +340,8 @@ public class PackageActivity extends AppCompatActivity {
         if (productAdapter == null) {
             productAdapter = new ProductAdapter(this, productArrayList, productMap,
                     (product, updatedMap) -> {
-                        Intent intent = new Intent(PackageActivity.this, ConfirmPackageActivity.class);
+                        Intent intent = new Intent(PackageActivity.this
+                                , ConfirmPackageActivity.class);
                         intent.putExtra("product", product);
                         intent.putExtra("productMap", new HashMap<>((Map) updatedMap));
                         confirmProductLauncher.launch(intent);

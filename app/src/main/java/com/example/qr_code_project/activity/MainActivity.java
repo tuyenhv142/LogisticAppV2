@@ -24,6 +24,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         languageMap.put("繁體", "tw");
         languageMap.put("English", "en");
+        languageMap.put("Việt Nam", "vi");
 
         requestQueue = Volley.newRequestQueue(this);
         loadingDialog = new LoadingDialog(this);
@@ -233,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
         String[] languages = languageMap.keySet().toArray(new String[0]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Language")
+        builder.setTitle(getString(R.string.change_language))
                 .setItems(languages, (dialog, which) -> {
                     String selectedLanguage = languageMap.get(languages[which]);
 
@@ -270,6 +272,13 @@ public class MainActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -360,6 +369,13 @@ public class MainActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
