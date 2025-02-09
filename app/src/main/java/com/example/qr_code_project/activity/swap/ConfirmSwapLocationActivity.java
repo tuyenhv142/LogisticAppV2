@@ -92,8 +92,8 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
 
                         if (isSuccess) {
                             loadingDialog.dismiss();
-                            Toast.makeText(ConfirmSwapLocationActivity.this, response,
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ConfirmSwapLocationActivity.this,
+                                    getString(R.string.success_response), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ConfirmSwapLocationActivity.this,
                                     MainActivity.class);
                             startActivity(intent);

@@ -187,6 +187,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
     private void sendConfirmationRequest(int swapId) {
         String url = ApiConstants.SWAP_LOCATION_CONFIRM;
         Log.d("swapID",""+swapId);
+        loadingDialog.show();
 
         StringRequest request = new StringRequest(Request.Method.PUT, url,
             response -> {
@@ -204,9 +205,14 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
+                }finally {
+                    loadingDialog.dismiss();
                 }
             },
-            error -> Toast.makeText(this, getString(R.string.error_confirm), Toast.LENGTH_SHORT).show()
+            error -> {
+                Toast.makeText(this, getString(R.string.error_confirm), Toast.LENGTH_SHORT).show();
+                loadingDialog.dismiss();
+            }
         )
         {
             @Override
