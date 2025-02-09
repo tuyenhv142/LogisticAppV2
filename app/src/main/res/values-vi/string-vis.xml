@@ -133,6 +133,8 @@
     <string name="product_location2">Vị trí sản phẩm: 2</string>
     <string name="code_new">Mã vị trí sản phẩm mới</string>
     <string name="continue1">Tiếp tục</string>
+    <string name="shelf_old">Kệ cũ</string>
+    <string name="shelf_new">Kệ mới</string>
 
     <!-- Toast -->
     <string name="login_fail">Không thể phân tích phản hồi!</string>
