@@ -118,6 +118,8 @@
     <string name="warehouse_new">新倉庫</string>
     <string name="floor_new">新樓層</string>
     <string name="area_new">新區域</string>
+    <string name="shelf_old">舊書架</string>
+    <string name="shelf_new">新書架</string>
 
     //Toast
     <string name="login_fail">解析回應失敗！</string>

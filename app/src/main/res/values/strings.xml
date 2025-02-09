@@ -114,7 +114,8 @@
     <string name="warehouse_new">Warehouse New</string>
     <string name="floor_new">Floor New</string>
     <string name="area_new">Area New</string>
-
+    <string name="shelf_old">Shelf Old</string>
+    <string name="shelf_new">Shelf New</string>
     <string name="product_location1">Product Location: 1</string>
     <string name="product_location2">Product Location: 2</string>
     <string name="code_new">Product Location Code New</string>
@@ -207,4 +208,5 @@
     <string name="swap_unsuccess_title">Your swap location unsuccess</string>
     <string name="change_language">Change language</string>
     <string name="swap_location_unsuccess">Swap location unsuccess</string>
+
 </resources>
