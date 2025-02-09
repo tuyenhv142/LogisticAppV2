@@ -132,10 +132,12 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
             String warehouse = object.optString("warehouse", "N/A");
             String area = object.optString("area", "N/A");
             String floor = object.optString("floor", "N/A");
+            String shelfOld = object.optString("shelfOld","N/A");
+            String shelfNew = object.optString("shelf","N/A");
 
             swapArrayList.add(new SwapModal(floor, area, warehouse
                     , floorOld, areaOld, warehouseOld
-                    ,locationNewCode,locationOldCode,title,id));
+                    ,locationNewCode,locationOldCode,title,id,shelfOld,shelfNew));
         }
 
         if (swapLocationAdapter == null) {

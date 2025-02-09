@@ -110,8 +110,8 @@
     <string name="loading">加載中...</string>
     <string name="items">項目</string>
     <string name="total_items">項目總數</string>
-    <string name="old_location_code">舊位置代碼</string>
-    <string name="new_location_code">新位置代碼</string>
+    <string name="old_location_code">舊位置代碼 :</string>
+    <string name="new_location_code">新位置代碼 :</string>
     <string name="warehouse_old">舊倉庫</string>
     <string name="floor_old">舊樓層</string>
     <string name="area_old">舊區域</string>

@@ -121,8 +121,8 @@
     <string name="loading">Đang tải...</string>
     <string name="items">Mục:</string>
     <string name="total_items">Tổng số mục:</string>
-    <string name="old_location_code">Mã vị trí cũ</string>
-    <string name="new_location_code">Mã vị trí mới</string>
+    <string name="old_location_code">Mã vị trí cũ :</string>
+    <string name="new_location_code">Mã vị trí mới :</string>
     <string name="warehouse_old">Kho cũ</string>
     <string name="floor_old">Tầng cũ</string>
     <string name="area_old">Khu vực cũ</string>

@@ -11,11 +11,13 @@ public class SwapModal {
     private String warehouse;
     private String area;
     private String floor;
+    private String shelfOld;
+    private String shelfNew;
 
     public SwapModal(String floor, String area, String warehouse
             , String floorOld
             , String areaOld, String warehouseOld, String locationNewCode
-            , String locationOldCode, String title, int id) {
+            , String locationOldCode, String title, int id,String shelfOld,String shelfNew) {
         this.floor = floor;
         this.area = area;
         this.warehouse = warehouse;
@@ -26,6 +28,24 @@ public class SwapModal {
         this.locationOldCode = locationOldCode;
         this.title = title;
         this.id = id;
+        this.shelfOld = shelfOld;
+        this.shelfNew = shelfNew;
+    }
+
+    public String getShelfOld() {
+        return shelfOld;
+    }
+
+    public void setShelfOld(String shelfOld) {
+        this.shelfOld = shelfOld;
+    }
+
+    public String getShelfNew() {
+        return shelfNew;
+    }
+
+    public void setShelfNew(String shelfNew) {
+        this.shelfNew = shelfNew;
     }
 
     public String getFloor() {

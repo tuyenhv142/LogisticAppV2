@@ -35,9 +35,9 @@ import java.util.Map;
 
 public class DetailSwapLocationActivity extends AppCompatActivity {
 
-    private EditText warehouseOldEd,floorOldEd,areaOldEt,locationOld1
+    private EditText shelfOldEt,floorOldEd,areaOldEt,locationOld1
             ,productName1,productQuantity1,productCode1;
-    private EditText warehouseNew2,floorNew2,areaNew2,locationNewCode2
+    private EditText shelfNewEt,floorNew2,areaNew2,locationNewCode2
             ,productName2,productQuantity2,productCode2;
     private TextView locationBarcodeStatus1Text, productBarcodeStatus1Text;
     private TextView locationBarcodeStatus2Text, productBarcodeStatus2Text;
@@ -145,10 +145,10 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
                 if (content != null) {
                     locationOld1.setText(content.optString("localtionOldCode", "N/A"));
                     locationNewCode2.setText(content.optString("localtionNewCode", "N/A"));
-                    warehouseOldEd.setText(content.optString("warehouseOld", "N/A"));
+                    shelfOldEt.setText(content.optString("shelfOld", "N/A"));
                     areaOldEt.setText(content.optString("areaOld", "N/A"));
                     floorOldEd.setText(content.optString("floorOld", "N/A"));
-                    warehouseNew2.setText(content.optString("warehouse", "N/A"));
+                    shelfNewEt.setText(content.optString("shelf", "N/A"));
                     areaNew2.setText(content.optString("area", "N/A"));
                     floorNew2.setText(content.optString("floor", "N/A"));
                 }
@@ -162,7 +162,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
     }
 
     private void util(){
-        warehouseOldEd = findViewById(R.id.warehouseOldEd);
+        shelfOldEt = findViewById(R.id.shelfOldEt);
         floorOldEd = findViewById(R.id.floorOldEd);
         areaOldEt = findViewById(R.id.areaOldEt);
         locationOld1 = findViewById(R.id.locationOld1);
@@ -170,7 +170,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         productName1 = findViewById(R.id.productName1);
         productQuantity1 = findViewById(R.id.productQuantity1);
         productCode1 = findViewById(R.id.productCode1);
-        warehouseNew2 = findViewById(R.id.warehouseNew2);
+        shelfNewEt = findViewById(R.id.shelfNewEt);
         floorNew2 = findViewById(R.id.floorNew2);
         areaNew2 = findViewById(R.id.areaNew2);
         locationNewCode2 = findViewById(R.id.locationNewCode2);

@@ -106,8 +106,8 @@
     <string name="loading">Loading...</string>
     <string name="items">Items:</string>
     <string name="total_items">Total Items: </string>
-    <string name="old_location_code">Old Location Code</string>
-    <string name="new_location_code">New Location Code</string>
+    <string name="old_location_code">Old Location Code :</string>
+    <string name="new_location_code">New Location Code :</string>
     <string name="warehouse_old">Warehouse Old</string>
     <string name="floor_old">Floor Old</string>
     <string name="area_old">Area Old</string>
