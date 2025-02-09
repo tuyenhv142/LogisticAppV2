@@ -207,4 +207,6 @@
     <string name="swap_unsuccess_title">Your swap location unsuccess</string>
     <string name="change_language">Change language</string>
     <string name="swap_location_unsuccess">Swap location unsuccess</string>
+    <string name="shelf_old">Shelf Old</string>
+    <string name="shelf_new">Shelf New</string>
 </resources>
