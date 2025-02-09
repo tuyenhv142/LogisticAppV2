@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -110,7 +111,11 @@ public class OutboundActivity extends AppCompatActivity {
         }
 
         StringRequest findInbound = getStringRequest(scanValue);
-
+        findInbound.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
         requestQueue.add(findInbound);
     }
 
@@ -134,6 +139,7 @@ public class OutboundActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
     }
 
     @SuppressLint("NotifyDataSetChanged")

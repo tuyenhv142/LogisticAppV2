@@ -109,7 +109,8 @@ public class PackageActivity extends AppCompatActivity {
                         String message = jsonObject.optString("error", "Unknown error");
 
                         if (isSuccess) {
-                            Toast.makeText(PackageActivity.this, response, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PackageActivity.this, getString(R.string.success_response)
+                                    , Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(PackageActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -315,7 +316,7 @@ public class PackageActivity extends AppCompatActivity {
 
             int id = object.optInt("id");
             String title = object.optString("title", "N/A");
-            int quantity = object.optInt("quantityDelivery");
+            int quantity = object.optInt("quantityDeliverynote");
 //            int location = object.optString("dataItem");
             String code = object.optString("code", "N/A");
             String image = object.optString("image", "");

@@ -126,7 +126,7 @@ public class ExportDetailActivity extends AppCompatActivity {
                 JSONObject object = products.getJSONObject(i);
                 int id = object.optInt("id");
                 String title = object.optString("title", "N/A");
-                int quantity = object.optInt("quantityDelivery");
+                int quantity = object.optInt("quantityDeliverynote");
 //                String location = null;
                 String code = object.optString("code");
                 String image = object.optString("image", "");

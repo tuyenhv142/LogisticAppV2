@@ -372,9 +372,6 @@ public class MainActivity extends AppCompatActivity {
                 if (content != null) {
                     contentUnSuccess(content);
                 }
-            } else {
-                Toast.makeText(this,jsonObject.optString("error"
-                        , getString(R.string.unknown_error)),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);

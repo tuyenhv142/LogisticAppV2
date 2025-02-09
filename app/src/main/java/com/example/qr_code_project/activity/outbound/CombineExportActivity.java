@@ -298,7 +298,7 @@ public class CombineExportActivity extends AppCompatActivity {
                 JSONObject object = products.getJSONObject(i);
                 int id = object.optInt("id");
                 String title = object.optString("title", "N/A");
-                int quantity = object.optInt("quantityDelivery");
+                int quantity = object.optInt("quantityDeliverynote");
                 String code = object.optString("code", "N/A");
                 String image = object.optString("image", "");
 

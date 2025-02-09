@@ -214,7 +214,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
             JSONObject warehouse = warehouseArray.getJSONObject(i);
 
             code = warehouse.optString("code", "N/A");
-            areaId = warehouse.optInt("idArea", 0);
+            areaId = warehouse.optInt("idShelf", 0);
             location = warehouse.optInt("location", 0);
             if (quantity >= requiredQuantity) {
                 warehouseCodeOutboundEt.setText(code);

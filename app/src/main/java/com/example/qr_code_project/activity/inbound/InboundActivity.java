@@ -208,11 +208,12 @@ public class InboundActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         boolean isSuccess = jsonObject.getBoolean("success");
-                        String message = jsonObject.optString("error", "Unknown error");
 
                         if (isSuccess) {
-                            Toast.makeText(InboundActivity.this, response, Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(InboundActivity.this, MainActivity.class);
+                            Toast.makeText(InboundActivity.this,
+                                    getString(R.string.success_response), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(InboundActivity.this,
+                                    MainActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -365,7 +366,8 @@ public class InboundActivity extends AppCompatActivity {
         if (productAdapter == null) {
             productAdapter = new ProductAdapter(this, productArrayList, productMap,
                     (product, updatedMap) -> {
-                        Intent intent = new Intent(InboundActivity.this, ConfirmInboundActivity.class);
+                        Intent intent = new Intent(InboundActivity.this,
+                                ConfirmInboundActivity.class);
                         intent.putExtra("product", product);
                         intent.putExtra("productMap", new HashMap<>((Map) updatedMap));
                         confirmProductLauncher.launch(intent);
