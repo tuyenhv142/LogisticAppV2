@@ -75,7 +75,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         int swapId = getIntent().getIntExtra("swapId", 0);
 
         if (swapId == 0) {
-            Toast.makeText(this, "Error swapId is empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.swapId_empty), Toast.LENGTH_SHORT).show();
             return null;
         }
         return swapId;
@@ -83,7 +83,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
     private void onConfirmSwap(int swapId) {
         if (scannedProductLocation1.isEmpty() || scannedProductLocation2.isEmpty()) {
-            Toast.makeText(this, "Please scan both product barcodes before confirming!"
+            Toast.makeText(this, getString(R.string.confirming)
                     , Toast.LENGTH_SHORT).show();
             return;
         }
@@ -97,7 +97,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
         editor.apply(); // Commit changes
 
-        Toast.makeText(this, "Product swap confirmed!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.swap_confirmed), Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(DetailSwapLocationActivity.this, ConfirmSwapLocationActivity.class);
         startActivity(intent);
@@ -150,7 +150,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             }
         } catch (JSONException e) {
             Log.e("SwapLocation", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            showError(getString(R.string.login_fail));
         }
     }
 
@@ -206,40 +206,40 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         if (scannedLocation1.isEmpty()) {
             scannedLocation1 = qrCodeText;
             if (scannedLocation1.equals(locationOld1.getText().toString().trim())) {
-                updateLocation1ScanStatus(true, "Location barcode is correct.");
+                updateLocation1ScanStatus(true, getString(R.string.location_correct));
                 fetchProductLocation(scannedLocation1,true);
             } else {
-                updateLocation1ScanStatus(false, "Invalid location barcode! Please scan again.");
+                updateLocation1ScanStatus(false, getString(R.string.scan_again_location));
                 scannedLocation1 = "";
             }
         } else if (scannedProductLocation1.isEmpty()) {
             scannedProductLocation1 = qrCodeText;
             if (scannedProductLocation1.equals(productCode1.getText().toString().trim())) {
-                updateProductLocation1ScanStatus(true, "Product barcode is correct.");
+                updateProductLocation1ScanStatus(true, getString(R.string.product_correct));
             } else {
-                updateProductLocation1ScanStatus(false, "Invalid Product barcode! Please scan again.");
+                updateProductLocation1ScanStatus(false,getString(R.string.invalid_product_barcode));
                 scannedProductLocation1 = "";
             }
         }else if (scannedLocation2.isEmpty()) {
             scannedLocation2 = qrCodeText;
             if (scannedLocation2.equals(locationNewCode2.getText().toString().trim())) {
-                updateLocation2ScanStatus(true, "Location barcode is correct.");
+                updateLocation2ScanStatus(true, getString(R.string.location_correct));
                 fetchProductLocation(scannedLocation2,false);
             } else {
-                updateLocation2ScanStatus(false, "Invalid Location barcode! Please scan again.");
+                updateLocation2ScanStatus(false, getString(R.string.scan_again_location));
                 scannedLocation2 = "";
             }
         }else if (scannedProductLocation2.isEmpty()) {
             scannedProductLocation2 = qrCodeText;
             if (scannedProductLocation2.equals(productCode2.getText().toString().trim())) {
-                updateProductLocation2ScanStatus(true, "Product barcode is correct.");
+                updateProductLocation2ScanStatus(true, getString(R.string.product_correct));
                 continueConfirmProductBtn.setEnabled(true);
                 if (qrCodeManager != null) {
                     qrCodeManager.unregister();
                     qrCodeManager = null;
                 }
             } else {
-                updateProductLocation2ScanStatus(false, "Invalid Product barcode! Please scan again.");
+                updateProductLocation2ScanStatus(false, getString(R.string.invalid_product_barcode));
                 scannedProductLocation2 = "";
             }
         }
@@ -314,17 +314,17 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                Toast.makeText(this,"Data null",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(R.string.data_null),Toast.LENGTH_SHORT).show();
                 if (isOldLocation){
-                    updateProductLocation1ScanStatus(true, "Can skip this code");
+                    updateProductLocation1ScanStatus(true, getString(R.string.skip_code));
                 }else {
-                    updateProductLocation2ScanStatus(true, "Can skip this code");
+                    updateProductLocation2ScanStatus(true, getString(R.string.skip_code));
                 }
 
                 Log.d("error", "Unknown error");
             }
         } catch (JSONException e) {
-            Toast.makeText(this, "Failed to parse response!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.login_fail), Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -332,11 +332,11 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
     //Show error process Api
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         loadingDialog.dismiss();
         Log.e("API Error", error.getMessage(), error);

@@ -21,6 +21,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.MainActivity;
+import com.example.qr_code_project.data.helper.LocaleHelper;
+import com.example.qr_code_project.data.manager.LanguageManager;
 import com.example.qr_code_project.data.network.ApiConstants;
 import com.example.qr_code_project.data.helper.SSLHelper;
 import com.example.qr_code_project.data.ui.LoadingDialog;
@@ -42,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String language = LanguageManager.getLanguage(this);
+        LocaleHelper.setLocale(this, language);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
@@ -65,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 String password = passwordEt.getText().toString();
 
                 if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-                    Toast.makeText(LoginActivity.this, "Username or password is empty!"
+                    Toast.makeText(LoginActivity.this, getString(R.string.login_empty)
                             , Toast.LENGTH_SHORT).show();
                 } else {
                     loginUser(username, password);
@@ -147,30 +151,30 @@ public class LoginActivity extends AppCompatActivity {
 
                     saveLoginInfo(token);
 
-                    Toast.makeText(LoginActivity.this, "Login successful!"
+                    Toast.makeText(LoginActivity.this, getString(R.string.login_success)
                             , Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this
                             , MainActivity.class);
                     startActivity(intent);
                 }
             } else {
-                Toast.makeText(this,"Username or Password is not correct!"
+                Toast.makeText(this,getString(R.string.login_wrong)
                         ,Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("Login_response_error", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
     }
 
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();

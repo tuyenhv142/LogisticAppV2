@@ -38,9 +38,9 @@ public class ExportAdapter extends RecyclerView.Adapter<ExportAdapter.ExportView
     public void onBindViewHolder(@NonNull ExportAdapter.ExportViewHolder holder, int position) {
         ExportModal exportModal = exportList.get(position);
 
-        holder.codeEp.setText(String.format("Code: %s", exportModal.getCodeEp()));
-        holder.items.setText(String.format("Items: %d", exportModal.getItems()));
-        holder.totalItem.setText(String.format("Total: %d", exportModal.getTotalItem()));
+        holder.codeEp.setText(String.format(exportModal.getCodeEp()));
+        holder.items.setText(String.format(String.valueOf(exportModal.getItems())));
+        holder.totalItem.setText(String.format(String.valueOf(exportModal.getTotalItem())));
 
         holder.itemView.setOnClickListener(v -> onExportClickListener.onExportClick(exportModal));
     }

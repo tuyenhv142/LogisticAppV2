@@ -83,7 +83,7 @@ public class CombineExportActivity extends AppCompatActivity {
                 totalProductCombineEt.setText(String.valueOf(totalProduct));
             }
         } else {
-            Toast.makeText(this, "Export list is empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.export_empty), Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -195,7 +195,7 @@ public class CombineExportActivity extends AppCompatActivity {
         if (pendingRequests == 0) { // Check all of request done
             if (successfulRequests > 0) {
                 loadingDialog.dismiss();
-                Toast.makeText(CombineExportActivity.this, "Update successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CombineExportActivity.this, getString(R.string.update), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CombineExportActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -203,7 +203,7 @@ public class CombineExportActivity extends AppCompatActivity {
 
             } else {
                 loadingDialog.dismiss();
-                Toast.makeText(CombineExportActivity.this, "Update fail all!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CombineExportActivity.this, getString(R.string.update_fail), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -298,7 +298,7 @@ public class CombineExportActivity extends AppCompatActivity {
                 JSONObject object = products.getJSONObject(i);
                 int id = object.optInt("id");
                 String title = object.optString("title", "N/A");
-                int quantity = object.optInt("quantityDelivery");
+                int quantity = object.optInt("quantityDeliverynote");
                 String code = object.optString("code", "N/A");
                 String image = object.optString("image", "");
 
@@ -352,11 +352,11 @@ public class CombineExportActivity extends AppCompatActivity {
     }
 
     private void handleError(Throwable error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
