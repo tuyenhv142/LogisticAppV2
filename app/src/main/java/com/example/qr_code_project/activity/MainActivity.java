@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         languageMap.put("繁體", "tw");
         languageMap.put("English", "en");
+        languageMap.put("Việt Nam", "vi");
 
         requestQueue = Volley.newRequestQueue(this);
         loadingDialog = new LoadingDialog(this);
@@ -234,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
         String[] languages = languageMap.keySet().toArray(new String[0]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Language")
+        builder.setTitle(getString(R.string.change_language))
                 .setItems(languages, (dialog, which) -> {
                     String selectedLanguage = languageMap.get(languages[which]);
 
