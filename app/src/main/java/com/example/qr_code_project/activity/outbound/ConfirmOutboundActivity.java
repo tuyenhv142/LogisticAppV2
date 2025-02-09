@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -180,6 +181,13 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -202,28 +210,31 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     }
 
     private void populateContent(JSONObject content) throws JSONException {
-        int quantity = content.optInt("quantity", 0);
+        int requiredQuantity = Integer.parseInt(quantityOutboundEt.getText().toString().trim());
         JSONArray warehouseArray = content.optJSONArray("listAreaOfproducts");
+
         if (warehouseArray == null || warehouseArray.length() == 0) {
-            Toast.makeText(this,getString(R.string.no_warehouse),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_warehouse), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int requiredQuantity = Integer.parseInt(quantityOutboundEt.getText().toString().trim());
         for (int i = 0; i < warehouseArray.length(); i++) {
             JSONObject warehouse = warehouseArray.getJSONObject(i);
+            int warehouseQuantity = warehouse.optInt("quantity", 0); // Lấy số lượng hàng trong kho
 
-            code = warehouse.optString("code", "N/A");
-            areaId = warehouse.optInt("idShelf", 0);
-            location = warehouse.optInt("location", 0);
-            if (quantity >= requiredQuantity) {
+            if (warehouseQuantity >= requiredQuantity) {
+                code = warehouse.optString("code", "N/A");
+                areaId = warehouse.optInt("idShelf", 0);
+                location = warehouse.optInt("location", 0);
+
                 warehouseCodeOutboundEt.setText(code);
                 return;
             }
         }
 
-        Toast.makeText(this,getString(R.string.no_warehouse),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.no_warehouse), Toast.LENGTH_SHORT).show();
     }
+
 
     private void confirmProduct(ProductModal productModal, Map<Integer, Object>  productMap, int actualQuantity) {
         isConfirmed = true;

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -89,6 +90,12 @@ public class ExportDetailActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
 
         Volley.newRequestQueue(this).add(request);
     }

@@ -110,13 +110,13 @@ public class OutboundActivity extends AppCompatActivity {
             }
         }
 
-        StringRequest findInbound = getStringRequest(scanValue);
-        findInbound.setRetryPolicy(new DefaultRetryPolicy(
+        StringRequest request = getStringRequest(scanValue);
+        request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(findInbound);
+        requestQueue.add(request);
     }
 
     private @NonNull StringRequest getStringRequest(String scanValue) {
@@ -178,12 +178,12 @@ public class OutboundActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void content(JSONObject content) throws JSONException {
 
-//        boolean isAction = content.optBoolean("isAction", false);
-//
-//        if (isAction) {
-//            Toast.makeText(this, "This delivery has been picked up. !", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        boolean isAction = content.optBoolean("isAction", false);
+
+        if (isAction) {
+            Toast.makeText(this, getString(R.string.has_been_pick_up), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         int id = content.optInt("id",0);
         String codeEp = content.optString("code", "N/A");

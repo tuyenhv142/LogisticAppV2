@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -185,6 +186,12 @@ public class CombineExportActivity extends AppCompatActivity {
             }
         };
 
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         Volley.newRequestQueue(this).add(request);
     }
 
@@ -269,6 +276,12 @@ public class CombineExportActivity extends AppCompatActivity {
             }
         };
 
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         Volley.newRequestQueue(this).add(request);
     }
 
@@ -312,14 +325,8 @@ public class CombineExportActivity extends AppCompatActivity {
                 }
 
                 if (!found) {
-                    ProductModal newProduct = new ProductModal(
-                            id,
-                            title,
-                            quantity,
-                            null,
-                            code,
-                            image
-                    );
+                    ProductModal newProduct = new ProductModal(id, title, quantity,
+                            null, code, image);
                     productList.add(newProduct);
                     //                                    deliveryProductsMap.get(delivery).add(newProduct);
                     //                                    Log.d("CombineExportActivity", "Products for delivery " + delivery + ": " + deliveryProductsMap.get(delivery));

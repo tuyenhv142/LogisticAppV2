@@ -196,6 +196,7 @@
     <string name="export_empty">導出列表為空！</string>
     <string name="update">更新成功！</string>
     <string name="update_fail">更新全部失敗！</string>
+    <string name="has_been_pick_up">此配送已被取件！</string>
 
     <!-- Inbound -->
     <string name="enter_actual_quantity">請輸入實際數量（數字）！</string>

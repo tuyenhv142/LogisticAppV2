@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -249,6 +250,12 @@ public class InboundActivity extends AppCompatActivity {
             }
         };
 
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -290,7 +297,7 @@ public class InboundActivity extends AppCompatActivity {
 //        }
 
         String url = ApiConstants.getFindOneCodeInboundUrl(scanValue);
-        StringRequest findInbound = new StringRequest(
+        StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 this::parseResponse,
                 this::handleError
@@ -309,7 +316,13 @@ public class InboundActivity extends AppCompatActivity {
             }
         };
 
-        requestQueue.add(findInbound);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        requestQueue.add(request);
 
     }
 

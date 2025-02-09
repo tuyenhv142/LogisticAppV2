@@ -123,11 +123,10 @@ public class ConfirmPackageActivity extends AppCompatActivity {
             new android.app.AlertDialog.Builder(this)
                     .setTitle(getString(R.string.warning))
                     .setMessage(getString(R.string.order_quantity_mismatch))
-                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> confirmProduct(productModal, productMap, actualQuantity))
-                    .setNegativeButton(getString(R.string.no), (dialog, which) -> {
-                        dialog.dismiss();
-                        realQuantityProductPackageEt.setText("");
-                    })
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> confirmProduct(productModal,
+                            productMap, actualQuantity))
+                    .setNegativeButton(getString(R.string.no), (dialog, which) -> {dialog.dismiss();
+                        realQuantityProductPackageEt.setText("");})
                     .show();
         }
 
