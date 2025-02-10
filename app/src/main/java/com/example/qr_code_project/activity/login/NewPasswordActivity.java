@@ -1,7 +1,6 @@
 package com.example.qr_code_project.activity.login;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -10,6 +9,9 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -28,19 +30,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ForgetPasswordActivity extends AppCompatActivity {
+public class NewPasswordActivity extends AppCompatActivity {
 
-    private EditText enterEmailEt;
-    private SharedPreferences sharedPreferences;
+    private EditText newPasswordEt,reNewPasswordEt;
+    private Button confirmNewPasswordBtn;
     private RequestQueue requestQueue;
     private LoadingDialog loadingDialog;
-    private Button btnSendNow;
-    private String email;
+    private String email,code;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_forget_password);
+        setContentView(R.layout.activity_new_password);
+
+        email = getIntent().getStringExtra("email");
+        code = getIntent().getStringExtra("code");
 
         util();
 
@@ -48,36 +52,32 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     private void util(){
-        enterEmailEt = findViewById(R.id.enterEmailEt);
-        btnSendNow = findViewById(R.id.btnSendNow);
-        sharedPreferences = getSharedPreferences("AccountToken",MODE_PRIVATE);
-        requestQueue = Volley.newRequestQueue(this);
+        newPasswordEt = findViewById(R.id.newPasswordEt);
+        reNewPasswordEt = findViewById(R.id.reNewPasswordEt);
+        confirmNewPasswordBtn = findViewById(R.id.confirmNewPasswordBtn);
+
         loadingDialog = new LoadingDialog(this);
-
+        requestQueue = Volley.newRequestQueue(this);
     }
-
-    private boolean isValidEmail(String email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
 
     private void utilBtn(){
-        btnSendNow.setOnClickListener(v -> {
-            email = enterEmailEt.getText().toString().trim();
-            if (email.isEmpty()){
-                Toast.makeText(this,"Please enter your email!",Toast.LENGTH_SHORT).show();
+        confirmNewPasswordBtn.setOnClickListener(v -> {
+            String password = newPasswordEt.getText().toString();
+            String rePassword = reNewPasswordEt.getText().toString();
+
+            if (password.isEmpty() || rePassword.isEmpty()) {
+                Toast.makeText(this, "New password cannot be empty!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (!isValidEmail(email)) {
-                Toast.makeText(this, "Invalid email format!", Toast.LENGTH_SHORT).show();
+            if (!password.equals(rePassword)) {
+                Toast.makeText(this, "Password and Re-Password must be the same!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            String url = ApiConstants.ACCOUNT_LOADOTP;
+            String url = ApiConstants.ACCOUNT_UPDATE_PASSWORD;
 
             loadingDialog.show();
-
             StringRequest request = new StringRequest(Request.Method.POST,url,
                     this::response,
                     this::handleError)
@@ -87,9 +87,10 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     JSONObject params = new JSONObject();
                     try {
                         params.put("email", email);
-                        params.put("type", "update password");
+                        params.put("passwordNew", newPasswordEt.getText().toString());
+                        params.put("code", code);
                     } catch (JSONException e) {
-                        Log.d("ForgetPasswordActivity", Objects.requireNonNull(e.getMessage()));
+                        Log.d("LoadOTPActivity", Objects.requireNonNull(e.getMessage()));
                         return null;
                     }
                     Log.d("Request Body", params.toString());
@@ -114,28 +115,26 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         });
     }
 
-    private void response(String response){
+    private void response(String response) {
         try {
             JSONObject object = new JSONObject(response);
             boolean success = object.getBoolean("success");
-            if (success){
-                Toast.makeText(this,getString(R.string.success_response),Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, LoadOTPActivity.class);
-                intent.putExtra("email",email);
+            if (success) {
+                Toast.makeText(this, getString(R.string.success_response), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
-            }else{
-                Toast.makeText(this,"You have sent too many requests recently, " +
-                        "please try again later!",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to update password!", Toast.LENGTH_SHORT).show();
             }
-
-        }catch (JSONException e) {
-            Log.e("Login_response_error", "Failed to parse JSON response", e);
-            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
-        }finally {
+        } catch (JSONException e) {
+            Log.e("NewPasswordActivity", "JSON Parsing error: " + e.getMessage());
+            Toast.makeText(this, getString(R.string.failed_parse_response), Toast.LENGTH_SHORT).show();
+        } finally {
             loadingDialog.dismiss();
         }
     }
+
 
     private void handleError(Exception error) {
         String errorMsg = getString(R.string.error_parse);

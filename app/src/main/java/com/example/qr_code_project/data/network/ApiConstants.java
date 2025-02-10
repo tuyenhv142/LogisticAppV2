@@ -1,9 +1,9 @@
 package com.example.qr_code_project.data.network;
 
 public class ApiConstants {
-//    public static final String BASE_URL = "https://172.20.10.2:7142/api/";
+    public static final String BASE_URL = "https://172.20.10.2:7142/api/";
 
-    public static final String BASE_URL = "https://192.168.37.182:7142/api/";
+//    public static final String BASE_URL = "https://192.168.37.182:7142/api/";
 
     public static final String ACCOUNT = BASE_URL+"Account/";
     public static final String INBOUND = BASE_URL+"Importform/";
@@ -14,6 +14,9 @@ public class ApiConstants {
 
     public static final String ACCOUNT_PROFILE = ACCOUNT+"Showrofile";
     public static final String ACCOUNT_LOGIN = ACCOUNT+"LoginData";
+    public static final String ACCOUNT_LOADOTP = ACCOUNT+"LoadOTP";
+    public static final String ACCOUNT_CHECKCODE = ACCOUNT+"checkCode";
+    public static final String ACCOUNT_UPDATE_PASSWORD = ACCOUNT+"UpdatePassworData";
     public static final String INBOUND_SUBMIT = INBOUND+"UpdateCode";
     public static final String PACKAGE_SUBMIT = DELIVERY+"CheckPack";
     public static final String DELIVERY_UPDATE = DELIVERY+"UpdateActionLocation";

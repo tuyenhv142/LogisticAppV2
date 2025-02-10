@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/login_background">
+    android:background="@drawable/login_background"
+    tools:context=".activity.login.LoadOTPActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:cardCornerRadius="28dp"
-        android:layout_marginBottom="-20dp"
+        android:layout_marginBottom="20dp"
         android:layout_centerInParent="true"
         android:id="@+id/card_view">
         <LinearLayout
@@ -47,57 +51,49 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/reset_password"
+                android:text="@string/enter_otp"
                 android:textColor="@color/my_primary"
                 android:textSize="32sp"
                 android:textStyle="bold"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/please_enter_a_new_password"
+                android:text="@string/a_verification_code_has_been_sent_to_your_email"
                 android:textSize="16sp"
                 android:alpha="0.7"/>
 
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/new_pasword"
-                android:textSize="20sp"
-                android:alpha="0.7"
-                android:textStyle="bold"/>
-            <EditText
-                android:id="@+id/usernameEt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textWebEmailAddress"
-                />
-            <View
-                android:layout_width="wrap_content"
                 android:layout_height="20dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/re_enter_password"
-                android:textSize="20sp"
-                android:alpha="0.7"
-                android:textStyle="bold"/>
+
             <EditText
-                android:id="@+id/passwordEt"
+                android:id="@+id/otpEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
+                android:inputType="text"
                 />
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="70px">-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/resend_code"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/teal_200"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_centerVertical="true"/>-->
+<!--            </RelativeLayout>-->
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="10dp"/>
+
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitOtpBtn"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="@string/confirm"
+                android:text="@string/verify_otp"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:cornerRadius="32dp"
@@ -105,6 +101,4 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-
-
 </RelativeLayout>

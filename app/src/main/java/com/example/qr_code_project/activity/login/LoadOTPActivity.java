@@ -1,7 +1,6 @@
 package com.example.qr_code_project.activity.login;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -10,6 +9,9 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -28,19 +30,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ForgetPasswordActivity extends AppCompatActivity {
+public class LoadOTPActivity extends AppCompatActivity {
 
-    private EditText enterEmailEt;
-    private SharedPreferences sharedPreferences;
-    private RequestQueue requestQueue;
+    private EditText otpEt;
+    private Button submitOtpBtn;
+    private String email,otp;
     private LoadingDialog loadingDialog;
-    private Button btnSendNow;
-    private String email;
+    private RequestQueue requestQueue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_forget_password);
+        setContentView(R.layout.activity_load_otpactivity);
+        //get data from intent
+        email = getIntent().getStringExtra("email");
 
         util();
 
@@ -48,35 +52,27 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
     private void util(){
-        enterEmailEt = findViewById(R.id.enterEmailEt);
-        btnSendNow = findViewById(R.id.btnSendNow);
-        sharedPreferences = getSharedPreferences("AccountToken",MODE_PRIVATE);
-        requestQueue = Volley.newRequestQueue(this);
+        otpEt = findViewById(R.id.otpEt);
+        submitOtpBtn = findViewById(R.id.submitOtpBtn);
+
         loadingDialog = new LoadingDialog(this);
-
+        requestQueue = Volley.newRequestQueue(this);
     }
-
-    private boolean isValidEmail(String email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
 
     private void utilBtn(){
-        btnSendNow.setOnClickListener(v -> {
-            email = enterEmailEt.getText().toString().trim();
-            if (email.isEmpty()){
-                Toast.makeText(this,"Please enter your email!",Toast.LENGTH_SHORT).show();
+        submitOtpBtn.setOnClickListener(v -> {
+            otp = otpEt.getText().toString().trim();
+            if (email == null || email.isEmpty()) {
+                Toast.makeText(this, "Error: Email is missing!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (!isValidEmail(email)) {
-                Toast.makeText(this, "Invalid email format!", Toast.LENGTH_SHORT).show();
+            if (otp.isEmpty()) {
+                Toast.makeText(this, "Please enter the OTP sent to your email!", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            String url = ApiConstants.ACCOUNT_LOADOTP;
-
             loadingDialog.show();
+            String url = ApiConstants.ACCOUNT_CHECKCODE;
 
             StringRequest request = new StringRequest(Request.Method.POST,url,
                     this::response,
@@ -87,9 +83,9 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                     JSONObject params = new JSONObject();
                     try {
                         params.put("email", email);
-                        params.put("type", "update password");
+                        params.put("code", otp);
                     } catch (JSONException e) {
-                        Log.d("ForgetPasswordActivity", Objects.requireNonNull(e.getMessage()));
+                        Log.d("LoadOTPActivity", Objects.requireNonNull(e.getMessage()));
                         return null;
                     }
                     Log.d("Request Body", params.toString());
@@ -111,27 +107,27 @@ public class ForgetPasswordActivity extends AppCompatActivity {
             ));
 
             requestQueue.add(request);
+
         });
     }
 
     private void response(String response){
         try {
-            JSONObject object = new JSONObject(response);
+            JSONObject object = new  JSONObject(response);
             boolean success = object.getBoolean("success");
-            if (success){
+            if(success){
                 Toast.makeText(this,getString(R.string.success_response),Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, LoadOTPActivity.class);
-                intent.putExtra("email",email);
+                Intent intent = new Intent(this, NewPasswordActivity.class);
+                intent.putExtra("email", email);
+                intent.putExtra("code",otp);
                 startActivity(intent);
                 finish();
-            }else{
-                Toast.makeText(this,"You have sent too many requests recently, " +
-                        "please try again later!",Toast.LENGTH_SHORT).show();
-            }
 
-        }catch (JSONException e) {
-            Log.e("Login_response_error", "Failed to parse JSON response", e);
-            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this,"Code is not correct!",Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            Toast.makeText(this, getString(R.string.failed_parse_response),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -148,5 +144,4 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         loadingDialog.dismiss();
     }
-
 }
