@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qr_code_project.R;
@@ -19,11 +21,15 @@ public class ExportAdapter extends RecyclerView.Adapter<ExportAdapter.ExportView
     private final Context context;
     private final ArrayList<ExportModal> exportList;
     private final OnExportClickListener onExportClickListener;
+    private final OnExportDeleteListener onExportDeleteListener;
 
-    public ExportAdapter(Context context, ArrayList<ExportModal> exportList, OnExportClickListener onExportClickListener) {
+    public ExportAdapter(Context context, ArrayList<ExportModal> exportList,
+                         OnExportClickListener onExportClickListener,
+                         OnExportDeleteListener onExportDeleteListener) {
         this.context = context;
         this.exportList = exportList;
         this.onExportClickListener = onExportClickListener;
+        this.onExportDeleteListener = onExportDeleteListener;
     }
 
     @NonNull
@@ -43,6 +49,11 @@ public class ExportAdapter extends RecyclerView.Adapter<ExportAdapter.ExportView
         holder.totalItem.setText(String.format(String.valueOf(exportModal.getTotalItem())));
 
         holder.itemView.setOnClickListener(v -> onExportClickListener.onExportClick(exportModal));
+
+        holder.itemView.setOnLongClickListener(v -> {
+            showDeleteDialog(position);
+            return true; // Trả về true để xác nhận sự kiện đã xử lý
+        });
     }
 
 
@@ -65,5 +76,25 @@ public class ExportAdapter extends RecyclerView.Adapter<ExportAdapter.ExportView
 
     public interface OnExportClickListener {
         void onExportClick(ExportModal exportModal);
+    }
+
+    private void showDeleteDialog(int position) {
+        new AlertDialog.Builder(context)
+                .setTitle("Delete this export")
+                .setMessage("Are you sure want to remove this export?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    ExportModal deletedItem = exportList.remove(position);
+                    notifyItemRemoved(position);
+                    if (onExportDeleteListener != null) {
+                        onExportDeleteListener.onExportDeleted(deletedItem);
+                    }
+                    Toast.makeText(context, "Export has been deleted!", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    public interface OnExportDeleteListener {
+        void onExportDeleted(ExportModal deletedItem);
     }
 }

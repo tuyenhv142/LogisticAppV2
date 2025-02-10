@@ -191,23 +191,31 @@ public class OutboundActivity extends AppCompatActivity {
         int totalItem = content.optInt("totalQuantity", 0);
 
         exportList.add(new ExportModal(codeEp, items, totalItem,id));
-        int totalExport = exportList.size();
-        totalExportEt.setText(String.valueOf(totalExport));
-
-        int totalProduct = exportList.stream().mapToInt(ExportModal::getTotalItem).sum();
-        totalProductEt.setText(String.valueOf(totalProduct));
+        updateTotalValues();
 
         if (exportAdapter == null) {
-            exportAdapter = new ExportAdapter(this, exportList, exportModal -> {
-                Intent intent = new Intent(OutboundActivity.this
-                        , ExportDetailActivity.class);
-                intent.putExtra("codeEp", exportModal.getCodeEp());
-                startActivity(intent);
-            });
+            exportAdapter = new ExportAdapter(this, exportList,
+                exportModal -> {
+                    Intent intent = new Intent(OutboundActivity.this, ExportDetailActivity.class);
+                    intent.putExtra("codeEp", exportModal.getCodeEp());
+                    startActivity(intent);
+                },
+                deletedItem -> {
+                    exportList.remove(deletedItem);
+                    updateTotalValues();
+                }
+            );
             exportsRv.setAdapter(exportAdapter);
         } else {
             exportAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void updateTotalValues() {
+        totalExportEt.setText(String.valueOf(exportList.size()));
+
+        int totalProduct = exportList.stream().mapToInt(ExportModal::getTotalItem).sum();
+        totalProductEt.setText(String.valueOf(totalProduct));
     }
 
     private void utils() {
