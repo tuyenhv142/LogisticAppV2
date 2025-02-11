@@ -74,7 +74,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 return;
             }
 
-            String url = ApiConstants.ACCOUNT_LOADOTP;
+            String url = ApiConstants.ACCOUNT_LOAD_OTP;
 
             loadingDialog.show();
 

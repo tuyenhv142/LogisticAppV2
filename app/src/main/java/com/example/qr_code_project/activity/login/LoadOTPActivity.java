@@ -72,7 +72,7 @@ public class LoadOTPActivity extends AppCompatActivity {
                 return;
             }
             loadingDialog.show();
-            String url = ApiConstants.ACCOUNT_CHECKCODE;
+            String url = ApiConstants.ACCOUNT_CHECK_CODE;
 
             StringRequest request = new StringRequest(Request.Method.POST,url,
                     this::response,

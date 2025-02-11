@@ -14,8 +14,8 @@ public class ApiConstants {
 
     public static final String ACCOUNT_PROFILE = ACCOUNT+"Showrofile";
     public static final String ACCOUNT_LOGIN = ACCOUNT+"LoginData";
-    public static final String ACCOUNT_LOADOTP = ACCOUNT+"LoadOTP";
-    public static final String ACCOUNT_CHECKCODE = ACCOUNT+"checkCode";
+    public static final String ACCOUNT_LOAD_OTP = ACCOUNT+"LoadOTP";
+    public static final String ACCOUNT_CHECK_CODE = ACCOUNT+"checkCode";
     public static final String ACCOUNT_UPDATE_PASSWORD = ACCOUNT+"UpdatePassworData";
     public static final String INBOUND_SUBMIT = INBOUND+"UpdateCode";
     public static final String PACKAGE_SUBMIT = DELIVERY+"CheckPack";
