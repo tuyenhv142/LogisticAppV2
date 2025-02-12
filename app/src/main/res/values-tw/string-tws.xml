@@ -8,7 +8,7 @@
     <string name="list_product">產品列表</string>
     <string name="reset">重置</string>
     <string name="submit">提交</string>
-    <string name="code">料號</string>
+    <string name="pack_code">料號</string>
 
     <!--    Swap-->
     <string name="plan_list">計劃列表</string>
@@ -17,7 +17,7 @@
     <string name="edit_warehouse2">倉庫 2</string>
     <string name="plan_information">計劃資訊</string>
     <string name="confirm">確認</string>
-    <string name="location">位置代碼：</string>
+    <string name="location">儲位：</string>
     <string name="location_code">掃描位置</string>
     <string name="location_code2">掃描位置 2</string>
     <string name="enter_location">輸入位置</string>
@@ -56,7 +56,7 @@
     <string name="quantity_swap">交換數量</string>
     <string name="location_swap">位置交換</string>
     <string name="swap_to">請掃描交換位置</string>
-    <string name="username">用戶名</string>
+    <string name="username">帳號</string>
     <string name="outbound">揀貨</string>
     <string name="inbound">進貨上架</string>
     <string name="pack">包裝</string>
@@ -65,5 +65,146 @@
     <string name="product_location2">儲位號碼: 2</string>
     <string name="code_new">新儲位號碼</string>
     <string name="continue1">繼續</string>
+    <string name="receipt_barcode">條碼</string>
+    <string name="receipt_name">名稱</string>
+    <string name="please_scan_the_code">請安 SCAN</string>
+    <string name="number_of_products">筆數 :</string>
+    <string name="total_number_of_products">應到量 :</string>
+    <string name="real_product_quantity">已清點數量 :</string>
+    <string name="product_list">產品列表</string>
+    <string name="export_receipt_details">匯出詳細信息</string>
+    <string name="returns">返回</string>
+    <string name="product_information">產品資訊</string>
+    <string name="product_barcodes">料號</string>
+    <string name="product_names">品名</string>
+    <string name="product_quantitys">應到數量</string>
+    <string name="real_product_quantitys">實際產品數量</string>
+    <string name="warehouse_barcodes">倉庫條碼</string>
+    <string name="forgot_password">忘記密碼</string>
+    <string name="please_enter_your_email_n_to_verify_your_password_reset">請輸入您的電子郵件以驗證您的密碼重設</string>
+    <string name="email_address">Email</string>
+    <string name="send">下一個</string>
+    <string name="welcome">歡迎</string>
+    <string name="please_login_with_your_information">請使用您的資訊登入</string>
+    <string name="password">密碼</string>
+    <string name="remember_me">保持登入狀態</string>
+    <string name="i_forgot_my_password">忘記密碼</string>
+    <string name="login">登入</string>
+    <string name="what_would_you_like_to_n_work_today">今天您想做什麼工作？</string>
+    <string name="reset_password">重置密碼</string>
+    <string name="please_enter_a_new_password">請輸入新密碼。</string>
+    <string name="new_pasword">新密碼</string>
+    <string name="re_enter_password">重新輸入密碼</string>
+    <string name="enter_otp">輸入OTP</string>
+    <string name="a_verification_code_has_been_sent_to_your_email">驗證碼已發送到您的電子郵件。</string>
+    <string name="resend_code">重新發送代碼</string>
+    <string name="verify_otp">驗證OTP</string>
+    <string name="total_number_of_export_receipt">總出庫單數量 :</string>
+    <string name="total_actual_quantity_of_the_product">產品實際總數量 :</string>
+    <string name="combine">結合</string>
+    <string name="export_receipt_list">導出列表</string>
+    <string name="total_number_of_export">出口總數：</string>
+    <string name="total_real_product_quantity">實際產品數量總計：</string>
+    <string name="code">料號 :</string>
+    <string name="title">品名 :</string>
+    <string name="loading">加載中...</string>
+    <string name="items">項目</string>
+    <string name="total_items">項目總數</string>
+    <string name="old_location_code">舊位置代碼 :</string>
+    <string name="new_location_code">新位置代碼 :</string>
+    <string name="warehouse_old">舊倉庫</string>
+    <string name="floor_old">舊樓層</string>
+    <string name="area_old">舊區域</string>
+    <string name="warehouse_new">新倉庫</string>
+    <string name="floor_new">新樓層</string>
+    <string name="area_new">新區域</string>
+    <string name="shelf_old">舊書架</string>
+    <string name="shelf_new">新書架</string>
+
+    //Toast
+    <string name="login_fail">解析回應失敗！</string>
+    <string name="login_success">登入成功！</string>
+    <string name="login_wrong">帳號或密碼不正確！</string>
+    <string name="login_empty">帳號或密碼不能為空！</string>
+    <string name="error_timeout">請求逾時。請檢查您的網絡連接。</string>
+    <string name="error_no_connection">沒有網絡連接！</string>
+    <string name="error_parse">發生錯誤，請再試一次。</string>
+    <string name="dialog_title">通知</string>
+    <string name="dialog_mes_unsucess">未完成產品位置交換。您想查看詳細信息嗎？</string>
+    <string name="reset_data">您確定要重置此數據嗎？</string>
+    <string name="response_fail">解析回應失敗!</string>
+
+    //Outbound Toast
+    <string name="combine_toast">沒有可組合的產品!</string>
+    <string name="real_quantity_outbout">請輸入實際數量！</string>
+    <string name="product_barcode_valid">產品條碼有效。</string>
+    <string name="invalid_product_barcode">無效的產品條碼！請重新掃描。</string>
+    <string name="warehouse_barcode_valid">倉庫條碼有效。</string>
+    <string name="invalid_warehouse_barcode">無效的倉庫條碼！請重新掃描。</string>
+    <string name="no_warehouse">沒有倉庫有足夠的產品來完成訂單。</string>
+    <string name="product_confirmed_successfully">產品確認成功！</string>
+    <string name="warning">警告</string>
+    <string name="order_quantity_mismatch">實際數量與訂單數量不匹配。您仍然想確認嗎？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="confirmation">確認</string>
+    <string name="please_scan_again">請重新掃描。</string>
+
+    //Package Toast
+    <string name="scan_value_empty">掃描值為空！</string>
+    <string name="real_quantity_null">實際數量為空</string>
+    <string name="failed_parse_response">解析回應失敗！</string>
+    <string name="this_delivery_packaged">此配送已包裝！</string>
+    <string name="unknown_error">未知錯誤</string>
+    <string name="success_response">成功</string>
+    <string name="warning_package">請在確認前掃描兩個位置條碼！</string>
+    <string name="not_value">掃描值為空！</string>
+    <string name="not_data">此入庫條碼沒有數據！</string>
+    <string name="fail_load_data">加載數據失敗！</string>
+    <string name="data_reset">數據已重置，請重新掃描！</string>
+    <string name="packaged">此配送已包裝！</string>
+    <string name="confirming">請在確認前掃描兩個產品條碼！</string>
+    <string name="swapId_empty">錯誤：交換 ID 為空！</string>
+    <string name="swap_confirmed">產品交換已確認！</string>
+
+    <!-- UnSuccess -->
+    <string name="location_correct">位置條碼正確。</string>
+    <string name="scan_again_location">位置條碼無效！請重新掃描。</string>
+    <string name="product_correct">產品條碼正確。</string>
+    <string name="data_null">此位置沒有產品！</string>
+    <string name="skip_code">可跳過此代碼</string>
+
+    <!-- MainActivity -->
+    <string name="confirm_task">確認任務</string>
+    <string name="accept">您確定要接受此任務嗎？</string>
+    <string name="confirm_success">確認成功！</string>
+    <string name="error">錯誤</string>
+    <string name="error_confirm">確認任務時發生錯誤</string>
+    <string name="confirm_logout">確認登出</string>
+    <string name="sure_logout">您確定要登出嗎？</string>
+    <string name="notification">您需要授予通知權限以接收消息。</string>
+    <string name="logout">登出</string>
+    <string name="canel">取消</string>
+
+    <!-- Product adapter -->
+    <string name="already">此產品已確認！</string>
+
+    <!-- Confirm package -->
+    <string name="invalid_product">無效的產品數據！</string>
+    <string name="invalid_quantity">數量無效！請輸入有效數字。</string>
+    <string name="exists">此代碼已存在！</string>
+
+    <!-- Outbound -->
+    <string name="missing">缺少產品數據！</string>
+    <string name="export_empty">導出列表為空！</string>
+    <string name="update">更新成功！</string>
+    <string name="update_fail">更新全部失敗！</string>
+    <string name="has_been_pick_up">此配送已被取件！</string>
+
+    <!-- Inbound -->
+    <string name="enter_actual_quantity">請輸入實際數量（數字）！</string>
+    <string name="swap_unsuccess_title">您的交換位置失敗</string>
+    <string name="change_language">更改語言</string>
+    <string name="swap_location_unsuccess">交換位置失敗</string>
 
 </resources>

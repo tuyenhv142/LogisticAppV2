@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -67,7 +68,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     private void getDateFromIntent() {
         ProductModal productModal = (ProductModal) getIntent().getSerializableExtra("product");
         if (productModal == null) {
-            Toast.makeText(this, "Product data is missing!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.missing), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -117,7 +118,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         String realQuantityStr = realQuantityOutboundEt.getText().toString().trim();
 
         if (realQuantityStr.isEmpty()) {
-            Toast.makeText(this, "Please enter actual quantity!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.real_quantity_outbout), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -137,23 +138,23 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         if (scannedProductBarcode.isEmpty()) {
             scannedProductBarcode = qrCodeText;
             if (scannedProductBarcode.equals(barcodeOutboundEt.getText().toString().trim())) {
-                updateProductScanStatus(true, "Product barcode is valid.");
+                updateProductScanStatus(true, getString(R.string.product_barcode_valid));
                 fetchWarehouseLocation(scannedProductBarcode);
             } else {
-                updateProductScanStatus(false, "Invalid product barcode! Please scan again.");
+                updateProductScanStatus(false, getString(R.string.invalid_product_barcode));
                 scannedProductBarcode = "";
             }
         } else if (scannedWarehouseBarcode.isEmpty()) {
             scannedWarehouseBarcode = qrCodeText;
             if (scannedWarehouseBarcode.equals(warehouseCodeOutboundEt.getText().toString().trim())) {
-                updateWarehouseScanStatus(true, "Warehouse barcode is valid.");
+                updateWarehouseScanStatus(true, getString(R.string.warehouse_barcode_valid));
                 confirmOutboundBtn.setVisibility(View.VISIBLE);
                 if (qrCodeManager != null) {
                     qrCodeManager.unregister();
                     qrCodeManager = null;
                 }
             } else {
-                updateWarehouseScanStatus(false, "Invalid warehouse barcode! Please scan again.");
+                updateWarehouseScanStatus(false, getString(R.string.invalid_warehouse_barcode));
                 scannedWarehouseBarcode = "";
             }
         }
@@ -180,6 +181,13 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -195,35 +203,38 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
                 Log.d("error","Unknown error");
             }
         } catch (JSONException e) {
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.response_fail),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
     }
 
     private void populateContent(JSONObject content) throws JSONException {
-        int quantity = content.optInt("quantity", 0);
+        int requiredQuantity = Integer.parseInt(quantityOutboundEt.getText().toString().trim());
         JSONArray warehouseArray = content.optJSONArray("listAreaOfproducts");
+
         if (warehouseArray == null || warehouseArray.length() == 0) {
-            Toast.makeText(this,"No warehouses found for this product.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_warehouse), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int requiredQuantity = Integer.parseInt(quantityOutboundEt.getText().toString().trim());
         for (int i = 0; i < warehouseArray.length(); i++) {
             JSONObject warehouse = warehouseArray.getJSONObject(i);
+            int warehouseQuantity = warehouse.optInt("quantity", 0); // Lấy số lượng hàng trong kho
 
-            code = warehouse.optString("code", "N/A");
-            areaId = warehouse.optInt("idArea", 0);
-            location = warehouse.optInt("location", 0);
-            if (quantity >= requiredQuantity) {
+            if (warehouseQuantity >= requiredQuantity) {
+                code = warehouse.optString("code", "N/A");
+                areaId = warehouse.optInt("idShelf", 0);
+                location = warehouse.optInt("location", 0);
+
                 warehouseCodeOutboundEt.setText(code);
                 return;
             }
         }
 
-        Toast.makeText(this,"No warehouse has enough products for the order.",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.no_warehouse), Toast.LENGTH_SHORT).show();
     }
+
 
     private void confirmProduct(ProductModal productModal, Map<Integer, Object>  productMap, int actualQuantity) {
         isConfirmed = true;
@@ -242,19 +253,17 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         setResult(RESULT_OK, resultIntent);
         finish();
 
-        Toast.makeText(this, "Product confirmed successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.product_confirmed_successfully), Toast.LENGTH_SHORT).show();
     }
 
     private void showConfirmationDialog(int orderQuantity, int actualQuantity, ProductModal productModal,
                                         Map<Integer, Object>  productMap) {
         new android.app.AlertDialog.Builder(this)
-                .setTitle("Warning")
-                .setMessage("The actual quantity (" + actualQuantity +
-                        ") does not match the order quantity (" + orderQuantity +
-                        "). Do you still want to confirm?")
-                .setPositiveButton("Yes", (dialog, which) ->
+                .setTitle(getString(R.string.warning))
+                .setMessage(getString(R.string.order_quantity_mismatch))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) ->
                         confirmProduct(productModal, productMap, actualQuantity))
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -277,11 +286,11 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     }
 
     private void handleError(Throwable error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();

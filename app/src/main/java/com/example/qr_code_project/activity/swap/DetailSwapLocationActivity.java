@@ -15,6 +15,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -34,9 +35,9 @@ import java.util.Map;
 
 public class DetailSwapLocationActivity extends AppCompatActivity {
 
-    private EditText warehouseOldEd,floorOldEd,areaOldEt,locationOld1
+    private EditText shelfOldEt,floorOldEd,areaOldEt,locationOld1
             ,productName1,productQuantity1,productCode1;
-    private EditText warehouseNew2,floorNew2,areaNew2,locationNewCode2
+    private EditText shelfNewEt,floorNew2,areaNew2,locationNewCode2
             ,productName2,productQuantity2,productCode2;
     private TextView locationBarcodeStatus1Text, productBarcodeStatus1Text;
     private TextView locationBarcodeStatus2Text, productBarcodeStatus2Text;
@@ -75,18 +76,18 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         int swapId = getIntent().getIntExtra("swapId", 0);
 
         if (swapId == 0) {
-            Toast.makeText(this, "Error swapId is empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.swapId_empty), Toast.LENGTH_SHORT).show();
             return null;
         }
         return swapId;
     }
 
     private void onConfirmSwap(int swapId) {
-        if (scannedProductLocation1.isEmpty() || scannedProductLocation2.isEmpty()) {
-            Toast.makeText(this, "Please scan both product barcodes before confirming!"
-                    , Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (scannedProductLocation1.isEmpty() || scannedProductLocation2.isEmpty()) {
+//            Toast.makeText(this, getString(R.string.confirming)
+//                    , Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -97,7 +98,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
         editor.apply(); // Commit changes
 
-        Toast.makeText(this, "Product swap confirmed!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.swap_confirmed), Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(DetailSwapLocationActivity.this, ConfirmSwapLocationActivity.class);
         startActivity(intent);
@@ -106,8 +107,9 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
     //Get data Inbound from Api
     private void loadSwapLocation(int swapId) {
+        loadingDialog.show();
         String url = ApiConstants.getFindOneCodeSwapLocationUrl(swapId);
-        StringRequest findInbound = new StringRequest(
+        StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 this::parseResponseLocation,
                 this::handleError
@@ -126,7 +128,13 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             }
         };
 
-        requestQueue.add(findInbound);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        requestQueue.add(request);
     }
 
     //Data from Api
@@ -138,10 +146,10 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
                 if (content != null) {
                     locationOld1.setText(content.optString("localtionOldCode", "N/A"));
                     locationNewCode2.setText(content.optString("localtionNewCode", "N/A"));
-                    warehouseOldEd.setText(content.optString("warehouseOld", "N/A"));
+                    shelfOldEt.setText(content.optString("shelfOld", "N/A"));
                     areaOldEt.setText(content.optString("areaOld", "N/A"));
                     floorOldEd.setText(content.optString("floorOld", "N/A"));
-                    warehouseNew2.setText(content.optString("warehouse", "N/A"));
+                    shelfNewEt.setText(content.optString("shelf", "N/A"));
                     areaNew2.setText(content.optString("area", "N/A"));
                     floorNew2.setText(content.optString("floor", "N/A"));
                 }
@@ -150,12 +158,14 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             }
         } catch (JSONException e) {
             Log.e("SwapLocation", "Failed to parse JSON response", e);
-            showError("Failed to parse response!");
+            showError(getString(R.string.login_fail));
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
     private void util(){
-        warehouseOldEd = findViewById(R.id.warehouseOldEd);
+        shelfOldEt = findViewById(R.id.shelfOldEt);
         floorOldEd = findViewById(R.id.floorOldEd);
         areaOldEt = findViewById(R.id.areaOldEt);
         locationOld1 = findViewById(R.id.locationOld1);
@@ -163,7 +173,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         productName1 = findViewById(R.id.productName1);
         productQuantity1 = findViewById(R.id.productQuantity1);
         productCode1 = findViewById(R.id.productCode1);
-        warehouseNew2 = findViewById(R.id.warehouseNew2);
+        shelfNewEt = findViewById(R.id.shelfNewEt);
         floorNew2 = findViewById(R.id.floorNew2);
         areaNew2 = findViewById(R.id.areaNew2);
         locationNewCode2 = findViewById(R.id.locationNewCode2);
@@ -206,40 +216,40 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         if (scannedLocation1.isEmpty()) {
             scannedLocation1 = qrCodeText;
             if (scannedLocation1.equals(locationOld1.getText().toString().trim())) {
-                updateLocation1ScanStatus(true, "Location barcode is correct.");
+                updateLocation1ScanStatus(true, getString(R.string.location_correct));
                 fetchProductLocation(scannedLocation1,true);
             } else {
-                updateLocation1ScanStatus(false, "Invalid location barcode! Please scan again.");
+                updateLocation1ScanStatus(false, getString(R.string.scan_again_location));
                 scannedLocation1 = "";
             }
         } else if (scannedProductLocation1.isEmpty()) {
             scannedProductLocation1 = qrCodeText;
             if (scannedProductLocation1.equals(productCode1.getText().toString().trim())) {
-                updateProductLocation1ScanStatus(true, "Product barcode is correct.");
+                updateProductLocation1ScanStatus(true, getString(R.string.product_correct));
             } else {
-                updateProductLocation1ScanStatus(false, "Invalid Product barcode! Please scan again.");
+                updateProductLocation1ScanStatus(false,getString(R.string.invalid_product_barcode));
                 scannedProductLocation1 = "";
             }
         }else if (scannedLocation2.isEmpty()) {
             scannedLocation2 = qrCodeText;
             if (scannedLocation2.equals(locationNewCode2.getText().toString().trim())) {
-                updateLocation2ScanStatus(true, "Location barcode is correct.");
+                updateLocation2ScanStatus(true, getString(R.string.location_correct));
                 fetchProductLocation(scannedLocation2,false);
             } else {
-                updateLocation2ScanStatus(false, "Invalid Location barcode! Please scan again.");
+                updateLocation2ScanStatus(false, getString(R.string.scan_again_location));
                 scannedLocation2 = "";
             }
         }else if (scannedProductLocation2.isEmpty()) {
             scannedProductLocation2 = qrCodeText;
             if (scannedProductLocation2.equals(productCode2.getText().toString().trim())) {
-                updateProductLocation2ScanStatus(true, "Product barcode is correct.");
+                updateProductLocation2ScanStatus(true, getString(R.string.product_correct));
                 continueConfirmProductBtn.setEnabled(true);
                 if (qrCodeManager != null) {
                     qrCodeManager.unregister();
                     qrCodeManager = null;
                 }
             } else {
-                updateProductLocation2ScanStatus(false, "Invalid Product barcode! Please scan again.");
+                updateProductLocation2ScanStatus(false, getString(R.string.invalid_product_barcode));
                 scannedProductLocation2 = "";
             }
         }
@@ -290,6 +300,13 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -298,7 +315,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONArray content = jsonObject.optJSONArray("content");
-                if (content != null) {
+                if (content != null && content.length()>0) {
                     for (int i = 0; i < content.length(); i++) {
                         JSONObject product = content.getJSONObject(i);
 
@@ -312,19 +329,26 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
                             productCode2.setText(product.optString("code", "N/A"));
                         }
                     }
+                }else{
+                    Toast.makeText(this,getString(R.string.data_null),Toast.LENGTH_SHORT).show();
+                    if (!isOldLocation){
+                        updateProductLocation2ScanStatus(true, getString(R.string.skip_code));
+                        continueConfirmProductBtn.setEnabled(true);
+                        if (qrCodeManager != null) {
+                            qrCodeManager.unregister();
+                            qrCodeManager = null;
+                        }
+                    }
+//                    else {
+//                        updateProductLocation2ScanStatus(true, getString(R.string.skip_code));
+//                    }
                 }
             } else {
-                Toast.makeText(this,"Data null",Toast.LENGTH_SHORT).show();
-                if (isOldLocation){
-                    updateProductLocation1ScanStatus(true, "Can skip this code");
-                }else {
-                    updateProductLocation2ScanStatus(true, "Can skip this code");
-                }
-
                 Log.d("error", "Unknown error");
+                Toast.makeText(this,getString(R.string.failed_parse_response),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
-            Toast.makeText(this, "Failed to parse response!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.login_fail), Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -332,11 +356,11 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
     //Show error process Api
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         loadingDialog.dismiss();
         Log.e("API Error", error.getMessage(), error);

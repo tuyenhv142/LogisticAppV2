@@ -49,7 +49,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         if (productObj instanceof ProductModal) {
             productModal = (ProductModal) productObj;
         } else {
-            Toast.makeText(this, "Invalid product data!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.invalid_product), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -81,7 +81,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         String realQuantityStr = realQuantityProductPackageEt.getText().toString().trim();
 
         if (realQuantityStr.isEmpty()) {
-            Toast.makeText(this, "Please enter actual quantity!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.real_quantity_outbout), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -95,7 +95,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
                 confirmProduct(productModal, productMap, actualQuantity);
             }
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Invalid quantity! Please enter a valid number."
+            Toast.makeText(this, getString(R.string.invalid_quantity)
                     , Toast.LENGTH_SHORT).show();
         }
 
@@ -121,15 +121,12 @@ public class ConfirmPackageActivity extends AppCompatActivity {
                                         Map<Integer, Object> productMap) {
         if (!isFinishing()) {
             new android.app.AlertDialog.Builder(this)
-                    .setTitle("Warning")
-                    .setMessage("The actual quantity (" + actualQuantity +
-                            ") does not match the order quantity (" + orderQuantity +
-                            "). Do you still want to confirm?")
-                    .setPositiveButton("Yes", (dialog, which) -> confirmProduct(productModal, productMap, actualQuantity))
-                    .setNegativeButton("No", (dialog, which) -> {
-                        dialog.dismiss();
-                        realQuantityProductPackageEt.setText("");
-                    })
+                    .setTitle(getString(R.string.warning))
+                    .setMessage(getString(R.string.order_quantity_mismatch))
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> confirmProduct(productModal,
+                            productMap, actualQuantity))
+                    .setNegativeButton(getString(R.string.no), (dialog, which) -> {dialog.dismiss();
+                        realQuantityProductPackageEt.setText("");})
                     .show();
         }
 
@@ -153,7 +150,7 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         setResult(RESULT_OK, resultIntent);
         finish();
 
-        Toast.makeText(this, "Product confirmed successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.product_confirmed_successfully), Toast.LENGTH_SHORT).show();
     }
 
     //Check scan product and warehouse
@@ -162,12 +159,11 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         scannedProductBarcode = qrCodeText;
         if (scannedProductBarcode != null && scannedProductBarcode.equals(barcodeProductPackageEt
                 .getText().toString().trim())) {
-            updateProductScanStatus(true, "Product barcode is valid.");
+            updateProductScanStatus(true, getString(R.string.product_barcode_valid));
             qrCodeManager.unregister();
             confirmProductPackageBtn.setEnabled(true);
-            confirmProductPackageBtn.setText("Confirm Product");
         } else {
-            updateProductScanStatus(false, "Invalid product barcode! Please scan again.");
+            updateProductScanStatus(false, getString(R.string.invalid_product_barcode));
             scannedProductBarcode = "";
         }
     }
@@ -191,7 +187,6 @@ public class ConfirmPackageActivity extends AppCompatActivity {
         productBarcodePackageStatusText = findViewById(R.id.productBarcodePackageStatusText);
 
         confirmProductPackageBtn.setEnabled(false);
-        confirmProductPackageBtn.setText("Scan barcode to enable");
 
     }
 }

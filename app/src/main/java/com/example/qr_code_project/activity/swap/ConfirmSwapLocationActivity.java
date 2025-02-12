@@ -15,16 +15,18 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.qr_code_project.data.manager.QRcodeManager;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.MainActivity;
 import com.example.qr_code_project.data.network.ApiConstants;
-import com.example.qr_code_project.data.network.ApiService;
 import com.example.qr_code_project.data.manager.TokenManager;
 import com.example.qr_code_project.data.ui.LoadingDialog;
 
@@ -51,9 +53,9 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private QRcodeManager qrCodeManager;
     private String scannedLocation1 = "";
     private String scannedLocation2= "";
-    private ApiService apiService;
     private LoadingDialog loadingDialog;
     private TokenManager tokenManager;
+    private int pendingRequests = 0;
 
     private int statusId;
     private int swapId;
@@ -79,27 +81,67 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
 
     private void onConfirmSwap(int swapId) {
         if (scannedLocation1.isEmpty() || scannedLocation2.isEmpty()) {
-            Toast.makeText(this, "Please scan both location barcodes before confirming!"
+            Toast.makeText(this, getString(R.string.warning_package)
                     , Toast.LENGTH_SHORT).show();
             return;
         }
         loadingDialog.show();
-        apiService.submitSwap(swapId, new ApiService.ApiResponseListener() {
+        String url = ApiConstants.SWAP_LOCATION_SUBMIT;
+        StringRequest request = new StringRequest(Request.Method.PUT, url,
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean isSuccess = jsonObject.getBoolean("success");
+
+                        if (isSuccess) {
+                            loadingDialog.dismiss();
+                            Toast.makeText(ConfirmSwapLocationActivity.this,
+                                    getString(R.string.success_response), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ConfirmSwapLocationActivity.this,
+                                    MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        loadingDialog.dismiss();
+                        Toast.makeText(ConfirmSwapLocationActivity.this, e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                },
+                this::handleError) {
             @Override
-            public void onSuccess(String response) {
-                loadingDialog.dismiss();
-                Toast.makeText(ConfirmSwapLocationActivity.this, response, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ConfirmSwapLocationActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject params = new JSONObject();
+                try {
+                    params.put("id_statuswarehourse", statusId);
+                    params.put("title", "done");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("ConfirmSwapLocationActivity", "Request Body: " + params.toString());
+                return params.toString().getBytes();
             }
 
             @Override
-            public void onError(String error) {
-                loadingDialog.dismiss();
-                Toast.makeText(ConfirmSwapLocationActivity.this, error, Toast.LENGTH_SHORT).show();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", null);
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                headers.put("Content-Type", "application/json");
+                return headers;
             }
-        });
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        requestQueue.add(request);
     }
 
     private void setupQRManager() {
@@ -184,7 +226,6 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         codeLocation1.setText(product1Location);
         requestQueue = Volley.newRequestQueue(this);
         confirmSwapBtn.setEnabled(false);
-        apiService = new ApiService(this);
         loadingDialog = new LoadingDialog(this);
         tokenManager = new TokenManager(this);
     }
@@ -192,7 +233,10 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private void fetchProductLocation(String code, boolean isOldLocation) {
         String url = ApiConstants.getFindCodeLocationProductUrl(code);
         Log.d("url_getFindCodeLocationProductUrl",url);
+
         loadingDialog.show();
+        pendingRequests++;
+
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 response -> parseResponseProductLocation(response, isOldLocation),
@@ -213,19 +257,22 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
-                30000, // timeout (30 second)
+                10 * 1000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
+
         requestQueue.add(request);
     }
 
+    @SuppressLint("SetTextI18n")
     private void parseResponseProductLocation(String response, boolean isOldLocation) {
+        checkAndDismissLoading();
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONArray content = jsonObject.optJSONArray("content");
-                if (content != null) {
+                if (content != null && content.length()>0) {
                     for (int i = 0; i < content.length(); i++) {
                         JSONObject product = content.getJSONObject(i);
 
@@ -237,32 +284,52 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                             nameProductLocation2.setText(product.optString("title", "N/A"));
                             quantityProductLocation2.setText(String.valueOf(product.optInt("quantity", 0)));
                             codeProductLocation2.setText(product.optString("code", "N/A"));
+
                         }
+                    }
+                }else{
+                    if (isOldLocation) {
+                        nameProductLocation1.setText("null");
+                        quantityProductLocation1.setText("null");
+                        codeProductLocation1.setText("null");
+                    } else {
+                        nameProductLocation2.setText("null");
+                        quantityProductLocation2.setText("null");
+                        codeProductLocation2.setText("null");
+//                        check = true;
                     }
                 }
             } else {
                 Log.d("error", "Unknown error");
+                Toast.makeText(this,getString(R.string.failed_parse_response),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
-            Toast.makeText(this, "Failed to parse response!", Toast.LENGTH_SHORT).show();
-        }finally {
+            Toast.makeText(this, getString(R.string.response_fail), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkAndDismissLoading() {
+        pendingRequests--; // Giảm biến đếm khi request hoàn thành
+        if (pendingRequests <= 0) {
             loadingDialog.dismiss();
         }
     }
 
+
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
-        if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
-        } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+        checkAndDismissLoading();
+        String errorMsg = getString(R.string.error_parse);
+        if (error instanceof TimeoutError) {
+            errorMsg = getString(R.string.error_timeout);
+        } else if (error instanceof NoConnectionError) {
+            errorMsg = getString(R.string.error_no_connection);
         }
-        loadingDialog.dismiss();
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
     }
 
     private void fetchPlanStatus(int code) {
+        loadingDialog.show();
         String url = ApiConstants.getFindByPlanUrl(code);
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
@@ -282,6 +349,13 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -297,7 +371,9 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                 Log.d("error", "Unknown error");
             }
         } catch (JSONException e) {
-            Toast.makeText(this, "Failed to parse response!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.response_fail), Toast.LENGTH_SHORT).show();
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 

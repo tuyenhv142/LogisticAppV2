@@ -53,17 +53,21 @@ public class SwapLocationAdapter extends RecyclerView.Adapter<SwapLocationAdapte
             String warehouse = swapModal.getWarehouse();
             String area = swapModal.getArea();
             String floor = swapModal.getFloor();
+            String shelfOld = swapModal.getShelfOld();
+            String shelfNew = swapModal.getShelfNew();
 
             // Gán dữ liệu vào các TextView
             holder.id.setText(String.valueOf(swapId));
-            holder.locationOldCode.setText(String.format("Location: %s", locationOldCode));
-            holder.locationNewCode.setText(String.format("Location: %s", locationNewCode));
-            holder.warehouseOld.setText(String.format("Warehouse: %s", warehouseOld));
-            holder.areaOld.setText(String.format("Area: %s", areaOld));
-            holder.floorOld.setText(String.format("Floor: %s", floorOld));
-            holder.warehouseNew.setText(String.format("Warehouse: %s", warehouse));
-            holder.floorNew.setText(String.format("Floor: %s", floor));
-            holder.areaNew.setText(String.format("Area: %s", area));
+            holder.locationOldCode.setText(String.valueOf(locationOldCode));
+            holder.locationNewCode.setText(String.valueOf(locationNewCode));
+            holder.warehouseOld.setText(String.valueOf(warehouseOld));
+            holder.areaOld.setText(String.valueOf(areaOld));
+            holder.floorOld.setText(String.valueOf(floorOld));
+            holder.warehouseNew.setText(String.valueOf(warehouse));
+            holder.floorNew.setText(String.valueOf(floor));
+            holder.areaNew.setText(String.valueOf(area));
+            holder.shelfOld.setText(String.valueOf(shelfOld));
+            holder.shelfNew.setText(String.valueOf(shelfNew));
 
             // Xử lý khi người dùng click vào item
             holder.itemView.setOnClickListener(v -> {
@@ -82,8 +86,8 @@ public class SwapLocationAdapter extends RecyclerView.Adapter<SwapLocationAdapte
 
     static class HolderPost extends RecyclerView.ViewHolder {
         ImageButton moreSwapBtn;
-        TextView locationOldCode, warehouseOld, floorOld, areaOld;
-        TextView locationNewCode, warehouseNew, floorNew, areaNew,id;
+        TextView locationOldCode, warehouseOld, floorOld, areaOld,shelfOld;
+        TextView locationNewCode, warehouseNew, floorNew, areaNew,shelfNew,id;
 //        ImageView swapImage;
 
         public HolderPost(@NonNull View itemView) {
@@ -97,6 +101,8 @@ public class SwapLocationAdapter extends RecyclerView.Adapter<SwapLocationAdapte
             warehouseNew = itemView.findViewById(R.id.warehouseNew);
             floorNew = itemView.findViewById(R.id.floorNew);
             areaNew = itemView.findViewById(R.id.areaNew);
+            shelfOld = itemView.findViewById(R.id.shelfOld);
+            shelfNew = itemView.findViewById(R.id.shelfNew);
             id = itemView.findViewById(R.id.id);
         }
     }

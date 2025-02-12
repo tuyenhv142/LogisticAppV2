@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -90,6 +91,12 @@ public class ExportDetailActivity extends AppCompatActivity {
             }
         };
 
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         Volley.newRequestQueue(this).add(request);
     }
 
@@ -126,7 +133,7 @@ public class ExportDetailActivity extends AppCompatActivity {
                 JSONObject object = products.getJSONObject(i);
                 int id = object.optInt("id");
                 String title = object.optString("title", "N/A");
-                int quantity = object.optInt("quantityDelivery");
+                int quantity = object.optInt("quantityDeliverynote");
 //                String location = null;
                 String code = object.optString("code");
                 String image = object.optString("image", "");
@@ -142,11 +149,11 @@ public class ExportDetailActivity extends AppCompatActivity {
     }
 
     private void handleError(Throwable error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();

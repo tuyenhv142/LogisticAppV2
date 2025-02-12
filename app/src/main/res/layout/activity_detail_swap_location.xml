@@ -28,28 +28,28 @@
             android:layout_marginStart="10dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="3dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="15sp"
-                    android:layout_weight="1"
-                    android:text="@string/warehouse"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-                <EditText
-                    android:id="@+id/warehouseOldEd"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/edit_warehouse"
-                    android:textSize="20sp"/>
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:padding="3dp">-->
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_horizontal"-->
+<!--                    android:layout_marginTop="15sp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/warehouse"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold" />-->
+<!--                <EditText-->
+<!--                    android:id="@+id/warehouseOldEd"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:hint="@string/edit_warehouse"-->
+<!--                    android:textSize="20sp"/>-->
+<!--            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,6 +95,30 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/edit_area"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="3dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:text="@string/shelf_old"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+                <EditText
+                    android:id="@+id/shelfOldEt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/shelf_old"
                     android:focusable="false"
                     android:focusableInTouchMode="false"/>
             </LinearLayout>
@@ -239,28 +263,28 @@
             android:layout_marginEnd="10dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="3dp">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="15sp"
-                    android:layout_weight="1"
-                    android:text="@string/warehouse"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-                <EditText
-                    android:id="@+id/warehouseNew2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/edit_warehouse2"
-                    android:textSize="20sp" />
-            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:padding="3dp">-->
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_horizontal"-->
+<!--                    android:layout_marginTop="15sp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/warehouse"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold" />-->
+<!--                <EditText-->
+<!--                    android:id="@+id/warehouseNew2"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:hint="@string/edit_warehouse2"-->
+<!--                    android:textSize="20sp" />-->
+<!--            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -310,6 +334,30 @@
                     android:hint="@string/edit_area2"
                     android:focusable="false"
                     android:focusableInTouchMode="false" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="3dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="1"
+                    android:text="@string/shelf_new"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+                <EditText
+                    android:id="@+id/shelfNewEt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/shelf_new"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
             </LinearLayout>
 
             <LinearLayout
@@ -452,7 +500,7 @@
         android:id="@+id/continueConfirmProductBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:background="@drawable/background_btn"
-        android:text="@string/continue1"
-        android:layout_gravity="center"/>
+        android:text="@string/continue1" />
 </LinearLayout>

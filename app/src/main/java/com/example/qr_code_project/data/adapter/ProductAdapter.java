@@ -79,15 +79,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPo
             }
 
             // Gán dữ liệu vào các TextView
-            holder.code.setText(String.format("Code: %s", productCode));
+            holder.code.setText(String.valueOf( productCode));
             holder.name.setText(productName);
-            holder.quantity.setText(String.format("Quantity: %s", productQuantity));
-            holder.location.setText(String.format("Location: %s", productLocation));
+            holder.quantity.setText(String.valueOf(productQuantity));
+            holder.location.setText(String.valueOf(productLocation));
 
             // Xử lý khi người dùng click vào item
             holder.itemView.setOnClickListener(v -> {
                 if (productMap.containsKey(productId)) {
-                    Toast.makeText(context, "This product has already been confirmed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "This product has already been confirmed!",
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     onProductClickListener.onProductClick(productModal, productMap);
                 }

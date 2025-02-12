@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -84,7 +85,7 @@ public class OutboundActivity extends AppCompatActivity {
     private void utilBtn() {
         submitCombineBtn.setOnClickListener(v -> {
             if (exportList.isEmpty()) {
-                Toast.makeText(OutboundActivity.this, "No products to combine!"
+                Toast.makeText(OutboundActivity.this, getString(R.string.combine_toast)
                         , Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -97,21 +98,25 @@ public class OutboundActivity extends AppCompatActivity {
     private void loadInbound(String scanValue) {
         loadingDialog.show();
         if (scanValue == null || scanValue.isEmpty()) {
-            Toast.makeText(this, "Scan value is empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.scan_value_empty), Toast.LENGTH_SHORT).show();
             return;
         }
 
         for (ExportModal modal : exportList) {
             if (modal.getCodeEp().equals(scanValue)) {
-                Toast.makeText(this, "This code already exists!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.exists), Toast.LENGTH_SHORT).show();
                 loadingDialog.dismiss();
                 return;
             }
         }
 
-        StringRequest findInbound = getStringRequest(scanValue);
-
-        requestQueue.add(findInbound);
+        StringRequest request = getStringRequest(scanValue);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        requestQueue.add(request);
     }
 
     private @NonNull StringRequest getStringRequest(String scanValue) {
@@ -134,8 +139,8 @@ public class OutboundActivity extends AppCompatActivity {
                 return headers;
             }
         };
-    }
 
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     private void responseData(String response) {
@@ -147,23 +152,23 @@ public class OutboundActivity extends AppCompatActivity {
                     content(content);
                 }
             } else {
-                Toast.makeText(this,"Failed to load outbound"
+                Toast.makeText(this,getString(R.string.response_fail)
                         ,Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.response_fail),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
     }
 
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
@@ -173,12 +178,12 @@ public class OutboundActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void content(JSONObject content) throws JSONException {
 
-//        boolean isAction = content.optBoolean("isAction", false);
-//
-//        if (isAction) {
-//            Toast.makeText(this, "This delivery has been picked up. !", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
+        boolean isAction = content.optBoolean("isAction", false);
+
+        if (isAction) {
+            Toast.makeText(this, getString(R.string.has_been_pick_up), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         int id = content.optInt("id",0);
         String codeEp = content.optString("code", "N/A");
@@ -186,23 +191,31 @@ public class OutboundActivity extends AppCompatActivity {
         int totalItem = content.optInt("totalQuantity", 0);
 
         exportList.add(new ExportModal(codeEp, items, totalItem,id));
-        int totalExport = exportList.size();
-        totalExportEt.setText(String.valueOf(totalExport));
-
-        int totalProduct = exportList.stream().mapToInt(ExportModal::getTotalItem).sum();
-        totalProductEt.setText(String.valueOf(totalProduct));
+        updateTotalValues();
 
         if (exportAdapter == null) {
-            exportAdapter = new ExportAdapter(this, exportList, exportModal -> {
-                Intent intent = new Intent(OutboundActivity.this
-                        , ExportDetailActivity.class);
-                intent.putExtra("codeEp", exportModal.getCodeEp());
-                startActivity(intent);
-            });
+            exportAdapter = new ExportAdapter(this, exportList,
+                exportModal -> {
+                    Intent intent = new Intent(OutboundActivity.this, ExportDetailActivity.class);
+                    intent.putExtra("codeEp", exportModal.getCodeEp());
+                    startActivity(intent);
+                },
+                deletedItem -> {
+                    exportList.remove(deletedItem);
+                    updateTotalValues();
+                }
+            );
             exportsRv.setAdapter(exportAdapter);
         } else {
             exportAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void updateTotalValues() {
+        totalExportEt.setText(String.valueOf(exportList.size()));
+
+        int totalProduct = exportList.stream().mapToInt(ExportModal::getTotalItem).sum();
+        totalProductEt.setText(String.valueOf(totalProduct));
     }
 
     private void utils() {

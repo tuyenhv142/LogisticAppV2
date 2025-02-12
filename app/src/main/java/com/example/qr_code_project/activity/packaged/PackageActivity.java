@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -28,7 +30,6 @@ import com.example.qr_code_project.activity.MainActivity;
 import com.example.qr_code_project.data.adapter.ProductAdapter;
 import com.example.qr_code_project.data.modal.ProductModal;
 import com.example.qr_code_project.data.network.ApiConstants;
-import com.example.qr_code_project.data.network.ApiService;
 import com.example.qr_code_project.data.manager.TokenManager;
 import com.example.qr_code_project.data.ui.LoadingDialog;
 
@@ -58,7 +59,6 @@ public class PackageActivity extends AppCompatActivity {
     private ArrayList<ProductModal> productArrayList;
     private ProductAdapter productAdapter;
     private final Map<Integer, Object> productMap = new HashMap<>();
-    private ApiService apiService;
     private LoadingDialog loadingDialog;
     private TokenManager tokenManager;
 
@@ -87,7 +87,7 @@ public class PackageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String code = codePackageEt.getText().toString();
                 if(deliveryId == 0){
-                    Toast.makeText(PackageActivity.this,"Real quantity is  null"
+                    Toast.makeText(PackageActivity.this,getString(R.string.real_quantity_null)
                             ,Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -100,20 +100,60 @@ public class PackageActivity extends AppCompatActivity {
 
     //Submit data
     private void submit(String code, int deliveryId) {
-        apiService.submitPackage(code, deliveryId, new ApiService.ApiResponseListener() {
+        loadingDialog.show();
+        String url = ApiConstants.PACKAGE_SUBMIT;
+        StringRequest request = new StringRequest(Request.Method.PUT, url,
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean isSuccess = jsonObject.getBoolean("success");
+                        String message = jsonObject.optString("error", "Unknown error");
+
+                        if (isSuccess) {
+                            Toast.makeText(PackageActivity.this, getString(R.string.success_response)
+                                    , Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(PackageActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(PackageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                this::handleError) {
             @Override
-            public void onSuccess(String response) {
-                Toast.makeText(PackageActivity.this, response, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(PackageActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject params = new JSONObject();
+                try {
+                    params.put("code", code);
+                    params.put("id", deliveryId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("PackageActivity", "Request Body: " + params.toString());
+                return params.toString().getBytes();
             }
 
             @Override
-            public void onError(String error) {
-                Toast.makeText(PackageActivity.this, error, Toast.LENGTH_SHORT).show();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", null);
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                headers.put("Content-Type", "application/json");
+                return headers;
             }
-        });
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        requestQueue.add(request);
     }
 
 //    @Override
@@ -207,13 +247,13 @@ public class PackageActivity extends AppCompatActivity {
 
     private void loadPackage(String scanValue) {
         if (scanValue == null || scanValue.isEmpty()) {
-            Toast.makeText(this, "Scan value is empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.scan_value_empty), Toast.LENGTH_SHORT).show();
             return;
         }
         loadingDialog.show();
 
         String url = ApiConstants.getFindOneCodeDeliveryUrl(scanValue);
-        StringRequest findInbound = new StringRequest(
+        StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 this::parseResponse,
                 this::handleError
@@ -232,7 +272,13 @@ public class PackageActivity extends AppCompatActivity {
             }
         };
 
-        requestQueue.add(findInbound);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        requestQueue.add(request);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -256,7 +302,7 @@ public class PackageActivity extends AppCompatActivity {
             }
         } catch (JSONException e) {
             Log.e("package", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.failed_parse_response),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -267,7 +313,7 @@ public class PackageActivity extends AppCompatActivity {
         boolean isAction = content.optBoolean("isPack", false);
 
         if (isAction) {
-            Toast.makeText(this, "This delivery has been packaged !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.packaged), Toast.LENGTH_SHORT).show();
             return;
         }
         deliveryId = content.optInt("id",0);
@@ -283,7 +329,7 @@ public class PackageActivity extends AppCompatActivity {
 
             int id = object.optInt("id");
             String title = object.optString("title", "N/A");
-            int quantity = object.optInt("quantityDelivery");
+            int quantity = object.optInt("quantityDeliverynote");
 //            int location = object.optString("dataItem");
             String code = object.optString("code", "N/A");
             String image = object.optString("image", "");
@@ -294,7 +340,8 @@ public class PackageActivity extends AppCompatActivity {
         if (productAdapter == null) {
             productAdapter = new ProductAdapter(this, productArrayList, productMap,
                     (product, updatedMap) -> {
-                        Intent intent = new Intent(PackageActivity.this, ConfirmPackageActivity.class);
+                        Intent intent = new Intent(PackageActivity.this
+                                , ConfirmPackageActivity.class);
                         intent.putExtra("product", product);
                         intent.putExtra("productMap", new HashMap<>((Map) updatedMap));
                         confirmProductLauncher.launch(intent);
@@ -307,11 +354,11 @@ public class PackageActivity extends AppCompatActivity {
     }
 
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
@@ -338,7 +385,6 @@ public class PackageActivity extends AppCompatActivity {
         tokenManager = new TokenManager(this);
         productPackagesRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
-        apiService = new ApiService(this);
         loadingDialog = new LoadingDialog(this);
 
         if(productMap.isEmpty()){

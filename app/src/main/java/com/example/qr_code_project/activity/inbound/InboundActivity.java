@@ -14,21 +14,24 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.qr_code_project.activity.swap.UnSuccessSwapLocationActivity;
 import com.example.qr_code_project.data.manager.QRcodeManager;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.MainActivity;
 import com.example.qr_code_project.data.adapter.ProductAdapter;
 import com.example.qr_code_project.data.modal.ProductModal;
 import com.example.qr_code_project.data.network.ApiConstants;
-import com.example.qr_code_project.data.network.ApiService;
 import com.example.qr_code_project.data.helper.SSLHelper;
 import com.example.qr_code_project.data.manager.TokenManager;
 import com.example.qr_code_project.data.ui.LoadingDialog;
@@ -60,7 +63,6 @@ public class InboundActivity extends AppCompatActivity {
     private ArrayList<ProductModal> productArrayList;
     private ProductAdapter productAdapter;
     private final Map<Integer, Object> productMap = new HashMap<>();
-    private ApiService apiService;
     private LoadingDialog loadingDialog;
     private boolean isSubmit = false;
     private TokenManager tokenManager;
@@ -82,7 +84,7 @@ public class InboundActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String code = codeEt.getText().toString();
                 if(totalRealQuantity == 0){
-                    Toast.makeText(InboundActivity.this,"Real quantity is  null"
+                    Toast.makeText(InboundActivity.this,getString(R.string.real_quantity_null)
                             ,Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -134,7 +136,6 @@ public class InboundActivity extends AppCompatActivity {
         Map<Integer, Object> updatedQuantities =
                 (Map<Integer, Object>) data.getSerializableExtra("productMap");
 
-//        loadingDialog.show();
         if (updatedQuantities != null) {
             productMap.putAll(updatedQuantities);
             productAdapter.notifyDataSetChanged();
@@ -168,14 +169,24 @@ public class InboundActivity extends AppCompatActivity {
             submitBtn.setVisibility( View.GONE);
             isSubmit = false;
         }
-
-//        loadingDialog.dismiss();
-
     }
 
     //Reset data for scan again
-    @SuppressLint("NotifyDataSetChanged")
     private void resetData() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.dialog_title))
+                .setMessage(getString(R.string.reset_data))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                    resetConfirm();
+                })
+                .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
+                .setCancelable(false)
+                .show();
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void resetConfirm() {
         codeEt.setText("");
         titleEt.setText("");
         itemsEt.setText("");
@@ -197,25 +208,66 @@ public class InboundActivity extends AppCompatActivity {
         // Hide submit button
         submitBtn.setVisibility(View.GONE);
 
-        Toast.makeText(this, "Data has been reset. Please scan again!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.data_reset), Toast.LENGTH_SHORT).show();
     }
 
     //Submit data
     private void submit(String code, int quantity) {
-        apiService.submitInbound(code, quantity, new ApiService.ApiResponseListener() {
+        loadingDialog.show();
+        String url = ApiConstants.INBOUND_SUBMIT;
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean isSuccess = jsonObject.getBoolean("success");
+
+                        if (isSuccess) {
+                            Toast.makeText(InboundActivity.this,
+                                    getString(R.string.success_response), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(InboundActivity.this,
+                                    MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(InboundActivity.this, getString(R.string.failed_parse_response),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                },
+                this::handleError) {
             @Override
-            public void onSuccess(String response) {
-                Toast.makeText(InboundActivity.this, response, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(InboundActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject params = new JSONObject();
+                try {
+                    params.put("code", code);
+                    params.put("actualQuantity", quantity);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG, "Request Body: " + params.toString());
+                return params.toString().getBytes();
             }
 
             @Override
-            public void onError(String error) {
-                Toast.makeText(InboundActivity.this, error, Toast.LENGTH_SHORT).show();
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", null);
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                headers.put("Content-Type", "application/json");
+                return headers;
             }
-        });
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        requestQueue.add(request);
     }
 
     //UI components
@@ -236,7 +288,6 @@ public class InboundActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         productsRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
-        apiService = new ApiService(this);
         tokenManager = new TokenManager(this);
         if(productMap.isEmpty()){
             totalRealQuantityEt.setText("0");
@@ -246,7 +297,7 @@ public class InboundActivity extends AppCompatActivity {
     //Get data Inbound from Api
     private void loadInbound(String scanValue) {
         if (scanValue == null || scanValue.isEmpty()) {
-            Toast.makeText(this, "Scan value is empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.not_value), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -257,7 +308,7 @@ public class InboundActivity extends AppCompatActivity {
 //        }
 
         String url = ApiConstants.getFindOneCodeInboundUrl(scanValue);
-        StringRequest findInbound = new StringRequest(
+        StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 this::parseResponse,
                 this::handleError
@@ -276,7 +327,13 @@ public class InboundActivity extends AppCompatActivity {
             }
         };
 
-        requestQueue.add(findInbound);
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
+        requestQueue.add(request);
 
     }
 
@@ -294,14 +351,14 @@ public class InboundActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                showError("Don't have data for this inbound barcode!");
+                showError(getString(R.string.not_data));
                 if (qrcodeManager != null) {
                     qrcodeManager.setListener(this::loadInbound);
                 }
             }
         } catch (JSONException e) {
             Log.e(TAG, "Failed to parse JSON response", e);
-            showError("Failed to load data!");
+            showError(getString(R.string.fail_load_data));
         }finally {
             loadingDialog.dismiss();
         }
@@ -309,6 +366,13 @@ public class InboundActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     private void populateContent(JSONObject content) throws JSONException {
+        boolean isAction = content.optBoolean("isaction",false);
+
+        if (isAction){
+            Toast.makeText(this,"The Import has been import!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         codeEt.setText(content.optString("code", "N/A"));
         titleEt.setText(content.optString("tite", "N/A"));
         itemsEt.setText(String.valueOf(content.optInt("totalProduct", 0)));
@@ -333,7 +397,8 @@ public class InboundActivity extends AppCompatActivity {
         if (productAdapter == null) {
             productAdapter = new ProductAdapter(this, productArrayList, productMap,
                     (product, updatedMap) -> {
-                        Intent intent = new Intent(InboundActivity.this, ConfirmInboundActivity.class);
+                        Intent intent = new Intent(InboundActivity.this,
+                                ConfirmInboundActivity.class);
                         intent.putExtra("product", product);
                         intent.putExtra("productMap", new HashMap<>((Map) updatedMap));
                         confirmProductLauncher.launch(intent);
@@ -353,11 +418,11 @@ public class InboundActivity extends AppCompatActivity {
 
     //Show error process Api
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dự án mã QR</string>
+    <string name="default_notification_channel_id">Thông báo mã QR</string>
+
+    <!-- Gói -->
+    <string name="pack_title">Tiêu đề</string>
+    <string name="quantity_product">Số lượng sản phẩm</string>
+    <string name="list_product">Danh sách sản phẩm</string>
+    <string name="reset">Đặt lại</string>
+    <string name="submit">Gửi</string>
+    <string name="pack_code">Mã</string>
+
+    <!-- Đổi vị trí -->
+    <string name="plan_list">Danh sách kế hoạch</string>
+    <string name="warehouse">Kho: </string>
+    <string name="edit_warehouse">Kho</string>
+    <string name="edit_warehouse2">Kho 2</string>
+    <string name="plan_information">Thông tin kế hoạch</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="location">Mã vị trí:</string>
+    <string name="location_code">Quét mã vị trí</string>
+    <string name="location_code2">Quét mã vị trí 2</string>
+    <string name="enter_location">Nhập vị trí</string>
+    <string name="floor">Tầng: </string>
+    <string name="edit_floor">Tầng</string>
+    <string name="edit_floor2">Tầng 2</string>
+    <string name="area">Khu vực: </string>
+    <string name="edit_area">Khu vực</string>
+    <string name="edit_area2">Khu vực 2</string>
+    <string name="product_name">Tên sản phẩm: </string>
+    <string name="name">Tên</string>
+    <string name="product_id">Mã sản phẩm:</string>
+    <string name="quantity">Số lượng: </string>
+    <string name="swap_to_location">Đổi sang vị trí</string>
+
+    <!-- Chi tiết sản phẩm trong gói -->
+    <string name="product_detail">Chi tiết sản phẩm</string>
+    <string name="enter_id">Nhập ID</string>
+    <string name="enter_name">Nhập tên</string>
+    <string name="quantity_pack">Số lượng đóng gói</string>
+    <string name="enter_quantity">Nhập số lượng</string>
+    <string name="actual_quantity">Số lượng thực tế</string>
+
+    <!-- Kế hoạch -->
+    <string name="list_plan">Tên kế hoạch di chuyển</string>
+
+    <!-- Thông tin kho -->
+    <string name="warehouse_info">Lấy sản phẩm từ vị trí</string>
+    <string name="warehouse_code">Nhận kho</string>
+    <string name="warehouse_title_code">Mã kho</string>
+    <string name="product_title_code">Mã vạch sản phẩm</string>
+    <string name="product_barcode">Quét mã vạch sản phẩm</string>
+
+    <!-- Đổi sản phẩm -->
+    <string name="product_swap">Đổi sản phẩm</string>
+    <string name="quantity_swap">Số lượng đổi</string>
+    <string name="location_swap">Vị trí đổi</string>
+    <string name="swap_to">Vui lòng quét mã vị trí đổi</string>
+    <string name="username">Tên người dùng</string>
+    <string name="outbound">Xuất kho</string>
+    <string name="inbound">Nhập kho</string>
+    <string name="pack">Đóng gói</string>
+    <string name="swap">Đổi sản phẩm \n vị trí</string>
+    <string name="receipt_barcode">Mã vạch</string>
+    <string name="receipt_name">Tên</string>
+    <string name="please_scan_the_code">Vui lòng quét mã</string>
+    <string name="number_of_products">Số lượng sản phẩm:</string>
+    <string name="total_number_of_products">Tổng số sản phẩm:</string>
+    <string name="real_product_quantity">Số lượng thực tế của sản phẩm:</string>
+    <string name="product_list">Danh sách sản phẩm</string>
+    <string name="export_receipt_details">Chi tiết xuất kho</string>
+    <string name="returns">Quay lại</string>
+    <string name="product_information">Thông tin sản phẩm</string>
+    <string name="product_barcodes">Mã vạch sản phẩm</string>
+    <string name="product_names">Tên sản phẩm</string>
+    <string name="product_quantitys">Số lượng sản phẩm</string>
+    <string name="real_product_quantitys">Số lượng thực tế</string>
+    <string name="warehouse_barcodes">Mã vạch kho</string>
+
+    <!-- Xác nhận và thông báo lỗi -->
+    <string name="confirm_task">Xác nhận công việc</string>
+    <string name="accept">Bạn có muốn nhận nhiệm vụ này không?</string>
+    <string name="confirm_success">Xác nhận thành công!</string>
+    <string name="error">Lỗi</string>
+    <string name="error_confirm">Lỗi xác nhận nhiệm vụ</string>
+    <string name="confirm_logout">Xác nhận đăng xuất</string>
+    <string name="sure_logout">Bạn có chắc muốn đăng xuất?</string>
+    <string name="notification">Bạn cần cấp quyền thông báo để nhận tin nhắn.</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="canel">Hủy</string>
+
+    <!-- Mật khẩu -->
+    <string name="forgot_password">Quên mật khẩu</string>
+    <string name="please_enter_your_email_n_to_verify_your_password_reset">Vui lòng nhập email của bạn \n để xác minh đặt lại mật khẩu</string>
+    <string name="email_address">Email</string>
+    <string name="send">Tiếp theo</string>
+    <string name="welcome">Chào mừng</string>
+    <string name="please_login_with_your_information">Vui lòng đăng nhập với thông tin của bạn</string>
+    <string name="password">Mật khẩu</string>
+    <string name="remember_me">Ghi nhớ đăng nhập</string>
+    <string name="i_forgot_my_password">Quên mật khẩu</string>
+    <string name="login">Đăng nhập</string>
+    <string name="what_would_you_like_to_n_work_today">Hôm nay bạn muốn làm gì?</string>
+    <string name="reset_password">Đặt lại mật khẩu</string>
+    <string name="please_enter_a_new_password">Vui lòng nhập mật khẩu mới.</string>
+    <string name="new_pasword">Mật khẩu mới</string>
+    <string name="re_enter_password">Nhập lại mật khẩu</string>
+    <string name="enter_otp">Nhập mã OTP</string>
+    <string name="a_verification_code_has_been_sent_to_your_email">Một mã xác minh đã được gửi đến email của bạn.</string>
+    <string name="resend_code">Gửi lại mã</string>
+    <string name="verify_otp">Xác minh OTP</string>
+    <string name="total_number_of_export_receipt">Tổng số đơn xuất hàng:</string>
+    <string name="total_actual_quantity_of_the_product">Tổng số lượng thực tế của sản phẩm:</string>
+    <string name="combine">Gộp</string>
+    <string name="export_receipt_list">Danh sách đơn xuất hàng</string>
+    <string name="total_number_of_export">Tổng số đơn xuất hàng:</string>
+    <string name="total_real_product_quantity">Tổng số lượng sản phẩm thực tế:</string>
+    <string name="code">Mã:</string>
+    <string name="title">Tiêu đề:</string>
+    <string name="loading">Đang tải...</string>
+    <string name="items">Mục:</string>
+    <string name="total_items">Tổng số mục:</string>
+    <string name="old_location_code">Mã vị trí cũ :</string>
+    <string name="new_location_code">Mã vị trí mới :</string>
+    <string name="warehouse_old">Kho cũ</string>
+    <string name="floor_old">Tầng cũ</string>
+    <string name="area_old">Khu vực cũ</string>
+    <string name="warehouse_new">Kho mới</string>
+    <string name="floor_new">Tầng mới</string>
+    <string name="area_new">Khu vực mới</string>
+    <string name="product_location1">Vị trí sản phẩm: 1</string>
+    <string name="product_location2">Vị trí sản phẩm: 2</string>
+    <string name="code_new">Mã vị trí sản phẩm mới</string>
+    <string name="continue1">Tiếp tục</string>
+    <string name="shelf_old">Kệ cũ</string>
+    <string name="shelf_new">Kệ mới</string>
+
+    <!-- Toast -->
+    <string name="login_fail">Không thể phân tích phản hồi!</string>
+    <string name="login_success">Đăng nhập thành công!</string>
+    <string name="login_wrong">Tên đăng nhập hoặc mật khẩu không đúng!</string>
+    <string name="login_empty">Tên đăng nhập hoặc mật khẩu trống!</string>
+    <!-- Thông báo lỗi -->
+    <string name="error_timeout">Hết thời gian chờ. Vui lòng kiểm tra kết nối.</string>
+    <string name="error_no_connection">Không có kết nối internet!</string>
+    <string name="error_parse">Đã xảy ra lỗi. Vui lòng thử lại.</string>
+    <string name="dialog_title">Thông báo</string>
+    <string name="dialog_mes_unsucess">Chưa hoàn thành đổi vị trí sản phẩm. Bạn có muốn xem chi tiết không?</string>
+    <string name="response_fail">Lỗi phân tích phản hồi!</string>
+    <string name="reset_data">您確定要重置此數據嗎？</string>
+
+    <!-- Xuất kho -->
+    <string name="combine_toast">Không có sản phẩm để gộp!</string>
+    <string name="real_quantity_outbout">Vui lòng nhập số lượng thực tế!</string>
+    <string name="product_barcode_valid">Mã vạch sản phẩm hợp lệ.</string>
+    <string name="invalid_product_barcode">Mã vạch sản phẩm không hợp lệ! Vui lòng quét lại.</string>
+    <string name="warehouse_barcode_valid">Mã vạch kho hợp lệ.</string>
+    <string name="invalid_warehouse_barcode">Mã vạch kho không hợp lệ! Vui lòng quét lại.</string>
+    <string name="no_warehouse">Không có kho nào có đủ sản phẩm cho đơn hàng.</string>
+    <string name="product_confirmed_successfully">Xác nhận sản phẩm thành công!</string>
+    <string name="warning">Cảnh báo</string>
+    <string name="order_quantity_mismatch">Số lượng thực tế không khớp với số lượng đặt hàng. Bạn có vẫn muốn xác nhận không?</string>
+    <string name="yes">Có</string>
+    <string name="no">Không</string>
+    <string name="confirmation">Xác nhận</string>
+    <string name="please_scan_again">Vui lòng quét lại.</string>
+
+    <!-- Thông báo đóng gói -->
+    <string name="scan_value_empty">Giá trị quét trống!</string>
+    <string name="real_quantity_null">Số lượng thực tế là null</string>
+    <string name="failed_parse_response">Không thể phân tích phản hồi!</string>
+    <string name="this_delivery_packaged">Giao hàng này đã được đóng gói!</string>
+    <string name="unknown_error">Lỗi không xác định</string>
+    <string name="success_response">Thành công</string>
+    <string name="warning_package">Vui lòng quét cả hai mã vạch vị trí trước khi xác nhận!</string>
+    <string name="not_value">Giá trị quét trống!</string>
+    <string name="not_data">Không có dữ liệu cho mã vạch nhập kho này!</string>
+    <string name="fail_load_data">Không thể tải dữ liệu!</string>
+    <string name="data_reset">Dữ liệu đã được đặt lại. Vui lòng quét lại!</string>
+    <string name="packaged">Giao hàng này đã được đóng gói!</string>
+    <string name="confirming">Vui lòng quét cả hai mã vạch sản phẩm trước khi xác nhận!</string>
+    <string name="swapId_empty">Lỗi: swapId trống!</string>
+    <string name="swap_confirmed">Hoán đổi sản phẩm đã được xác nhận!</string>
+
+    <!-- Không thành công -->
+    <string name="location_correct">Mã vạch vị trí chính xác.</string>
+    <string name="scan_again_location">Mã vạch vị trí không hợp lệ! Vui lòng quét lại.</string>
+    <string name="product_correct">Mã vạch sản phẩm chính xác.</string>
+    <string name="data_null">Vị trí này không có sản phẩm!</string>
+    <string name="skip_code">Có thể bỏ qua mã này</string>
+    <string name="already">Sản phẩm này đã được xác nhận!</string>
+
+    <!-- Xác nhận đóng gói -->
+    <string name="invalid_product">Dữ liệu sản phẩm không hợp lệ!</string>
+    <string name="invalid_quantity">Số lượng không hợp lệ! Vui lòng nhập một số hợp lệ.</string>
+    <string name="exists">Mã này đã tồn tại!</string>
+
+    <!-- Xuất kho -->
+    <string name="missing">Dữ liệu sản phẩm bị thiếu!</string>
+    <string name="export_empty">Danh sách xuất kho trống!</string>
+    <string name="update">Cập nhật thành công!</string>
+    <string name="update_fail">Cập nhật thất bại toàn bộ!</string>
+    <string name="has_been_pick_up">Giao hàng này đã được lấy đi!</string>
+
+    <!-- Nhập kho -->
+    <string name="enter_actual_quantity">Vui lòng nhập số lượng thực tế dưới dạng số!</string>
+
+    <!-- Đổi vị trí không thành công -->
+    <string name="swap_unsuccess_title">Đổi vị trí không thành công</string>
+    <string name="change_language">Thay đổi ngôn ngữ</string>
+    <string name="swap_location_unsuccess">Đổi vị trí thất bại</string>
+</resources>

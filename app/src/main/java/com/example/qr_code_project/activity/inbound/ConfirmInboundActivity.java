@@ -49,7 +49,7 @@ public class ConfirmInboundActivity extends AppCompatActivity {
     private void getDataFromIntent() {
         ProductModal productModal = (ProductModal) getIntent().getSerializableExtra("product");
         if (productModal == null) {
-            Toast.makeText(this, "Product data is missing!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.missing), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -97,21 +97,21 @@ public class ConfirmInboundActivity extends AppCompatActivity {
         if (scannedProductBarcode.isEmpty()) {
             scannedProductBarcode = qrCodeText;
             if (scannedProductBarcode.equals(barcodeEt.getText().toString().trim())) {
-                updateProductScanStatus(true, "Product barcode is valid.");
+                updateProductScanStatus(true, getString(R.string.product_barcode_valid));
             } else {
-                updateProductScanStatus(false, "Invalid product barcode! Please scan again.");
+                updateProductScanStatus(false, getString(R.string.invalid_product_barcode));
                 scannedProductBarcode = "";
             }
         } else if (scannedWarehouseBarcode.isEmpty()) {
             scannedWarehouseBarcode = qrCodeText;
             if (scannedWarehouseBarcode.equals(warehouseCodeEt.getText().toString().trim())) {
-                updateWarehouseScanStatus(true, "Warehouse barcode is valid.");
+                updateWarehouseScanStatus(true, getString(R.string.warehouse_barcode_valid));
                 confirmBtn.setVisibility(View.VISIBLE);
 //                if(qrCodeManager != null){
 //                    qrCodeManager.unregister();
 //                }
             } else {
-                updateWarehouseScanStatus(false, "Invalid warehouse barcode! Please scan again.");
+                updateWarehouseScanStatus(false, getString(R.string.invalid_warehouse_barcode));
                 scannedWarehouseBarcode = "";
                 confirmBtn.setVisibility(View.GONE);
             }
@@ -124,7 +124,7 @@ public class ConfirmInboundActivity extends AppCompatActivity {
         String realQuantityStr = realQuantityEt.getText().toString().replaceAll("[^0-9]", "");
 
         if (realQuantityStr.isEmpty()) {
-            Toast.makeText(this, "Please enter actual quantity is number!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_actual_quantity), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -174,7 +174,7 @@ public class ConfirmInboundActivity extends AppCompatActivity {
         setResult(RESULT_OK, resultIntent);
         finish();
 
-        Toast.makeText(this, "Product confirmed successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.product_confirmed_successfully), Toast.LENGTH_SHORT).show();
     }
 
     //Show warning when quantity and real quantity don't same
@@ -182,12 +182,10 @@ public class ConfirmInboundActivity extends AppCompatActivity {
                                         ProductModal productModal,
                                         Map<Integer, Object> productMap) {
         new android.app.AlertDialog.Builder(this)
-                .setTitle("Warning")
-                .setMessage("The actual quantity (" + actualQuantity +
-                        ") does not match the order quantity (" + orderQuantity +
-                        "). Do you still want to confirm?")
-                .setPositiveButton("Yes", (dialog, which) -> confirmProduct(productModal, productMap, actualQuantity))
-                .setNegativeButton("No", (dialog, which) -> {
+                .setTitle(getString(R.string.warning))
+                .setMessage(getString(R.string.order_quantity_mismatch))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> confirmProduct(productModal, productMap, actualQuantity))
+                .setNegativeButton(getString(R.string.no), (dialog, which) -> {
                     dialog.dismiss();
                     realQuantityEt.setText("");
                 })

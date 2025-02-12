@@ -33,7 +33,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="200dp"
             android:layout_marginBottom="40dp"
-            android:text="Package"
+            android:text="@string/pack"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="48sp"
@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:text="@string/code"
+                        android:text="@string/receipt_barcode"
                         android:textSize="22sp" />
                     <LinearLayout
                         android:layout_width="0dp"
@@ -83,7 +83,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
                             android:focusable="false"
-                            android:hint="code"
                             android:inputType="text"/>
                         <TextView
                             android:id="@+id/textView3"
@@ -110,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:text="@string/title"
+                        android:text="@string/receipt_name"
                         android:textSize="22sp" />
 
                     <EditText
@@ -118,7 +117,6 @@
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:layout_weight="2"
-                        android:hint="Title"
                         android:focusable="false"
                         android:inputType="text" />
                 </LinearLayout>
@@ -140,7 +138,7 @@
                         android:id="@+id/textView7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Number of products: "
+                        android:text="@string/number_of_products"
                         android:textSize="22sp"
                         android:textStyle="bold"/>
 

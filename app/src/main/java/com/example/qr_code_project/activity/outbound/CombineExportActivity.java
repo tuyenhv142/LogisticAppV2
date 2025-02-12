@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,7 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -34,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +68,8 @@ public class CombineExportActivity extends AppCompatActivity {
 
         util();
 
+        utilButton();
+
         // Take a list export from Intent
         getDataFromIntent();
 
@@ -83,32 +89,31 @@ public class CombineExportActivity extends AppCompatActivity {
                 totalProductCombineEt.setText(String.valueOf(totalProduct));
             }
         } else {
-            Toast.makeText(this, "Export list is empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.export_empty), Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        utilButton();
     }
 
     private void utilButton() {
         submitOutboundBtn.setOnClickListener(v -> {
             // Check all of deliveries
             prepareSubmit();
+
         });
     }
 
     private void prepareSubmit() {
+        // list deliveries
+        ArrayList<Map<String, Object>> deliveriesList = new ArrayList<>();
+
         for (ExportModal export : deliveryList) {
-            // Create arraylist for save products in delivery
             ArrayList<Map<String, Object>> productListForDelivery = new ArrayList<>();
             ArrayList<ProductModal> productsForThisDelivery = deliveryProductsMap.get(export.getId());
 
-            // Check all of products
             if (productsForThisDelivery != null) {
                 for (ProductModal product : productsForThisDelivery) {
-                    // Get location and area from realQuantitiesMap
-                    Map<Integer, Object> realQuantityInfo =
-                            (Map<Integer, Object>) productMap.get(product.getId());
+                    Map<Integer, Object> realQuantityInfo = (Map<Integer, Object>) productMap.get(product.getId());
 
                     if (realQuantityInfo != null) {
                         Object location = realQuantityInfo.get("location");
@@ -123,61 +128,78 @@ public class CombineExportActivity extends AppCompatActivity {
                             productData.put("area", area);
 
                             productListForDelivery.add(productData);
-                            Log.d("CombineExportActivity",
-                                    "Added product to request: " + productData);
                         }
                     }
                 }
-            } else {
-                Log.e("CombineExportActivity",
-                        "No products found for delivery " + export.getId());
             }
 
-            // Create object JSON for send API
-            Map<String, Object> requestData = new HashMap<>();
-            requestData.put("code", export.getCodeEp());
-            requestData.put("id", export.getId());
-            requestData.put("products", productListForDelivery);
+            // a delivery
+            Map<String, Object> deliveryData = new HashMap<>();
+            deliveryData.put("code", export.getCodeEp());
+            deliveryData.put("id", export.getId());
+            deliveryData.put("products", productListForDelivery);
 
-            // Send request API for update data
-            sendUpdateRequest(requestData);
+            deliveriesList.add(deliveryData);
         }
+
+        // send all of list deliveries
+        sendUpdateRequest(deliveriesList);
     }
 
-    private void sendUpdateRequest(Map<String, Object> requestData) {
+    private void sendUpdateRequest(ArrayList<Map<String, Object>> requestData) {
         String url = ApiConstants.DELIVERY_UPDATE;
-        JSONObject jsonObject = new JSONObject(requestData);
-        Log.d("CombineExportActivity", "Sending update request: " + jsonObject.toString());
+        JSONArray jsonArray = new JSONArray(requestData);
+
+        Log.d("CombineExportActivity", "Sending update request: " + jsonArray.toString());
 
         loadingDialog.show();
-        pendingRequests++; //Count request pending
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, jsonObject,
+        StringRequest request = new StringRequest(Request.Method.PUT, url,
                 response -> {
                     try {
-                        if (response.getBoolean("success")) {
-                            successfulRequests++; // count request success
+                        JSONObject jsonResponse = new JSONObject(response);
+                        String mess = jsonResponse.getString("content");
+                        if (jsonResponse.getBoolean("success")) {
+                            JSONArray contentArray = jsonResponse.getJSONArray("content");
+                            Log.d("CombineExportActivity", "Content received: " + contentArray.toString());
+
+                            Toast.makeText(CombineExportActivity.this, getString(R.string.success_response),
+                                    Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(CombineExportActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
                         } else {
-                            Log.d("CombineExportActivity", "Update fail!");
+                            Log.d("CombineExportActivity", mess);
+                            Toast.makeText(CombineExportActivity.this, getString(R.string.update_fail),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Log.d("CombineExportActivity", "Server not response!");
-                    }finally {
+                        Log.d("CombineExportActivity", "Error parsing response!");
+                    } finally {
                         loadingDialog.dismiss();
                     }
-                    checkAllRequestsCompleted();
                 },
-                error -> {
-                    checkAllRequestsCompleted();
-                }) {
+                this::handleError) {
+            @Override
+            public byte[] getBody() {
+                return jsonArray.toString().getBytes(StandardCharsets.UTF_8);
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", null);
                 if (!tokenManager.isTokenExpired()) {
                     headers.put("Authorization", "Bearer " + token);
-                }else {
+                } else {
                     tokenManager.clearTokenAndLogout();
                 }
                 headers.put("Content-Type", "application/json");
@@ -185,28 +207,15 @@ public class CombineExportActivity extends AppCompatActivity {
             }
         };
 
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                60 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         Volley.newRequestQueue(this).add(request);
     }
 
-    private void checkAllRequestsCompleted() {
-        pendingRequests--;
-
-        loadingDialog.show();
-        if (pendingRequests == 0) { // Check all of request done
-            if (successfulRequests > 0) {
-                loadingDialog.dismiss();
-                Toast.makeText(CombineExportActivity.this, "Update successfully!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(CombineExportActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-
-            } else {
-                loadingDialog.dismiss();
-                Toast.makeText(CombineExportActivity.this, "Update fail all!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     private final ActivityResultLauncher<Intent> confirmProductLauncher =
@@ -244,6 +253,13 @@ public class CombineExportActivity extends AppCompatActivity {
                 }
                 totalRealQuantityCombineEt.setText(String.valueOf(totalRealQuantity));
             }
+            checkAllProductsConfirmed();
+        }
+    }
+
+    private void checkAllProductsConfirmed() {
+        if(productMap.size() == productList.size()){
+            submitOutboundBtn.setEnabled(true);
         }
     }
 
@@ -268,6 +284,12 @@ public class CombineExportActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
 
         Volley.newRequestQueue(this).add(request);
     }
@@ -298,7 +320,7 @@ public class CombineExportActivity extends AppCompatActivity {
                 JSONObject object = products.getJSONObject(i);
                 int id = object.optInt("id");
                 String title = object.optString("title", "N/A");
-                int quantity = object.optInt("quantityDelivery");
+                int quantity = object.optInt("quantityDeliverynote");
                 String code = object.optString("code", "N/A");
                 String image = object.optString("image", "");
 
@@ -312,14 +334,8 @@ public class CombineExportActivity extends AppCompatActivity {
                 }
 
                 if (!found) {
-                    ProductModal newProduct = new ProductModal(
-                            id,
-                            title,
-                            quantity,
-                            null,
-                            code,
-                            image
-                    );
+                    ProductModal newProduct = new ProductModal(id, title, quantity,
+                            null, code, image);
                     productList.add(newProduct);
                     //                                    deliveryProductsMap.get(delivery).add(newProduct);
                     //                                    Log.d("CombineExportActivity", "Products for delivery " + delivery + ": " + deliveryProductsMap.get(delivery));
@@ -352,11 +368,11 @@ public class CombineExportActivity extends AppCompatActivity {
     }
 
     private void handleError(Throwable error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
@@ -369,6 +385,7 @@ public class CombineExportActivity extends AppCompatActivity {
         totalRealQuantityCombineEt = findViewById(R.id.totalRealQuantityCombineEt);
         combinedExportsRv = findViewById(R.id.productExportRv);
         submitOutboundBtn = findViewById(R.id.submitOutboundBtn);
+        submitOutboundBtn.setEnabled(false);
 
         combinedExportsRv.setLayoutManager(new LinearLayoutManager(this));
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);

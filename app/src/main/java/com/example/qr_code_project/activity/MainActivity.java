@@ -24,6 +24,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -72,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
             new ActivityResultContracts.RequestPermission(), isGranted->{
                 if(isGranted){
                     getDeviceToken();
-                }else{
-
                 }
             });
     @Override
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                     PackageManager.PERMISSION_GRANTED){
                 getDeviceToken();
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                Toast.makeText(this, "You need to grant notification permission to receive messages."
+                Toast.makeText(this, getString(R.string.notification)
                         , Toast.LENGTH_SHORT).show();
             }else {
                 resultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
@@ -141,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     private void util(){
         usernameTv = findViewById(R.id.usernameTv);
         imageAccountIv = findViewById(R.id.imageAccountIv);
-        menuButton = findViewById(R.id.menuButton);
+        menuButton = findViewById(R.id.menuButtons);
         inboundBtn = findViewById(R.id.inboundBtn);
         outboundBtn = findViewById(R.id.outboundBtn);
         packageBtn = findViewById(R.id.packageBtn);
@@ -149,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         languageMap.put("繁體", "tw");
         languageMap.put("English", "en");
+        languageMap.put("Việt Nam", "vi");
 
         requestQueue = Volley.newRequestQueue(this);
         loadingDialog = new LoadingDialog(this);
@@ -213,19 +213,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void showLogoutConfirmationDialog() {
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Confirm logout")
-                .setMessage("Are you sure logout?")
-                .setPositiveButton("Logout", (dialog, which) -> {
+                .setTitle(getString(R.string.confirm_logout))
+                .setMessage(getString(R.string.sure_logout))
+                .setPositiveButton(getString(R.string.logout), (dialog, which) -> {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.clear();
+                    editor.remove("token");
                     editor.apply();
 
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(getString(R.string.canel), (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         String[] languages = languageMap.keySet().toArray(new String[0]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Language")
+        builder.setTitle(getString(R.string.change_language))
                 .setItems(languages, (dialog, which) -> {
                     String selectedLanguage = languageMap.get(languages[which]);
 
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(getString(R.string.canel), (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
@@ -270,6 +270,13 @@ public class MainActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -284,11 +291,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else {
                 Toast.makeText(this, jsonObject.optString("error"
-                        , "Unknown error"),Toast.LENGTH_SHORT).show();
+                        , getString(R.string.unknown_error)),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
         }finally {
             if (loadingDialog != null && !isFinishing() && !isDestroyed()) {
                 loadingDialog.dismiss();
@@ -328,11 +335,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         Log.e("API Error", error.getMessage(), error);
         loadingDialog.dismiss();
@@ -360,6 +367,13 @@ public class MainActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -372,13 +386,10 @@ public class MainActivity extends AppCompatActivity {
                 if (content != null) {
                     contentUnSuccess(content);
                 }
-            } else {
-                Toast.makeText(this,jsonObject.optString("error"
-                        , "Unknown error"),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -396,13 +407,13 @@ public class MainActivity extends AppCompatActivity {
     //send warning have swap plan not done
     private void showUnSuccessPlanDialog(int quantity) {
         new AlertDialog.Builder(this)
-                .setTitle("Notification")
-                .setMessage("You have "+quantity+" unfinished Swap product location. Would you like to see details?")
-                .setPositiveButton("OK", (dialog, which) -> {
+                .setTitle(getString(R.string.dialog_title))
+                .setMessage(quantity+" "+getString(R.string.dialog_mes_unsucess))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                     Intent intent = new Intent(MainActivity.this, UnSuccessSwapLocationActivity.class);
                     startActivity(intent);
                 })
-                .setNegativeButton("Later", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
                 .setCancelable(false)
                 .show();
     }

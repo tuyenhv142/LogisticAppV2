@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -83,6 +84,13 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
                 return headers;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+
         requestQueue.add(request);
     }
 
@@ -97,11 +105,11 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
                 }
             } else {
                 Toast.makeText(this,jsonObject.optString("error"
-                        , "Unknown error"),Toast.LENGTH_SHORT).show();
+                        , getString(R.string.unknown_error)),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,"Failed to parse response!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
         }finally {
             loadingDialog.dismiss();
         }
@@ -124,10 +132,12 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
             String warehouse = object.optString("warehouse", "N/A");
             String area = object.optString("area", "N/A");
             String floor = object.optString("floor", "N/A");
+            String shelfOld = object.optString("shelfOld","N/A");
+            String shelfNew = object.optString("shelf","N/A");
 
             swapArrayList.add(new SwapModal(floor, area, warehouse
                     , floorOld, areaOld, warehouseOld
-                    ,locationNewCode,locationOldCode,title,id));
+                    ,locationNewCode,locationOldCode,title,id,shelfOld,shelfNew));
         }
 
         if (swapLocationAdapter == null) {
@@ -142,11 +152,11 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
 
 
     private void handleError(Exception error) {
-        String errorMsg = "An error occurred. Please try again.";
+        String errorMsg = getString(R.string.error_parse);
         if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = "Request timed out. Please check your connection.";
+            errorMsg = getString(R.string.error_timeout);
         } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = "No internet connection!";
+            errorMsg = getString(R.string.error_no_connection);
         }
         loadingDialog.dismiss();
         Log.e("API Error", error.getMessage(), error);
