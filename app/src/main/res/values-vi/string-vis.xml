@@ -210,4 +210,8 @@
     <string name="swap_unsuccess_title">Đổi vị trí không thành công</string>
     <string name="change_language">Thay đổi ngôn ngữ</string>
     <string name="swap_location_unsuccess">Đổi vị trí thất bại</string>
+    <string name="quantity2">Số lượng</string>
+    <string name="code1">Mã</string>
+    <string name="confirm_product_on_shef">Xác nhận sản phẩm trên kệ</string>
+    <string name="please_scan_the_product_barcode">Vui lòng quét mã vạch sản phẩm</string>
 </resources>

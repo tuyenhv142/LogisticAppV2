@@ -209,5 +209,9 @@
     <string name="swap_unsuccess_title">Your swap location unsuccess</string>
     <string name="change_language">Change language</string>
     <string name="swap_location_unsuccess">Swap location unsuccess</string>
+    <string name="quantity2">Quantity</string>
+    <string name="code1">Code</string>
+    <string name="confirm_product_on_shef">Confirm product on Shef</string>
+    <string name="please_scan_the_product_barcode">Please scan the product barcode</string>
 
 </resources>

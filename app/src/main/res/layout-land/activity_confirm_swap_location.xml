@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Confirm product on Shef"
+        android:text="@string/confirm_product_on_shef"
         android:textSize="30sp"
         android:textStyle="bold"
         android:padding="10dp"
@@ -36,13 +36,13 @@
             android:id="@+id/nameLocationOld1Tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Product Location: 1"
+            android:text="@string/product_location1"
             android:textSize="22sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/nameProductLocation1"
-            android:hint="Product Name"
+            android:hint="@string/name"
             android:padding="10dp"
             android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
@@ -50,7 +50,7 @@
 
         <EditText
             android:id="@+id/quantityProductLocation1"
-            android:hint="Quantity"
+            android:hint="@string/quantity2"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:padding="10dp"
@@ -58,7 +58,7 @@
 
         <EditText
             android:id="@+id/codeProductLocation1"
-            android:hint="Code"
+            android:hint="@string/code1"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:padding="10dp"
@@ -67,7 +67,7 @@
 
         <TextView
             android:id="@+id/nameLocationOld2Tv"
-            android:text="Product Location: 2"
+            android:text="@string/product_location2"
             android:textStyle="bold"
             android:textSize="22sp"
             android:layout_width="wrap_content"
@@ -78,14 +78,14 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:padding="10dp"
-            android:hint="Name"
+            android:hint="@string/name"
             android:layout_marginBottom="5dp"/>
 
         <EditText
             android:id="@+id/quantityProductLocation2"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:hint="Quantity"
+            android:hint="@string/quantity2"
             android:padding="10dp"
             android:layout_marginBottom="5dp"/>
 
@@ -93,7 +93,7 @@
             android:id="@+id/codeProductLocation2"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:hint="Code"
+            android:hint="@string/code1"
             android:padding="10dp"/>
     </LinearLayout>
 
@@ -122,7 +122,7 @@
 
         <TextView
             android:id="@+id/nameLocationNew1Tv"
-            android:text="Product Location Code New"
+            android:text="@string/code_new"
             android:textStyle="bold"
             android:textSize="20sp"
             android:padding="10dp"
@@ -131,19 +131,24 @@
 
         <EditText
             android:id="@+id/codeLocation2"
-            android:hint="Code"
+            android:hint="@string/code1"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:padding="10dp"
             />
-        <TextView android:id="@+id/locationNewBarcodeStatus1" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="Please scan the barcode"
-            android:textSize="16sp" android:textColor="#FF0000" android:layout_marginBottom="16dp"  />
+        <TextView
+            android:id="@+id/locationNewBarcodeStatus1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/please_scan_the_code"
+            android:textSize="16sp"
+            android:textColor="#FF0000"
+            android:layout_marginBottom="16dp"  />
         <TextView
             android:id="@+id/nameLocationNew2Tv"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="Product Location Code New"
+            android:text="@string/code_new"
             android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -151,13 +156,18 @@
 
         <EditText
             android:id="@+id/codeLocation1"
-            android:hint="Code"
+            android:hint="@string/code1"
             android:layout_width="match_parent"
             android:layout_height="48dp" />
 
-        <TextView android:id="@+id/locationNewBarcodeStatus2" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="Please scan the barcode"
-            android:textSize="16sp" android:textColor="#FF0000" android:layout_marginBottom="16dp"  />
+        <TextView
+            android:id="@+id/locationNewBarcodeStatus2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/please_scan_the_code"
+            android:textSize="16sp"
+            android:textColor="#FF0000"
+            android:layout_marginBottom="16dp"  />
     </LinearLayout>
 
 
@@ -167,7 +177,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="26dp"
-        android:text="Confirm"
+        android:text="@string/confirm"
         android:textSize="18sp"
         android:background="@drawable/background_btn"
         app:layout_constraintBottom_toBottomOf="parent"

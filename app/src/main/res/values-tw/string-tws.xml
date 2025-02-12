@@ -206,5 +206,9 @@
     <string name="swap_unsuccess_title">您的交換位置失敗</string>
     <string name="change_language">更改語言</string>
     <string name="swap_location_unsuccess">交換位置失敗</string>
+    <string name="quantity2">數量</string>
+    <string name="code1">料號</string>
+    <string name="confirm_product_on_shef">確認商品在架</string>
+    <string name="please_scan_the_product_barcode">請掃描產品條碼</string>
 
 </resources>
