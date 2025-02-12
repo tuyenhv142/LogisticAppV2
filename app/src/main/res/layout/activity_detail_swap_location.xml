@@ -157,7 +157,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:text="Please scan the barcode"
+                        android:text="@string/please_scan_the_code"
                         android:textColor="#FF0000"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -245,7 +245,7 @@
                         android:id="@+id/productBarcodeStatus1Text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Please scan the product barcode"
+                        android:text="@string/please_scan_the_product_barcode"
                         android:textSize="14sp"
                         android:textColor="#FF0000"
                         android:layout_marginBottom="16dp" />
@@ -393,7 +393,7 @@
                         android:id="@+id/locationBarcodeStatus2Text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Please scan the barcode"
+                        android:text="@string/please_scan_the_code"
                         android:textSize="14sp"
                         android:textColor="#FF0000"
                         android:layout_marginBottom="16dp" />
@@ -486,7 +486,7 @@
                         android:id="@+id/productBarcodeStatus2Text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Please scan the product barcode"
+                        android:text="@string/please_scan_the_product_barcode"
                         android:textSize="14sp"
                         android:textColor="#FF0000"
                         android:layout_marginBottom="16dp" />
