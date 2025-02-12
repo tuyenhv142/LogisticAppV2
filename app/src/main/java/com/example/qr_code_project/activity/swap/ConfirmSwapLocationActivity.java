@@ -150,8 +150,9 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     }
 
     private void handleScannedData(String qrCodeText) {
-
-        if (scannedLocation2.isEmpty()) {
+        if (scannedLocation2.equals("SKIP")) {
+            scannedLocation2 = "SKIP";
+        } else if (scannedLocation2.isEmpty()) {
             scannedLocation2 = qrCodeText;
             if (scannedLocation2.equals(codeLocation2.getText().toString().trim())) {
                 updateLocation1ScanStatus(true, "Location barcode is correct.");
@@ -159,7 +160,8 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                 updateLocation1ScanStatus(false, "Invalid location barcode! Please scan again.");
                 scannedLocation2 = "";
             }
-        }else if (scannedLocation1.isEmpty()) {
+        }
+        if (scannedLocation1.isEmpty()) {
             scannedLocation1 = qrCodeText;
             if (scannedLocation1.equals(codeLocation1.getText().toString().trim())) {
                 updateLocation2ScanStatus(true, "Location barcode is correct.");
@@ -284,7 +286,6 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                             nameProductLocation2.setText(product.optString("title", "N/A"));
                             quantityProductLocation2.setText(String.valueOf(product.optInt("quantity", 0)));
                             codeProductLocation2.setText(product.optString("code", "N/A"));
-
                         }
                     }
                 }else{
@@ -292,10 +293,13 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                         nameProductLocation1.setText("null");
                         quantityProductLocation1.setText("null");
                         codeProductLocation1.setText("null");
+                        scannedLocation2 = "SKIP";
+                        updateLocation1ScanStatus(true, "No scan required.");
                     } else {
                         nameProductLocation2.setText("null");
                         quantityProductLocation2.setText("null");
                         codeProductLocation2.setText("null");
+                        scannedLocation1 = "SKIP";
 //                        check = true;
                     }
                 }
