@@ -87,7 +87,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPo
             // Xử lý khi người dùng click vào item
             holder.itemView.setOnClickListener(v -> {
                 if (productMap.containsKey(productId)) {
-                    Toast.makeText(context, "This product has already been confirmed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "This product has already been confirmed!",
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     onProductClickListener.onProductClick(productModal, productMap);
                 }

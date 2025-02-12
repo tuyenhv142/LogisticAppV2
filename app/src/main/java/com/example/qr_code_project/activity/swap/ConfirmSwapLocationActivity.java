@@ -17,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.qr_code_project.data.manager.QRcodeManager;
@@ -53,6 +55,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private String scannedLocation2= "";
     private LoadingDialog loadingDialog;
     private TokenManager tokenManager;
+    private int pendingRequests = 0;
 
     private int statusId;
     private int swapId;
@@ -230,7 +233,10 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private void fetchProductLocation(String code, boolean isOldLocation) {
         String url = ApiConstants.getFindCodeLocationProductUrl(code);
         Log.d("url_getFindCodeLocationProductUrl",url);
+
         loadingDialog.show();
+        pendingRequests++;
+
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
                 response -> parseResponseProductLocation(response, isOldLocation),
@@ -259,12 +265,14 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
+    @SuppressLint("SetTextI18n")
     private void parseResponseProductLocation(String response, boolean isOldLocation) {
+        checkAndDismissLoading();
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONArray content = jsonObject.optJSONArray("content");
-                if (content != null) {
+                if (content != null && content.length()>0) {
                     for (int i = 0; i < content.length(); i++) {
                         JSONObject product = content.getJSONObject(i);
 
@@ -276,32 +284,52 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                             nameProductLocation2.setText(product.optString("title", "N/A"));
                             quantityProductLocation2.setText(String.valueOf(product.optInt("quantity", 0)));
                             codeProductLocation2.setText(product.optString("code", "N/A"));
+
                         }
+                    }
+                }else{
+                    if (isOldLocation) {
+                        nameProductLocation1.setText("null");
+                        quantityProductLocation1.setText("null");
+                        codeProductLocation1.setText("null");
+                    } else {
+                        nameProductLocation2.setText("null");
+                        quantityProductLocation2.setText("null");
+                        codeProductLocation2.setText("null");
+//                        check = true;
                     }
                 }
             } else {
                 Log.d("error", "Unknown error");
+                Toast.makeText(this,getString(R.string.failed_parse_response),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Toast.makeText(this, getString(R.string.response_fail), Toast.LENGTH_SHORT).show();
-        }finally {
+        }
+    }
+
+    private void checkAndDismissLoading() {
+        pendingRequests--; // Giảm biến đếm khi request hoàn thành
+        if (pendingRequests <= 0) {
             loadingDialog.dismiss();
         }
     }
 
+
     private void handleError(Exception error) {
+        checkAndDismissLoading();
         String errorMsg = getString(R.string.error_parse);
-        if (error instanceof com.android.volley.TimeoutError) {
+        if (error instanceof TimeoutError) {
             errorMsg = getString(R.string.error_timeout);
-        } else if (error instanceof com.android.volley.NoConnectionError) {
+        } else if (error instanceof NoConnectionError) {
             errorMsg = getString(R.string.error_no_connection);
         }
-        loadingDialog.dismiss();
         Log.e("API Error", error.getMessage(), error);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
     }
 
     private void fetchPlanStatus(int code) {
+        loadingDialog.show();
         String url = ApiConstants.getFindByPlanUrl(code);
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
@@ -344,6 +372,8 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
             }
         } catch (JSONException e) {
             Toast.makeText(this, getString(R.string.response_fail), Toast.LENGTH_SHORT).show();
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 

@@ -83,11 +83,11 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
     }
 
     private void onConfirmSwap(int swapId) {
-        if (scannedProductLocation1.isEmpty() || scannedProductLocation2.isEmpty()) {
-            Toast.makeText(this, getString(R.string.confirming)
-                    , Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (scannedProductLocation1.isEmpty() || scannedProductLocation2.isEmpty()) {
+//            Toast.makeText(this, getString(R.string.confirming)
+//                    , Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -107,6 +107,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
     //Get data Inbound from Api
     private void loadSwapLocation(int swapId) {
+        loadingDialog.show();
         String url = ApiConstants.getFindOneCodeSwapLocationUrl(swapId);
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
@@ -158,6 +159,8 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         } catch (JSONException e) {
             Log.e("SwapLocation", "Failed to parse JSON response", e);
             showError(getString(R.string.login_fail));
+        }finally {
+            loadingDialog.dismiss();
         }
     }
 
@@ -312,7 +315,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONArray content = jsonObject.optJSONArray("content");
-                if (content != null) {
+                if (content != null && content.length()>0) {
                     for (int i = 0; i < content.length(); i++) {
                         JSONObject product = content.getJSONObject(i);
 
@@ -326,16 +329,23 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
                             productCode2.setText(product.optString("code", "N/A"));
                         }
                     }
+                }else{
+                    Toast.makeText(this,getString(R.string.data_null),Toast.LENGTH_SHORT).show();
+                    if (!isOldLocation){
+                        updateProductLocation2ScanStatus(true, getString(R.string.skip_code));
+                        continueConfirmProductBtn.setEnabled(true);
+                        if (qrCodeManager != null) {
+                            qrCodeManager.unregister();
+                            qrCodeManager = null;
+                        }
+                    }
+//                    else {
+//                        updateProductLocation2ScanStatus(true, getString(R.string.skip_code));
+//                    }
                 }
             } else {
-                Toast.makeText(this,getString(R.string.data_null),Toast.LENGTH_SHORT).show();
-                if (isOldLocation){
-                    updateProductLocation1ScanStatus(true, getString(R.string.skip_code));
-                }else {
-                    updateProductLocation2ScanStatus(true, getString(R.string.skip_code));
-                }
-
                 Log.d("error", "Unknown error");
+                Toast.makeText(this,getString(R.string.failed_parse_response),Toast.LENGTH_SHORT).show();
             }
         } catch (JSONException e) {
             Toast.makeText(this, getString(R.string.login_fail), Toast.LENGTH_SHORT).show();

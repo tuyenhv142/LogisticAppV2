@@ -132,7 +132,8 @@
     <string name="error_parse">An error occurred. Please try again.</string>
     <string name="dialog_title">Notification</string>
     <string name="dialog_mes_unsucess">unfinished Swap product location. Would you like to see details?</string>
-    <string name="response_fail">Failed to parse response!</string>
+    <string name="reset_data">Are you sure reset this data!</string>
+    <string name="response_fail">Failed to parse response!</string>a
 
     //Outbound Toast
     <string name="combine_toast">No products to combine!</string>
@@ -171,7 +172,7 @@
     <string name="location_correct">Location barcode is correct.</string>
     <string name="scan_again_location">Invalid location barcode! Please scan again.</string>
     <string name="product_correct">Product barcode is correct.</string>
-    <string name="data_null">Data null</string>
+    <string name="data_null">This location dont have product!</string>
     <string name="skip_code">Can skip this code</string>
     <string name="confirm_task">Confirm Task</string>
     <string name="accept">Do you want to accept this task ?</string>

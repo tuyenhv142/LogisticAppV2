@@ -200,6 +200,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
                         Intent intent = new Intent(this, DetailSwapLocationActivity.class);
                         intent.putExtra("swapId", swapId);
                         startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }

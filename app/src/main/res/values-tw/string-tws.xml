@@ -131,6 +131,7 @@
     <string name="error_parse">發生錯誤，請再試一次。</string>
     <string name="dialog_title">通知</string>
     <string name="dialog_mes_unsucess">未完成產品位置交換。您想查看詳細信息嗎？</string>
+    <string name="reset_data">您確定要重置此數據嗎？</string>
     <string name="response_fail">解析回應失敗!</string>
 
     //Outbound Toast
@@ -170,7 +171,7 @@
     <string name="location_correct">位置條碼正確。</string>
     <string name="scan_again_location">位置條碼無效！請重新掃描。</string>
     <string name="product_correct">產品條碼正確。</string>
-    <string name="data_null">數據為空</string>
+    <string name="data_null">此位置沒有產品！</string>
     <string name="skip_code">可跳過此代碼</string>
 
     <!-- MainActivity -->

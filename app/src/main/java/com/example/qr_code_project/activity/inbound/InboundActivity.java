@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.qr_code_project.activity.swap.UnSuccessSwapLocationActivity;
 import com.example.qr_code_project.data.manager.QRcodeManager;
 import com.example.qr_code_project.R;
 import com.example.qr_code_project.activity.MainActivity;
@@ -134,7 +136,6 @@ public class InboundActivity extends AppCompatActivity {
         Map<Integer, Object> updatedQuantities =
                 (Map<Integer, Object>) data.getSerializableExtra("productMap");
 
-//        loadingDialog.show();
         if (updatedQuantities != null) {
             productMap.putAll(updatedQuantities);
             productAdapter.notifyDataSetChanged();
@@ -168,14 +169,24 @@ public class InboundActivity extends AppCompatActivity {
             submitBtn.setVisibility( View.GONE);
             isSubmit = false;
         }
-
-//        loadingDialog.dismiss();
-
     }
 
     //Reset data for scan again
-    @SuppressLint("NotifyDataSetChanged")
     private void resetData() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.dialog_title))
+                .setMessage(getString(R.string.reset_data))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                    resetConfirm();
+                })
+                .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
+                .setCancelable(false)
+                .show();
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void resetConfirm() {
         codeEt.setText("");
         titleEt.setText("");
         itemsEt.setText("");
@@ -355,6 +366,13 @@ public class InboundActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     private void populateContent(JSONObject content) throws JSONException {
+        boolean isAction = content.optBoolean("isaction",false);
+
+        if (isAction){
+            Toast.makeText(this,"The Import has been import!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         codeEt.setText(content.optString("code", "N/A"));
         titleEt.setText(content.optString("tite", "N/A"));
         itemsEt.setText(String.valueOf(content.optInt("totalProduct", 0)));

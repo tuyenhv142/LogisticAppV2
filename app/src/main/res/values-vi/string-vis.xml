@@ -148,6 +148,7 @@
     <string name="dialog_title">Thông báo</string>
     <string name="dialog_mes_unsucess">Chưa hoàn thành đổi vị trí sản phẩm. Bạn có muốn xem chi tiết không?</string>
     <string name="response_fail">Lỗi phân tích phản hồi!</string>
+    <string name="reset_data">您確定要重置此數據嗎？</string>
 
     <!-- Xuất kho -->
     <string name="combine_toast">Không có sản phẩm để gộp!</string>
@@ -186,7 +187,7 @@
     <string name="location_correct">Mã vạch vị trí chính xác.</string>
     <string name="scan_again_location">Mã vạch vị trí không hợp lệ! Vui lòng quét lại.</string>
     <string name="product_correct">Mã vạch sản phẩm chính xác.</string>
-    <string name="data_null">Dữ liệu trống</string>
+    <string name="data_null">Vị trí này không có sản phẩm!</string>
     <string name="skip_code">Có thể bỏ qua mã này</string>
     <string name="already">Sản phẩm này đã được xác nhận!</string>
 
