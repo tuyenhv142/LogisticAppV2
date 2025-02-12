@@ -61,8 +61,8 @@
     <string name="inbound">進貨上架</string>
     <string name="pack">包裝</string>
     <string name="swap">交換產品\n位置</string>
-    <string name="product_location1">儲位號碼: 1</string>
-    <string name="product_location2">儲位號碼: 2</string>
+    <string name="product_location1">儲位號碼1: </string>
+    <string name="product_location2">儲位號碼2: </string>
     <string name="code_new">新儲位號碼</string>
     <string name="continue1">繼續</string>
     <string name="receipt_barcode">條碼</string>
