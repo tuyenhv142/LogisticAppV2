@@ -220,10 +220,8 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         product1Location = sharedPreferences.getString("product1_location", "N/A");
         product2Location = sharedPreferences.getString("product2_location", "N/A");
         swapId = sharedPreferences.getInt("swap_location_id", 0);
-        nameLocationOld1Tv.setText("Location code: "+product1Location);
-        nameLocationOld2Tv.setText("Location code: "+product2Location);
-        nameLocationNew1Tv.setText("Location code new: ");
-        nameLocationNew2Tv.setText("Location code new: ");
+        nameLocationOld1Tv.setText(product1Location);
+        nameLocationOld2Tv.setText(product2Location);
         codeLocation2.setText(product2Location);
         codeLocation1.setText(product1Location);
         requestQueue = Volley.newRequestQueue(this);
