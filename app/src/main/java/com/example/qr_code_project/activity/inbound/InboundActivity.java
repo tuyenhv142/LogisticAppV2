@@ -377,7 +377,6 @@ public class InboundActivity extends AppCompatActivity {
         titleEt.setText(content.optString("tite", "N/A"));
         itemsEt.setText(String.valueOf(content.optInt("totalProduct", 0)));
         totalEt.setText(String.valueOf(content.optInt("totalQuanTity", 0)));
-
         JSONArray products = content.optJSONArray("products");
         productArrayList.clear();
         for (int i = 0; i < Objects.requireNonNull(products).length(); i++) {

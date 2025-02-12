@@ -316,6 +316,7 @@ public class PackageActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.packaged), Toast.LENGTH_SHORT).show();
             return;
         }
+
         deliveryId = content.optInt("id",0);
         codePackageEt.setText(content.optString("code", "N/A"));
         titlePackageEt.setText(content.optString("title", "N/A"));
