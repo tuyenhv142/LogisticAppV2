@@ -18,4 +18,5 @@
     <color name="my_secondary">#673AB7</color>
     <color name="dark_blue">#32357a</color>
     <color name="light_blue">#f2f1f6</color>
+    <color name="grey">#835B5A5A</color>
 </resources>

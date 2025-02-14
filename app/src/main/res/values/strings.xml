@@ -213,5 +213,7 @@
     <string name="code1">Code</string>
     <string name="confirm_product_on_shef">Confirm product on Shef</string>
     <string name="please_scan_the_product_barcode">Please scan the product barcode</string>
+    <string name="product_quantity">Product Quantity:</string>
+    <string name="product_barcode2">Product Barcode:</string>
 
 </resources>

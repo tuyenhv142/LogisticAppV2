@@ -9,6 +9,7 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -27,188 +28,256 @@
         android:orientation="vertical"
         android:layout_margin="8dp"
         android:padding="8dp"
+        android:background="@drawable/background_edittext"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/arrow_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textTitle">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/product_location1"
-                android:textSize="22sp"
-                android:textStyle="bold" />
             <TextView
                 android:id="@+id/nameLocationOld1Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
+                android:text="@string/location"
                 android:textSize="22sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/nameProductLocation1"
-            android:hint="@string/name"
-            android:padding="10dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
-
-        <EditText
-            android:id="@+id/quantityProductLocation1"
-            android:hint="@string/quantity2"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:padding="10dp"
-            android:layout_marginBottom="5dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
-
-        <EditText
-            android:id="@+id/codeProductLocation1"
-            android:hint="@string/code1"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:padding="10dp"
-            android:layout_marginBottom="50px"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:text="@string/product_location2"
                 android:textStyle="bold"
-                android:textSize="22sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/grey"
+                android:layout_marginEnd="15dp"/>
+            <ImageView
+                android:id="@+id/arrow_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_arrow_right"/>
             <TextView
-                android:id="@+id/nameLocationOld2Tv"
+                android:id="@+id/codeLocation2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
+                android:text="@string/location"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/grey"/>
         </LinearLayout>
-        <EditText
-            android:id="@+id/nameProductLocation2"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:padding="10dp"
-            android:hint="@string/name"
-            android:layout_marginBottom="5dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
 
-        <EditText
-            android:id="@+id/quantityProductLocation2"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="@string/quantity2"
-            android:padding="10dp"
-            android:layout_marginBottom="5dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
-        <EditText
-            android:id="@+id/codeProductLocation2"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="@string/code1"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:padding="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/product_barcode2"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/grey"/>
+
+            <EditText
+                android:id="@+id/codeProductLocation1"
+                android:hint="@string/code1"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@color/grey"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:layout_marginEnd="50dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/product_name"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/grey"/>
+
+            <EditText
+                android:id="@+id/nameProductLocation1"
+                android:hint="@string/name"
+                android:padding="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="170dp"
+                android:textColor="@color/grey"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/check"
+                android:layout_marginStart="50dp"
+                app:tint="@color/grey"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/product_quantity"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/grey"/>
+
+            <EditText
+                android:id="@+id/quantityProductLocation1"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="@string/quantity2"
+                android:padding="10dp"
+                android:textColor="@color/grey"/>
+
+
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Arrow Icon -->
-    <ImageView
-        android:id="@+id/arrow_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_right"
-        app:layout_constraintStart_toEndOf="@id/location_old"
-        app:layout_constraintEnd_toStartOf="@id/location_new"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <!-- Product Location New -->
     <LinearLayout
         android:id="@+id/location_new"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="8dp"
-        app:layout_constraintStart_toEndOf="@id/arrow_icon"
+        android:padding="8dp"
+        android:background="@drawable/background_edittext"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/location_old">
 
-
-        <TextView
-            android:id="@+id/nameLocationNew1Tv"
-            android:text="@string/code_new"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:padding="5dp"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/codeLocation2"
-            android:hint="@string/code1"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:padding="10dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            />
-        <TextView
-            android:id="@+id/locationNewBarcodeStatus1"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/please_scan_the_code"
-            android:textSize="16sp"
-            android:textColor="#FF0000"
-            android:layout_marginBottom="16dp"  />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/nameLocationOld2Tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/location"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/grey"
+                android:layout_marginEnd="15dp"/>
+            <ImageView
+                android:id="@+id/arrow_icon2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_arrow_right"/>
+            <TextView
+                android:id="@+id/nameLocationNew2Tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/location"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/grey"/>
+        </LinearLayout>
 
-
-        <TextView
-            android:id="@+id/nameLocationNew2Tv"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:text="@string/code_new"
-            android:padding="5dp"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/codeLocation1"
-            android:hint="@string/code1"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
-
-        <TextView
-            android:id="@+id/locationNewBarcodeStatus2"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/please_scan_the_code"
-            android:textSize="16sp"
-            android:textColor="#FF0000"
-            android:layout_marginBottom="16dp"  />
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/product_barcode2"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="10dp"
+                android:textColor="@color/grey"/>
+
+            <EditText
+                android:id="@+id/codeProductLocation2"
+                android:hint="@string/code1"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@color/grey"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:layout_marginEnd="50dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/product_name"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/grey"
+                android:layout_marginEnd="10dp"/>
+
+            <EditText
+                android:id="@+id/nameProductLocation2"
+                android:hint="@string/name"
+                android:padding="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="170dp"
+                android:textColor="@color/grey"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/check"
+                android:layout_marginStart="50dp"
+                app:tint="@color/grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/product_quantity"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/grey"/>
+
+            <EditText
+                android:id="@+id/quantityProductLocation2"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/grey"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="@string/quantity2"
+                android:padding="10dp" />
+
+
+        </LinearLayout>
     </LinearLayout>
-
 
     <!-- Confirm Button -->
     <Button
@@ -221,5 +290,6 @@
         android:background="@drawable/background_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/location_new"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

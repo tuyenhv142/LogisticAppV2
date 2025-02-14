@@ -77,6 +77,9 @@
     <string name="product_quantitys">Số lượng sản phẩm</string>
     <string name="real_product_quantitys">Số lượng thực tế</string>
     <string name="warehouse_barcodes">Mã vạch kho</string>
+    <string name="product_quantity">Số lượng sản phẩm:</string>
+    <string name="product_barcode2">Mã vạch sản phẩm:</string>
+
 
     <!-- Xác nhận và thông báo lỗi -->
     <string name="confirm_task">Xác nhận công việc</string>

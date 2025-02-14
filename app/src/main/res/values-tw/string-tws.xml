@@ -32,6 +32,8 @@
     <string name="product_id">產品代碼：</string>
     <string name="quantity">數量：</string>
     <string name="swap_to_location">交換到位置</string>
+    <string name="product_quantity">產品數量：</string>
+    <string name="product_barcode2">產品條碼：</string>
 
     <!--    product_detail_pack-->
     <string name="product_detail">產品詳情</string>
