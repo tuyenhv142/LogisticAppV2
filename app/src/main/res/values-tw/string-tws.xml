@@ -16,7 +16,7 @@
     <string name="edit_warehouse">倉庫</string>
     <string name="edit_warehouse2">倉庫 2</string>
     <string name="plan_information">計劃資訊</string>
-    <string name="confirm">確認</string>
+    <string name="confirm">存入完成</string>
     <string name="location">儲位：</string>
     <string name="location_code">掃描位置</string>
     <string name="location_code2">掃描位置 2</string>
@@ -66,7 +66,7 @@
     <string name="product_location1">儲位號碼1: </string>
     <string name="product_location2">儲位號碼2: </string>
     <string name="code_new">新儲位號碼</string>
-    <string name="continue1">繼續</string>
+    <string name="continue1">取出完成</string>
     <string name="receipt_barcode">條碼</string>
     <string name="receipt_name">名稱</string>
     <string name="please_scan_the_code">請安 SCAN</string>

@@ -102,7 +102,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                             Toast.makeText(ConfirmSwapLocationActivity.this,
                                     getString(R.string.success_response), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ConfirmSwapLocationActivity.this,
-                                    MainActivity.class);
+                                    SwapLocationActivity.class);
                             startActivity(intent);
                             finish();
                         }
