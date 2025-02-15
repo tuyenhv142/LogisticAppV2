@@ -375,7 +375,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             if (jsonObject.getBoolean("success")) {
                 JSONArray content = jsonObject.optJSONArray("content");
                 if (content != null && content.length() > 0) {
-                    for (int i = 0; i < 1; i++) {
+                    for (int i = 0; i < content.length(); i++) {
                         JSONObject product = content.getJSONObject(i);
 
                         if (isOldLocation) {
