@@ -226,6 +226,34 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                     scannedLocation1New = "";
                 }
 
+            }else if (scannedProductLocation2.isEmpty()) {
+                scannedProductLocation2 = qrCodeText;
+                if (scannedProductLocation2.equals(codeProductLocation2.getText().toString().trim())) {
+                    String productCode = codeProductLocation2.getText().toString().trim();
+                    String productName = nameProductLocation2.getText().toString().trim();
+                    String productQuantity = quantityProductLocation2.getText().toString().trim();
+                    showProductDialog(product1Location, productCode, productName, productQuantity);
+                } else {
+                    Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
+                    scannedProductLocation2 = "";
+                }
+            } else if (scannedLocation2New.isEmpty()) {
+                scannedLocation2New = qrCodeText;
+                if (scannedLocation2New.equals(product1Location)) {
+                    Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+                    updateProductLocation2ScanStatus();
+                    if (productDialog != null && productDialog.isShowing()) {
+                        productDialog.dismiss();
+                    }
+                    confirmSwapBtn.setEnabled(true);
+                    if (qrCodeManager != null) {
+                        qrCodeManager.unregister();
+                        qrCodeManager = null;
+                    }
+                } else {
+                    Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+                    scannedLocation2New = "";
+                }
             }
         } else if (scannedProductLocation2.isEmpty()) {
             scannedProductLocation2 = qrCodeText;
@@ -351,7 +379,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
             if (jsonObject.getBoolean("success")) {
                 JSONArray content = jsonObject.optJSONArray("content");
                 if (content != null && content.length()>0) {
-                    for (int i = 0; i < content.length(); i++) {
+                    for (int i = 0; i < 1; i++) {
                         JSONObject product = content.getJSONObject(i);
 
                         if (isOldLocation) {
