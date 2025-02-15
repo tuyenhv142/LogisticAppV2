@@ -20,6 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <!-- Product Location 1 -->
     <LinearLayout
         android:id="@+id/location_old"
@@ -38,14 +39,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/nameLocationOld1Tv"
+                android:id="@+id/codeLocation1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="@string/location"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/grey"
+                android:textColor="@color/black"
                 android:layout_marginEnd="15dp"/>
             <ImageView
                 android:id="@+id/arrow_icon"
@@ -53,7 +54,7 @@
                 android:layout_height="30dp"
                 android:src="@drawable/ic_arrow_right"/>
             <TextView
-                android:id="@+id/codeLocation2"
+                android:id="@+id/codeLocation1New"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -70,6 +71,7 @@
             android:layout_marginTop="10dp">
 
             <TextView
+                android:id="@+id/productCode1Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -91,6 +93,7 @@
                 android:layout_marginEnd="50dp"/>
 
             <TextView
+                android:id="@+id/productName1Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -112,6 +115,7 @@
                 android:focusableInTouchMode="false"/>
 
             <ImageView
+                android:id="@+id/checkLocation1Iv"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/check"
@@ -126,6 +130,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/productQuantity1Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -167,14 +172,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/nameLocationOld2Tv"
+                android:id="@+id/codeLocation2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="@string/location"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/grey"
+                android:textColor="@color/black"
                 android:layout_marginEnd="15dp"/>
             <ImageView
                 android:id="@+id/arrow_icon2"
@@ -182,7 +187,7 @@
                 android:layout_height="30dp"
                 android:src="@drawable/ic_arrow_right"/>
             <TextView
-                android:id="@+id/nameLocationNew2Tv"
+                android:id="@+id/codeLocation2New"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -199,6 +204,7 @@
             android:layout_marginTop="10dp">
 
             <TextView
+                android:id="@+id/productCode2Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -220,6 +226,7 @@
                 android:layout_marginEnd="50dp"/>
 
             <TextView
+                android:id="@+id/productName2Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -241,6 +248,7 @@
                 android:focusableInTouchMode="false"/>
 
             <ImageView
+                android:id="@+id/checkLocation2Iv"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/check"
@@ -255,6 +263,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/productQuantity2Tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"

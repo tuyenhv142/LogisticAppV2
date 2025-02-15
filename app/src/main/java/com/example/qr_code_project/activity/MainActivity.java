@@ -410,7 +410,8 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle(getString(R.string.dialog_title))
                 .setMessage(quantity+" "+getString(R.string.dialog_mes_unsucess))
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-                    Intent intent = new Intent(MainActivity.this, UnSuccessSwapLocationActivity.class);
+                    Intent intent = new Intent(MainActivity.this,
+                            UnSuccessSwapLocationActivity.class);
                     startActivity(intent);
                 })
                 .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())

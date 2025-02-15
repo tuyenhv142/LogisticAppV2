@@ -3,16 +3,21 @@ package com.example.qr_code_project.activity.swap;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
@@ -36,26 +41,31 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class ConfirmSwapLocationActivity extends AppCompatActivity {
 
-    private TextView nameLocationOld1Tv,nameLocationOld2Tv,
-            nameLocationNew1Tv,nameLocationNew2Tv;
-    private TextView locationNewBarcodeStatus1,locationNewBarcodeStatus2;
-    private EditText nameProductLocation1,quantityProductLocation1
-            ,codeProductLocation1,codeLocation2;
-    private EditText nameProductLocation2,quantityProductLocation2
-            ,codeProductLocation2,codeLocation1;
+    private TextView codeLocation2,codeLocation1, codeLocation1New,codeLocation2New;
+    private TextView productCode1Tv,productQuantity1Tv,productName1Tv;
+    private TextView productCode2Tv,productQuantity2Tv,productName2Tv;
+    private ImageView checkLocation1Iv,checkLocation2Iv;
+    private EditText nameProductLocation1,quantityProductLocation1,codeProductLocation1;
+    private EditText nameProductLocation2,quantityProductLocation2,codeProductLocation2;
     private Button confirmSwapBtn;
     private String product1Location,product2Location;
     private RequestQueue requestQueue;
     private SharedPreferences sharedPreferences;
     private QRcodeManager qrCodeManager;
-    private String scannedLocation1 = "";
-    private String scannedLocation2= "";
+    private String scannedProductLocation1 = "";
+    private String scannedLocation1New = "";
+    private String scannedProductLocation2= "";
+    private String scannedLocation2New= "";
     private LoadingDialog loadingDialog;
     private TokenManager tokenManager;
     private int pendingRequests = 0;
+    private AlertDialog productDialog;
+    private boolean isLocation1Confirmed = false;
+    private boolean isLocation2Confirmed = false;
 
     private int statusId;
     private int swapId;
@@ -64,7 +74,6 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_confirm_swap_location);
-
 
         util();
 
@@ -80,11 +89,6 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     }
 
     private void onConfirmSwap(int swapId) {
-        if (scannedLocation1.isEmpty() || scannedLocation2.isEmpty()) {
-            Toast.makeText(this, getString(R.string.warning_package)
-                    , Toast.LENGTH_SHORT).show();
-            return;
-        }
         loadingDialog.show();
         String url = ApiConstants.SWAP_LOCATION_SUBMIT;
         StringRequest request = new StringRequest(Request.Method.PUT, url,
@@ -149,30 +153,107 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         qrCodeManager.setListener(this::handleScannedData);
     }
 
+    @SuppressLint("SetTextI18n")
+    private void showProductDialog(String location, String productCode, String productName, String quantity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.custom_product_dialog, null);
+        builder.setView(dialogView);
+
+        TextView tvProductLocation = dialogView.findViewById(R.id.tvProductLocation);
+        TextView tvProductCode = dialogView.findViewById(R.id.tvProductCode);
+        TextView tvProductName = dialogView.findViewById(R.id.tvProductName);
+        TextView tvProductQuantity = dialogView.findViewById(R.id.tvProductQuantity);
+
+        tvProductLocation.setText(location);
+        tvProductCode.setText("產品代碼: " + productCode);
+        tvProductName.setText("產品名稱: " + productName);
+        tvProductQuantity.setText("產品數量: " + quantity);
+
+        productDialog = builder.create();
+        Objects.requireNonNull(productDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        productDialog.setCancelable(false);
+        productDialog.show();
+    }
+
+    private void updateProductLocation1ScanStatus() {
+        productCode1Tv.setTextColor(Color.BLACK);
+        productQuantity1Tv.setTextColor(Color.BLACK);
+        productName1Tv.setTextColor(Color.BLACK);
+        codeProductLocation1.setTextColor(Color.BLACK);
+        quantityProductLocation1.setTextColor(Color.BLACK);
+        nameProductLocation1.setTextColor(Color.BLACK);
+        codeLocation1New.setTextColor(Color.BLACK);
+        checkLocation1Iv.setImageTintList(ColorStateList.valueOf(Color.GREEN));
+        isLocation1Confirmed = true;
+    }
+
+    private void updateProductLocation2ScanStatus() {
+        codeLocation2New.setTextColor(Color.BLACK);
+        productCode2Tv.setTextColor(Color.BLACK);
+        productQuantity2Tv.setTextColor(Color.BLACK);
+        codeProductLocation2.setTextColor(Color.BLACK);
+        quantityProductLocation2.setTextColor(Color.BLACK);
+        productName2Tv.setTextColor(Color.BLACK);
+        nameProductLocation2.setTextColor(Color.BLACK);
+        checkLocation2Iv.setImageTintList(ColorStateList.valueOf(Color.GREEN));
+        isLocation2Confirmed = true;
+    }
+
     private void handleScannedData(String qrCodeText) {
-        if (scannedLocation2.equals("SKIP")) {
-            scannedLocation2 = "SKIP";
-        } else if (scannedLocation2.isEmpty()) {
-            scannedLocation2 = qrCodeText;
-            if (scannedLocation2.equals(codeLocation2.getText().toString().trim())) {
-                updateLocation1ScanStatus(true, "Location barcode is correct.");
-            } else {
-                updateLocation1ScanStatus(false, "Invalid location barcode! Please scan again.");
-                scannedLocation2 = "";
+        if ( !scannedProductLocation1.equals("SKIP")) {
+            if (scannedProductLocation1.isEmpty()){
+                scannedProductLocation1 = qrCodeText;
+                if (scannedProductLocation1.equals(codeProductLocation1.getText().toString().trim())) {
+                    String productCode = codeProductLocation1.getText().toString().trim();
+                    String productName = nameProductLocation1.getText().toString().trim();
+                    String productQuantity = quantityProductLocation1.getText().toString().trim();
+                    showProductDialog(product2Location, productCode, productName, productQuantity);
+                } else {
+                    Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
+                    scannedProductLocation1 = "";
+                }
+            }else if (scannedLocation1New.isEmpty() ) {
+                scannedLocation1New = qrCodeText;
+                if (scannedLocation1New.equals(product2Location)) {
+                    updateProductLocation1ScanStatus();
+                    Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+                    if (productDialog != null && productDialog.isShowing()) {
+                        productDialog.dismiss();
+                    }
+                } else {
+                    Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+                    scannedLocation1New = "";
+                }
+
             }
-        }
-        if (scannedLocation1.isEmpty()) {
-            scannedLocation1 = qrCodeText;
-            if (scannedLocation1.equals(codeLocation1.getText().toString().trim())) {
-                updateLocation2ScanStatus(true, "Location barcode is correct.");
+        } else if (scannedProductLocation2.isEmpty()) {
+            scannedProductLocation2 = qrCodeText;
+            if (scannedProductLocation2.equals(codeProductLocation2.getText().toString().trim())) {
+                String productCode = codeProductLocation2.getText().toString().trim();
+                String productName = nameProductLocation2.getText().toString().trim();
+                String productQuantity = quantityProductLocation2.getText().toString().trim();
+                showProductDialog(product1Location, productCode, productName, productQuantity);
+            } else {
+                Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
+                scannedProductLocation2 = "";
+            }
+        } else if (scannedLocation2New.isEmpty()) {
+            scannedLocation2New = qrCodeText;
+            if (scannedLocation2New.equals(product1Location)) {
+                Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+                updateProductLocation2ScanStatus();
+                if (productDialog != null && productDialog.isShowing()) {
+                    productDialog.dismiss();
+                }
                 confirmSwapBtn.setEnabled(true);
                 if (qrCodeManager != null) {
                     qrCodeManager.unregister();
                     qrCodeManager = null;
                 }
             } else {
-                updateLocation2ScanStatus(false, "Invalid Location barcode! Please scan again.");
-                scannedLocation1 = "";
+                Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+                scannedLocation2New = "";
             }
         }
     }
@@ -185,26 +266,12 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         }
     }
 
-    private void updateLocation1ScanStatus(boolean isValid, String message) {
-        locationNewBarcodeStatus1.setVisibility(View.VISIBLE);
-        locationNewBarcodeStatus1.setText(message);
-        locationNewBarcodeStatus1.setTextColor(isValid ? Color.GREEN : Color.RED);
-    }
-
-    private void updateLocation2ScanStatus(boolean isValid, String message) {
-        locationNewBarcodeStatus2.setVisibility(View.VISIBLE);
-        locationNewBarcodeStatus2.setText(message);
-        locationNewBarcodeStatus2.setTextColor(isValid ? Color.GREEN : Color.RED);
-    }
-
     @SuppressLint("SetTextI18n")
     private void util(){
-        nameLocationOld1Tv = findViewById(R.id.nameLocationOld1Tv);
-        nameLocationOld2Tv = findViewById(R.id.nameLocationOld2Tv);
-        nameLocationNew1Tv = findViewById(R.id.nameLocationNew1Tv);
-        nameLocationNew2Tv = findViewById(R.id.nameLocationNew2Tv);
-        locationNewBarcodeStatus1 = findViewById(R.id.locationNewBarcodeStatus1);
-        locationNewBarcodeStatus2 = findViewById(R.id.locationNewBarcodeStatus2);
+        codeLocation1New = findViewById(R.id.codeLocation1New);
+        codeLocation2New = findViewById(R.id.codeLocation2New);
+//        locationNewBarcodeStatus1 = findViewById(R.id.locationNewBarcodeStatus1);
+//        locationNewBarcodeStatus2 = findViewById(R.id.locationNewBarcodeStatus2);
         nameProductLocation1 = findViewById(R.id.nameProductLocation1);
         quantityProductLocation1 = findViewById(R.id.quantityProductLocation1);
         codeProductLocation1 = findViewById(R.id.codeProductLocation1);
@@ -215,15 +282,26 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         codeLocation1 = findViewById(R.id.codeLocation1);
         confirmSwapBtn = findViewById(R.id.confirmSwapBtn);
 
+        productCode1Tv = findViewById(R.id.productCode1Tv);
+        productQuantity1Tv = findViewById(R.id.productQuantity1Tv);
+        productCode2Tv = findViewById(R.id.productCode2Tv);
+        productQuantity2Tv = findViewById(R.id.productQuantity2Tv);
+        productName2Tv = findViewById(R.id.productName2Tv);
+        productName1Tv = findViewById(R.id.productName1Tv);
+        checkLocation1Iv = findViewById(R.id.checkLocation1Iv);
+        checkLocation2Iv = findViewById(R.id.checkLocation2Iv);
+
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
 
         product1Location = sharedPreferences.getString("product1_location", "N/A");
         product2Location = sharedPreferences.getString("product2_location", "N/A");
         swapId = sharedPreferences.getInt("swap_location_id", 0);
-        nameLocationOld1Tv.setText(product1Location);
-        nameLocationOld2Tv.setText(product2Location);
+//        nameLocationOld1Tv.setText(product1Location);
+//        nameLocationOld2Tv.setText(product2Location);
         codeLocation2.setText(product2Location);
         codeLocation1.setText(product1Location);
+        codeLocation1New.setText(product2Location);
+        codeLocation2New.setText(product1Location);
         requestQueue = Volley.newRequestQueue(this);
         confirmSwapBtn.setEnabled(false);
         loadingDialog = new LoadingDialog(this);
@@ -291,14 +369,14 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                         nameProductLocation1.setText("null");
                         quantityProductLocation1.setText("null");
                         codeProductLocation1.setText("null");
-                        scannedLocation2 = "SKIP";
-                        updateLocation1ScanStatus(true, "No scan required.");
+                        scannedProductLocation1 = "SKIP";
+                        updateProductLocation1ScanStatus();
                     } else {
                         nameProductLocation2.setText("null");
                         quantityProductLocation2.setText("null");
                         codeProductLocation2.setText("null");
-                        scannedLocation1 = "SKIP";
-//                        check = true;
+                        scannedProductLocation2 = "SKIP";
+                        updateProductLocation2ScanStatus();
                     }
                 }
             } else {
@@ -311,7 +389,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     }
 
     private void checkAndDismissLoading() {
-        pendingRequests--; // Giảm biến đếm khi request hoàn thành
+        pendingRequests--;
         if (pendingRequests <= 0) {
             loadingDialog.dismiss();
         }
