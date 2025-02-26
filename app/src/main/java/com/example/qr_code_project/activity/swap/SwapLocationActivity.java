@@ -177,7 +177,7 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
         Intent intent = new Intent(this, DetailSwapLocationActivity.class);
                         intent.putExtra("swapId", swapId);
                         startActivity(intent);
-                        finish();
+//                        finish();
     }
 
 //    private void showConfirmationDialog(int swapId) {

@@ -106,7 +106,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
         Intent intent = new Intent(DetailSwapLocationActivity.this, ConfirmSwapLocationActivity.class);
         startActivity(intent);
-        finish();
+//        finish();
     }
 
     //Get data Inbound from Api
