@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, getString(R.string.login_empty)
                             , Toast.LENGTH_SHORT).show();
                 } else {
-                    loginUser(username, password);
+//                    loginUser(username, password);
                 }
             }
         });
@@ -109,42 +109,42 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void loginUser(String username, String password) {
-        String url = ApiConstants.ACCOUNT_LOGIN;
-        loadingDialog.show();
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-                this::responseAPI,
-                this::handleError)
-        {
-            @Override
-            public byte[] getBody() throws AuthFailureError {
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("username", username);
-                    params.put("password", password);
-                } catch (JSONException e) {
-                    Log.d("LoginActivity", Objects.requireNonNull(e.getMessage()));
-                }
-                Log.d("Request Body", params.toString());
-                return params.toString().getBytes();
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/json"); //  Content-Type is JSON
-                return headers;
-            }
-        };
-
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10 * 1000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
-
-        Volley.newRequestQueue(this).add(request);
-    }
+//    private void loginUser(String username, String password) {
+//        String url = ApiConstants.ACCOUNT_LOGIN;
+//        loadingDialog.show();
+//        StringRequest request = new StringRequest(Request.Method.POST, url,
+//                this::responseAPI,
+//                this::handleError)
+//        {
+//            @Override
+//            public byte[] getBody() throws AuthFailureError {
+//                JSONObject params = new JSONObject();
+//                try {
+//                    params.put("username", username);
+//                    params.put("password", password);
+//                } catch (JSONException e) {
+//                    Log.d("LoginActivity", Objects.requireNonNull(e.getMessage()));
+//                }
+//                Log.d("Request Body", params.toString());
+//                return params.toString().getBytes();
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> headers = new HashMap<>();
+//                headers.put("Content-Type", "application/json"); //  Content-Type is JSON
+//                return headers;
+//            }
+//        };
+//
+//        request.setRetryPolicy(new DefaultRetryPolicy(
+//                10 * 1000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//        ));
+//
+//        Volley.newRequestQueue(this).add(request);
+//    }
 
     @SuppressLint("NotifyDataSetChanged")
     private void responseAPI(String response) {

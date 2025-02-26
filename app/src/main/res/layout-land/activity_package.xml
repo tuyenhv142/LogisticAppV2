@@ -103,22 +103,22 @@
                     android:gravity="center_vertical"
                     android:padding="10dp">
 
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textStyle="bold"
-                        android:text="@string/receipt_name"
-                        android:textSize="22sp" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView6"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:text="@string/receipt_name"-->
+<!--                        android:textSize="22sp" />-->
 
-                    <EditText
-                        android:id="@+id/titlePackageEt"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="2"
-                        android:focusable="false"
-                        android:inputType="text" />
+<!--                    <EditText-->
+<!--                        android:id="@+id/titlePackageEt"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="48dp"-->
+<!--                        android:layout_weight="2"-->
+<!--                        android:focusable="false"-->
+<!--                        android:inputType="text" />-->
                 </LinearLayout>
             </LinearLayout>
 

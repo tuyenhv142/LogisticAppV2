@@ -60,10 +60,10 @@ public class SwapLocationAdapter extends RecyclerView.Adapter<SwapLocationAdapte
             holder.id.setText(String.valueOf(swapId));
             holder.locationOldCode.setText(String.valueOf(locationOldCode));
             holder.locationNewCode.setText(String.valueOf(locationNewCode));
-            holder.warehouseOld.setText(String.valueOf(warehouseOld));
+//            holder.warehouseOld.setText(String.valueOf(warehouseOld));
             holder.areaOld.setText(String.valueOf(areaOld));
             holder.floorOld.setText(String.valueOf(floorOld));
-            holder.warehouseNew.setText(String.valueOf(warehouse));
+//            holder.warehouseNew.setText(String.valueOf(warehouse));
             holder.floorNew.setText(String.valueOf(floor));
             holder.areaNew.setText(String.valueOf(area));
             holder.shelfOld.setText(String.valueOf(shelfOld));
@@ -94,11 +94,11 @@ public class SwapLocationAdapter extends RecyclerView.Adapter<SwapLocationAdapte
             super(itemView);
             moreSwapBtn = itemView.findViewById(R.id.moreSwapBtn);
             locationOldCode = itemView.findViewById(R.id.locationOldCode);
-            warehouseOld = itemView.findViewById(R.id.warehouseOld);
+//            warehouseOld = itemView.findViewById(R.id.warehouseOld);
             floorOld = itemView.findViewById(R.id.floorOld);
             areaOld = itemView.findViewById(R.id.areaOld);
             locationNewCode = itemView.findViewById(R.id.locationNewCode);
-            warehouseNew = itemView.findViewById(R.id.warehouseNew);
+//            warehouseNew = itemView.findViewById(R.id.warehouseNew);
             floorNew = itemView.findViewById(R.id.floorNew);
             areaNew = itemView.findViewById(R.id.areaNew);
             shelfOld = itemView.findViewById(R.id.shelfOld);

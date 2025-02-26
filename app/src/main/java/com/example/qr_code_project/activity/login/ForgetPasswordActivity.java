@@ -44,7 +44,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
         util();
 
-        utilBtn();
+//        utilBtn();
     }
 
     private void util(){
@@ -61,58 +61,58 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     }
 
 
-    private void utilBtn(){
-        btnSendNow.setOnClickListener(v -> {
-            email = enterEmailEt.getText().toString().trim();
-            if (email.isEmpty()){
-                Toast.makeText(this,"Please enter your email!",Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!isValidEmail(email)) {
-                Toast.makeText(this, "Invalid email format!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            String url = ApiConstants.ACCOUNT_LOAD_OTP;
-
-            loadingDialog.show();
-
-            StringRequest request = new StringRequest(Request.Method.POST,url,
-                    this::response,
-                    this::handleError)
-            {
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    JSONObject params = new JSONObject();
-                    try {
-                        params.put("email", email);
-                        params.put("type", "update password");
-                    } catch (JSONException e) {
-                        Log.d("ForgetPasswordActivity", Objects.requireNonNull(e.getMessage()));
-                        return null;
-                    }
-                    Log.d("Request Body", params.toString());
-                    return params.toString().getBytes();
-                }
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json"); //  Content-Type is JSON
-                    return headers;
-                }
-            };
-
-            request.setRetryPolicy(new DefaultRetryPolicy(
-                    10 * 1000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-            ));
-
-            requestQueue.add(request);
-        });
-    }
+//    private void utilBtn(){
+//        btnSendNow.setOnClickListener(v -> {
+//            email = enterEmailEt.getText().toString().trim();
+//            if (email.isEmpty()){
+//                Toast.makeText(this,"Please enter your email!",Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            if (!isValidEmail(email)) {
+//                Toast.makeText(this, "Invalid email format!", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            String url = ApiConstants.ACCOUNT_LOAD_OTP;
+//
+//            loadingDialog.show();
+//
+//            StringRequest request = new StringRequest(Request.Method.POST,url,
+//                    this::response,
+//                    this::handleError)
+//            {
+//                @Override
+//                public byte[] getBody() throws AuthFailureError {
+//                    JSONObject params = new JSONObject();
+//                    try {
+//                        params.put("email", email);
+//                        params.put("type", "update password");
+//                    } catch (JSONException e) {
+//                        Log.d("ForgetPasswordActivity", Objects.requireNonNull(e.getMessage()));
+//                        return null;
+//                    }
+//                    Log.d("Request Body", params.toString());
+//                    return params.toString().getBytes();
+//                }
+//
+//                @Override
+//                public Map<String, String> getHeaders() throws AuthFailureError {
+//                    Map<String, String> headers = new HashMap<>();
+//                    headers.put("Content-Type", "application/json"); //  Content-Type is JSON
+//                    return headers;
+//                }
+//            };
+//
+//            request.setRetryPolicy(new DefaultRetryPolicy(
+//                    10 * 1000,
+//                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//            ));
+//
+//            requestQueue.add(request);
+//        });
+//    }
 
     private void response(String response){
         try {

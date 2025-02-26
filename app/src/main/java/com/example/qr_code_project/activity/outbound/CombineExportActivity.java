@@ -49,16 +49,16 @@ public class CombineExportActivity extends AppCompatActivity {
     private Button submitOutboundBtn;
     private RecyclerView combinedExportsRv;
     private ProductAdapter productAdapter;
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
     private final Map<Integer, Object> productMap = new HashMap<>();
     private ArrayList<ExportModal> deliveryList = new ArrayList<>();
     private ArrayList<ProductModal> productList = new ArrayList<>();
     private final Map<Integer, ArrayList<ProductModal>> deliveryProductsMap = new HashMap<>();
     private LoadingDialog loadingDialog;
     //check all request update confirm
-    private int pendingRequests = 0;
-    private int successfulRequests = 0;
-    private TokenManager tokenManager;
+//    private int pendingRequests = 0;
+//    private int successfulRequests = 0;
+//    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,8 +136,8 @@ public class CombineExportActivity extends AppCompatActivity {
             // a delivery
             Map<String, Object> deliveryData = new HashMap<>();
             deliveryData.put("code", export.getCodeEp());
-            deliveryData.put("id", export.getId());
-            deliveryData.put("products", productListForDelivery);
+            deliveryData.put("quantity", export.getId());
+//            deliveryData.put("products", productListForDelivery);
 
             deliveriesList.add(deliveryData);
         }
@@ -160,8 +160,8 @@ public class CombineExportActivity extends AppCompatActivity {
                         JSONObject jsonResponse = new JSONObject(response);
                         String mess = jsonResponse.getString("content");
                         if (jsonResponse.getBoolean("success")) {
-                            JSONArray contentArray = jsonResponse.getJSONArray("content");
-                            Log.d("CombineExportActivity", "Content received: " + contentArray.toString());
+//                            JSONArray contentArray = jsonResponse.getJSONArray("content");
+//                            Log.d("CombineExportActivity", "Content received: " + contentArray.toString());
 
                             Toast.makeText(CombineExportActivity.this, getString(R.string.success_response),
                                     Toast.LENGTH_SHORT).show();
@@ -196,12 +196,12 @@ public class CombineExportActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                } else {
-                    tokenManager.clearTokenAndLogout();
-                }
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                } else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
                 headers.put("Content-Type", "application/json");
                 return headers;
             }
@@ -270,20 +270,21 @@ public class CombineExportActivity extends AppCompatActivity {
         @SuppressLint("NotifyDataSetChanged")
         StringRequest request = new StringRequest(Request.Method.GET, url, 
                 this::parseResponse,
-                this::handleError) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+                this::handleError) ;
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
@@ -299,8 +300,10 @@ public class CombineExportActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONObject content = jsonObject.optJSONObject("content");
-                if (content != null) {
-                    populateContent(content);
+                assert content != null;
+                JSONObject data = content.optJSONObject("data");
+                if (data != null) {
+                    populateContent(data);
                 }
             }
         } catch (JSONException e) {
@@ -313,15 +316,16 @@ public class CombineExportActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void populateContent(JSONObject content) throws JSONException {
         int delivery = content.optInt("id",0);
-        JSONArray products = content.optJSONArray("products");
+        JSONArray products = content.optJSONArray("locationDataInbounds");
 
         if (products != null) {
             for (int i = 0; i < products.length(); i++) {
                 JSONObject object = products.getJSONObject(i);
                 int id = object.optInt("id");
                 String title = object.optString("title", "N/A");
-                int quantity = object.optInt("quantityDeliverynote");
-                String code = object.optString("code", "N/A");
+                int quantity = object.optInt("quantity");
+                String code = object.optString("title", "N/A");
+                String location = object.optString("code","N/A");
                 String image = object.optString("image", "");
 
                 boolean found = false;
@@ -335,10 +339,10 @@ public class CombineExportActivity extends AppCompatActivity {
 
                 if (!found) {
                     ProductModal newProduct = new ProductModal(id, title, quantity,
-                            null, code, image);
+                            location, code, image);
                     productList.add(newProduct);
-                    //                                    deliveryProductsMap.get(delivery).add(newProduct);
-                    //                                    Log.d("CombineExportActivity", "Products for delivery " + delivery + ": " + deliveryProductsMap.get(delivery));
+                    //deliveryProductsMap.get(delivery).add(newProduct);
+                    //Log.d("CombineExportActivity", "Products for delivery " + delivery + ": " + deliveryProductsMap.get(delivery));
 
                 }
                 ArrayList<ProductModal> productListForThisDelivery = new ArrayList<>(productList);
@@ -388,10 +392,10 @@ public class CombineExportActivity extends AppCompatActivity {
         submitOutboundBtn.setEnabled(false);
 
         combinedExportsRv.setLayoutManager(new LinearLayoutManager(this));
-        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         loadingDialog = new LoadingDialog(this);
         productList = new ArrayList<>();
         deliveryList = new ArrayList<>();
-        tokenManager = new TokenManager(this);
+//        tokenManager = new TokenManager(this);
     }
 }

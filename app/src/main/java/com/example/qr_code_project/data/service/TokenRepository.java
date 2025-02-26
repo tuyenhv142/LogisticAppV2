@@ -22,10 +22,10 @@ import java.util.Map;
 public class TokenRepository {
 
     public static void sendTokenToServer(Context context, String token) {
-        TokenManager tokenManager = new TokenManager(context);
+//        TokenManager tokenManager = new TokenManager(context);
         RequestQueue queue = Volley.newRequestQueue(context);
-        SharedPreferences sharedPreferences =
-                context.getSharedPreferences("AccountToken", Context.MODE_PRIVATE);
+//        SharedPreferences sharedPreferences =
+//                context.getSharedPreferences("AccountToken", Context.MODE_PRIVATE);
         String url = ApiConstants.TOKEN_ADD;
 
         StringRequest request = new StringRequest(Request.Method.POST, url,
@@ -60,12 +60,12 @@ public class TokenRepository {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
                 headers.put("Content-Type", "application/json");
                 return headers;
             }

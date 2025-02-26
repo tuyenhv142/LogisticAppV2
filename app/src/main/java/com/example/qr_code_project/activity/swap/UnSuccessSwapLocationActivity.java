@@ -50,7 +50,7 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
 
         util();
 
-        loadSwapPlan();
+//        loadSwapPlan();
     }
 
     private void util(){
@@ -63,36 +63,36 @@ public class UnSuccessSwapLocationActivity extends AppCompatActivity implements 
         swapArrayList = new ArrayList<>();
     }
 
-    private void loadSwapPlan(){
-        String url = ApiConstants.SWAP_LOCATION_CLAIM;
-        loadingDialog.show();
-        StringRequest request = new StringRequest(
-                Request.Method.GET,url,
-                this::parseResponse,
-                this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10 * 1000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
-
-        requestQueue.add(request);
-    }
+//    private void loadSwapPlan(){
+//        String url = ApiConstants.SWAP_LOCATION_CLAIM;
+//        loadingDialog.show();
+//        StringRequest request = new StringRequest(
+//                Request.Method.GET,url,
+//                this::parseResponse,
+//                this::handleError
+//        ) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
+//
+//        request.setRetryPolicy(new DefaultRetryPolicy(
+//                10 * 1000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//        ));
+//
+//        requestQueue.add(request);
+//    }
 
     @SuppressLint("NotifyDataSetChanged")
     private void parseResponse(String response) {

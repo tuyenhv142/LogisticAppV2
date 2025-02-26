@@ -50,7 +50,8 @@ public class InboundActivity extends AppCompatActivity {
     private static final String TAG = "InboundActivity";
 
     // Create UI Components
-    private EditText codeEt, titleEt;
+    private EditText codeEt;
+//            titleEt;
     private TextView itemsEt, totalEt, totalRealQuantityEt;
     private RecyclerView productsRv;
     private Button submitBtn,resetBtn;
@@ -59,13 +60,13 @@ public class InboundActivity extends AppCompatActivity {
     private int totalRealQuantity;
     private QRcodeManager qrcodeManager;
     private RequestQueue requestQueue;
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
     private ArrayList<ProductModal> productArrayList;
     private ProductAdapter productAdapter;
     private final Map<Integer, Object> productMap = new HashMap<>();
     private LoadingDialog loadingDialog;
     private boolean isSubmit = false;
-    private TokenManager tokenManager;
+//    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +189,7 @@ public class InboundActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void resetConfirm() {
         codeEt.setText("");
-        titleEt.setText("");
+//        titleEt.setText("");
         itemsEt.setText("");
         totalEt.setText("");
         totalRealQuantityEt.setText("0");
@@ -215,7 +216,8 @@ public class InboundActivity extends AppCompatActivity {
     private void submit(String code, int quantity) {
         loadingDialog.show();
         String url = ApiConstants.INBOUND_SUBMIT;
-        StringRequest request = new StringRequest(Request.Method.POST, url,
+        Log.d(TAG,url);
+        StringRequest request = new StringRequest(Request.Method.PUT, url,
                 response -> {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
@@ -235,27 +237,44 @@ public class InboundActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 },
-                this::handleError) {
+                this::handleError)
+        {
+//            @Override
+//            public byte[] getBody() {
+//                JSONObject params = new JSONObject();
+//                try {
+//                    params.put("code", code);
+//                    params.put("quantity", quantity);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                Log.d(TAG, "Request Body: " + params.toString());
+//                return params.toString().getBytes();
+//            }
+
             @Override
-            public byte[] getBody() throws AuthFailureError {
+            public byte[] getBody() {
+                JSONArray jsonArray = new JSONArray();
                 JSONObject params = new JSONObject();
                 try {
                     params.put("code", code);
-                    params.put("actualQuantity", quantity);
+                    params.put("quantity", quantity);
+                    jsonArray.put(params);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.d(TAG, "Request Body: " + params.toString());
-                return params.toString().getBytes();
+                Log.d(TAG, "Request Body: " + jsonArray.toString());
+                return jsonArray.toString().getBytes();
             }
+
 
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (token != null) {
-                    headers.put("Authorization", "Bearer " + token);
-                }
+//                String token = sharedPreferences.getString("token", null);
+//                if (token != null) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }
                 headers.put("Content-Type", "application/json");
                 return headers;
             }
@@ -273,7 +292,7 @@ public class InboundActivity extends AppCompatActivity {
     //UI components
     private void initUI() {
         codeEt = findViewById(R.id.codeEt);
-        titleEt = findViewById(R.id.titleEt);
+//        titleEt = findViewById(R.id.titleEt);
         itemsEt = findViewById(R.id.itemsEt);
         totalEt = findViewById(R.id.totalEt);
         productsRv = findViewById(R.id.productsRv);
@@ -285,10 +304,10 @@ public class InboundActivity extends AppCompatActivity {
         qrcodeManager = new QRcodeManager(this);
         loadingDialog = new LoadingDialog(this);
         requestQueue = Volley.newRequestQueue(this);
-        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         productsRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
-        tokenManager = new TokenManager(this);
+//        tokenManager = new TokenManager(this);
         if(productMap.isEmpty()){
             totalRealQuantityEt.setText("0");
         }
@@ -312,20 +331,21 @@ public class InboundActivity extends AppCompatActivity {
                 Request.Method.GET, url,
                 this::parseResponse,
                 this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (tokenManager.isTokenExpired()) {
-                    tokenManager.clearTokenAndLogout();
-                }else {
-                    headers.put("Authorization", "Bearer " + token);
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        ) ;
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (tokenManager.isTokenExpired()) {
+//                    tokenManager.clearTokenAndLogout();
+//                }else {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
@@ -344,8 +364,10 @@ public class InboundActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONObject content = jsonObject.optJSONObject("content");
-                if (content != null) {
-                    populateContent(content);
+                assert content != null;
+                JSONObject data = content.optJSONObject("data");
+                if (data != null) {
+                    populateContent(data);
                     if (!productArrayList.isEmpty()) {
                         qrcodeManager.unregister();
                     }
@@ -366,7 +388,7 @@ public class InboundActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     private void populateContent(JSONObject content) throws JSONException {
-        boolean isAction = content.optBoolean("isaction",false);
+        boolean isAction = content.optBoolean("isAction",false);
 
         if (isAction){
             Toast.makeText(this,"The Import has been import!",Toast.LENGTH_SHORT).show();
@@ -374,20 +396,19 @@ public class InboundActivity extends AppCompatActivity {
         }
 
         codeEt.setText(content.optString("code", "N/A"));
-        titleEt.setText(content.optString("tite", "N/A"));
-        itemsEt.setText(String.valueOf(content.optInt("totalProduct", 0)));
-        totalEt.setText(String.valueOf(content.optInt("totalQuanTity", 0)));
-        JSONArray products = content.optJSONArray("products");
+//        titleEt.setText(content.optString("tite", "N/A"));
+        itemsEt.setText(String.valueOf(content.optInt("quantity", 0)));
+        totalEt.setText(String.valueOf(content.optInt("quantityProduct", 0)));
+        JSONArray products = content.optJSONArray("locationDataInbounds");
         productArrayList.clear();
         for (int i = 0; i < Objects.requireNonNull(products).length(); i++) {
             JSONObject object = products.getJSONObject(i);
 
             int id = object.optInt("id");
             String title = object.optString("title", "N/A");
-            int quantity = object.optInt("quantityImportFrom");
-            String location = object.getJSONObject("dataItem")
-                    .optString("code",null);
-            String code = object.optString("code", "N/A");
+            int quantity = object.optInt("quantity");
+            String location = object.optString("code",null);
+            String code = object.optString("title", "N/A");
             String image = object.optString("category_image", "N/A");
 
             productArrayList.add(new ProductModal(id, title, quantity, location, code, image));

@@ -20,20 +20,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qr_code_project"
         tools:targetApi="31">
-        <activity
-            android:name=".activity.login.NewPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.login.LoadOTPActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".activity.login.NewPasswordActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".activity.login.LoadOTPActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".activity.swap.UnSuccessSwapLocationActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
-        <activity
-            android:name=".activity.login.ForgetPasswordActivity"
-            android:exported="false"
-            android:screenOrientation="sensorLandscape" />
+<!--        <activity-->
+<!--            android:name=".activity.login.ForgetPasswordActivity"-->
+<!--            android:exported="false"-->
+<!--            android:screenOrientation="sensorLandscape" />-->
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
@@ -97,11 +97,11 @@
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.login.LoginActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
-            android:name=".activity.login.LoginActivity"
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:screenOrientation="sensorLandscape">
             <intent-filter>

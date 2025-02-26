@@ -37,12 +37,12 @@ import java.util.Objects;
 public class SwapLocationActivity extends AppCompatActivity implements SwapLocationAdapter.OnSwapClickListener {
 
     private RecyclerView swapLocationsRv;
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
     private RequestQueue requestQueue;
     private ArrayList<SwapModal> swapArrayList;
     private SwapLocationAdapter swapLocationAdapter;
     private LoadingDialog loadingDialog;
-    private TokenManager tokenManager;
+//    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +60,10 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
 
         loadingDialog = new LoadingDialog(this);
         requestQueue = Volley.newRequestQueue(this);
-        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         swapLocationsRv.setLayoutManager(new LinearLayoutManager(this));
         swapArrayList = new ArrayList<>();
-        tokenManager = new TokenManager(this);
+//        tokenManager = new TokenManager(this);
     }
 
     private void loadSwapPlan(){
@@ -73,20 +73,21 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
                 Request.Method.GET,url,
                 this::parseResponse,
                 this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        ) ;
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
@@ -124,28 +125,28 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
         swapArrayList.clear();
         for (int i = 0; i < Objects.requireNonNull(swapLocations).length(); i++) {
             JSONObject object = swapLocations.getJSONObject(i);
-            boolean isConfirmation = object.optBoolean("isConfirmation",false);
+            int isConfirmation = object.optInt("status",0);
 
-            if (isConfirmation){
+            if (isConfirmation == 1){
                 continue;
             }
 
             int id = object.optInt("id");
-            String title = object.optString("title", "N/A");
-            String locationOldCode = object.optString("localtionOldCode","N/A");
-            String locationNewCode = object.optString("localtionNewCode", "N/A");
-            String warehouseOld = object.optString("warehouseOld", "N/A");
+//            String title = object.optString("title", "N/A");
+            String locationOldCode = object.optString("locationOld","N/A");
+            String locationNewCode = object.optString("locationNew", "N/A");
             String areaOld = object.optString("areaOld", "N/A");
-            String floorOld = object.optString("floorOld","N/A");
-            String warehouse = object.optString("warehouse", "N/A");
-            String area = object.optString("area", "N/A");
-            String floor = object.optString("floor", "N/A");
-            String shelfOld = object.optString("shelfOld","N/A");
-            String shelfNew = object.optString("shelf","N/A");
+            String shelfOld = object.optString("shelfOld", "N/A");
+            String lineOld = object.optString("lineOld","N/A");
+            String areaNew = object.optString("areaNew", "N/A");
+            String lineNew = object.optString("lineNew", "N/A");
+            String shelfNew = object.optString("shelfNew", "N/A");
+//            String shelfOld = object.optString("shelfOld","N/A");
+//            String shelfNew = object.optString("shelf","N/A");
 
-            swapArrayList.add(new SwapModal(floor, area, warehouse
-                    , floorOld, areaOld, warehouseOld
-                    ,locationNewCode,locationOldCode,title,id,shelfOld,shelfNew));
+            swapArrayList.add(new SwapModal(areaNew, lineNew, null
+                    , areaOld, lineOld, null
+                    ,locationNewCode,locationOldCode,null,id,shelfOld,shelfNew));
         }
 
         if (swapLocationAdapter == null) {
@@ -172,85 +173,89 @@ public class SwapLocationActivity extends AppCompatActivity implements SwapLocat
 
     @Override
     public void onSwapItemClick(int swapId) {
-        showConfirmationDialog(swapId);
-    }
-
-    private void showConfirmationDialog(int swapId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.confirm_task))
-                .setMessage(getString(R.string.accept))
-                .setPositiveButton(getString(R.string.yes), (dialog, which) -> sendConfirmationRequest(swapId))
-                .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
-                .show();
-    }
-
-    private void sendConfirmationRequest(int swapId) {
-        String url = ApiConstants.SWAP_LOCATION_CONFIRM;
-        Log.d("swapID",""+swapId);
-        loadingDialog.show();
-
-        StringRequest request = new StringRequest(Request.Method.PUT, url,
-            response -> {
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(response);
-//                    if (jsonObject.getBoolean("content")) {
-                    if (jsonObject.getBoolean("success")) {
-                        Toast.makeText(this, getString(R.string.confirm_success), Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(this, DetailSwapLocationActivity.class);
+//        showConfirmationDialog(swapId);
+        Intent intent = new Intent(this, DetailSwapLocationActivity.class);
                         intent.putExtra("swapId", swapId);
                         startActivity(intent);
                         finish();
-                    } else {
-                        Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }finally {
-                    loadingDialog.dismiss();
-                }
-            },
-            error -> {
-                Toast.makeText(this, getString(R.string.error_confirm), Toast.LENGTH_SHORT).show();
-                loadingDialog.dismiss();
-            }
-        )
-        {
-            @Override
-            public byte[] getBody() {
-                JSONObject params = new JSONObject();
-                try {
-                    JSONArray idArray = new JSONArray();
-                    idArray.put(swapId);
-                    params.put("id", idArray);
-                    params.put("isConfirmation", true);
-                } catch (JSONException e) {
-                    Log.e("JSONError", "Error while creating JSON body", e);
-                }
-                Log.d("Request Body", params.toString());
-                return params.toString().getBytes();
-            }
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10 * 1000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
-
-        Volley.newRequestQueue(this).add(request);
     }
+
+//    private void showConfirmationDialog(int swapId) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(getString(R.string.confirm_task))
+//                .setMessage(getString(R.string.accept))
+//                .setPositiveButton(getString(R.string.yes), (dialog, which) -> sendConfirmationRequest(swapId))
+//                .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
+//                .show();
+//    }
+
+//    private void sendConfirmationRequest(int swapId) {
+//        String url = ApiConstants.SWAP_LOCATION_CONFIRM;
+//        Log.d("swapID",""+swapId);
+//        loadingDialog.show();
+//
+//        StringRequest request = new StringRequest(Request.Method.PUT, url,
+//            response -> {
+//                JSONObject jsonObject = null;
+//                try {
+//                    jsonObject = new JSONObject(response);
+////                    if (jsonObject.getBoolean("content")) {
+//                    if (jsonObject.getBoolean("success")) {
+//                        Toast.makeText(this, getString(R.string.confirm_success), Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(this, DetailSwapLocationActivity.class);
+//                        intent.putExtra("swapId", swapId);
+//                        startActivity(intent);
+//                        finish();
+//                    } else {
+//                        Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
+//                    }
+//                } catch (JSONException e) {
+//                    throw new RuntimeException(e);
+//                }finally {
+//                    loadingDialog.dismiss();
+//                }
+//            },
+//            error -> {
+//                Toast.makeText(this, getString(R.string.error_confirm), Toast.LENGTH_SHORT).show();
+//                loadingDialog.dismiss();
+//            }
+//        )
+//        {
+//            @Override
+//            public byte[] getBody() {
+//                JSONObject params = new JSONObject();
+//                try {
+//                    JSONArray idArray = new JSONArray();
+//                    idArray.put(swapId);
+//                    params.put("id", idArray);
+//                    params.put("isConfirmation", true);
+//                } catch (JSONException e) {
+//                    Log.e("JSONError", "Error while creating JSON body", e);
+//                }
+//                Log.d("Request Body", params.toString());
+//                return params.toString().getBytes();
+//            }
+//
+////            @Override
+////            public Map<String, String> getHeaders() {
+////                Map<String, String> headers = new HashMap<>();
+////                String token = sharedPreferences.getString("token", null);
+////                if (!tokenManager.isTokenExpired()) {
+////                    headers.put("Authorization", "Bearer " + token);
+////                }else {
+////                    tokenManager.clearTokenAndLogout();
+////                }
+////                headers.put("Content-Type", "application/json");
+////                return headers;
+////            }
+//        };
+//
+//        request.setRetryPolicy(new DefaultRetryPolicy(
+//                10 * 1000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//        ));
+//
+//        Volley.newRequestQueue(this).add(request);
+//    }
 }

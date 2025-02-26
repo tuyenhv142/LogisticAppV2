@@ -79,7 +79,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPo
             }
 
             // Gán dữ liệu vào các TextView
-            holder.code.setText(String.valueOf( productCode));
+//            holder.code.setText(String.valueOf( productCode));
             holder.name.setText(productName);
             holder.quantity.setText(String.valueOf(productQuantity));
             holder.location.setText(String.valueOf(productLocation));
@@ -109,7 +109,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.HolderPo
         public HolderPost(@NonNull View itemView) {
             super(itemView);
             moreBtn = itemView.findViewById(R.id.moreBtn);
-            code = itemView.findViewById(R.id.code);
+//            code = itemView.findViewById(R.id.code);
             name = itemView.findViewById(R.id.title);
             quantity = itemView.findViewById(R.id.quantity);
             location = itemView.findViewById(R.id.location);

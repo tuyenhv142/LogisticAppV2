@@ -215,5 +215,7 @@
     <string name="please_scan_the_product_barcode">Please scan the product barcode</string>
     <string name="product_quantity">Product Quantity:</string>
     <string name="product_barcode2">Product Barcode:</string>
+    <string name="line_old">Line Old</string>
+    <string name="line_new">Line New</string>
 
 </resources>

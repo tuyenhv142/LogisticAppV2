@@ -57,7 +57,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
     private QRcodeManager qrCodeManager;
     private boolean isConfirmed = false;
     private LoadingDialog loadingDialog;
-    private TokenManager tokenManager;
+//    private TokenManager tokenManager;
     private AlertDialog productDialog;
     private boolean isLocation1Confirmed = false;
     private boolean isLocation2Confirmed = false;
@@ -117,20 +117,21 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
                 Request.Method.GET, url,
                 this::parseResponseLocation,
                 this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        );
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
@@ -148,8 +149,8 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
             if (jsonObject.getBoolean("success")) {
                 JSONObject content = jsonObject.optJSONObject("content");
                 if (content != null) {
-                    String codeLocationOld = content.optString("localtionOldCode", "N/A");
-                    String codeLocationNew = content.optString("localtionNewCode", "N/A");
+                    String codeLocationOld = content.optString("locationOld", "N/A");
+                    String codeLocationNew = content.optString("locationNew", "N/A");
                     locationOld1.setText(codeLocationOld);
                     locationNewCode2.setText(codeLocationNew);
                     fetchProductLocation(codeLocationOld,true);
@@ -190,7 +191,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         loadingDialog = new LoadingDialog(this);
-        tokenManager = new TokenManager(this);
+//        tokenManager = new TokenManager(this);
         continueConfirmProductBtn.setEnabled(false);
     }
 
@@ -235,71 +236,256 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         productDialog.show();
     }
 
+//    private void handleScannedData(String qrCodeText) {
+//        if (isConfirmed) return;
+//
+//        if(qrCodeText.equals(locationOld1.getText().toString().trim())){
+//            if (scannedLocation1.isEmpty()) {
+//                scannedLocation1 = qrCodeText;
+//                if (scannedLocation1.equals(locationOld1.getText().toString().trim())) {
+//                    String productName = productName1.getText().toString().trim();
+//                    String productQuantity = productQuantity1.getText().toString().trim();
+//                    String productCode = productCode1.getText().toString().trim();
+//                    showProductDialog(scannedLocation1, productCode, productName, productQuantity);
+//                    Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+//                    scannedLocation1 = "";
+//                }
+//            } else if (scannedProductLocation1.isEmpty()) {
+//                scannedProductLocation1 = qrCodeText;
+//                Log.d("DetailSwapLocationsssss",qrCodeText);
+//                if (scannedProductLocation1.equals(productCode1.getText().toString().trim())) {
+//                    updateProductLocation1ScanStatus();
+//                    Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
+//                    if (productDialog != null && productDialog.isShowing()) {
+//                        productDialog.dismiss();
+//                    }
+//                } else {
+//                    Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
+//                    Log.d("DetailSwapLocationssssss",productCode1.getText().toString().trim());
+//                    Log.d("DetailSwapLocationssssss",scannedProductLocation1);
+////                    scannedProductLocation1 = "";
+//                }
+//            } else if (scannedLocation2.isEmpty()) {
+//                scannedLocation2 = qrCodeText;
+//                if (scannedLocation2.equals(locationNewCode2.getText().toString().trim())) {
+//                    String productName = productName2.getText().toString().trim();
+//                    String productQuantity = productQuantity2.getText().toString().trim();
+//                    String productCode = productCode2.getText().toString().trim();
+//                    showProductDialog(scannedLocation2, productCode, productName, productQuantity);
+//                    Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+//                    scannedLocation2 = "";
+//                }
+//            } else if (scannedProductLocation2.isEmpty()) {
+//                scannedProductLocation2 = qrCodeText;
+//                if (scannedProductLocation2.equals(productCode2.getText().toString().trim())) {
+//                    updateProductLocation2ScanStatus();
+//                    Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
+//                    if (productDialog != null && productDialog.isShowing()) {
+//                        productDialog.dismiss();
+//                    }
+//                    // Check if position 1 is scanned and continue
+//                    if (!scannedProductLocation1.isEmpty() && !scannedProductLocation2.isEmpty()) {
+////                    continueConfirmProductBtn.setEnabled(true);
+//                        if (qrCodeManager != null) {
+//                            qrCodeManager.unregister();
+//                            qrCodeManager = null;
+//                        }
+//                    }
+//                } else {
+//                    Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
+//                    scannedProductLocation2 = "";
+//                }
+//            }
+//        }else{
+//            if (scannedLocation2.isEmpty()) {
+//                scannedLocation2 = qrCodeText;
+//                if (scannedLocation2.equals(locationNewCode2.getText().toString().trim())) {
+//                    String productName = productName2.getText().toString().trim();
+//                    String productQuantity = productQuantity2.getText().toString().trim();
+//                    String productCode = productCode2.getText().toString().trim();
+//                    showProductDialog(scannedLocation2, productCode, productName, productQuantity);
+//                    Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+//                    scannedLocation2 = "";
+//                }
+//            } else if (scannedProductLocation2.isEmpty()) {
+//                scannedProductLocation2 = qrCodeText;
+//                if (scannedProductLocation2.equals(productCode2.getText().toString().trim())) {
+//                    updateProductLocation2ScanStatus();
+//                    Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
+//                    if (productDialog != null && productDialog.isShowing()) {
+//                        productDialog.dismiss();
+//                    }
+//                } else {
+//                    Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
+//                    scannedProductLocation2 = "";
+//                }
+//            } else if (scannedLocation1.isEmpty()) {
+//                scannedLocation1 = qrCodeText;
+//                if (scannedLocation1.equals(locationOld1.getText().toString().trim())) {
+//                    String productName = productName1.getText().toString().trim();
+//                    String productQuantity = productQuantity1.getText().toString().trim();
+//                    String productCode = productCode1.getText().toString().trim();
+//                    showProductDialog(scannedLocation1, productCode, productName, productQuantity);
+//                    Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+//                    scannedLocation1 = "";
+//                }
+//            } else if (scannedProductLocation1.isEmpty()) {
+//                scannedProductLocation1 = qrCodeText;
+//                if (scannedProductLocation1.equals(productCode1.getText().toString().trim())) {
+//                    updateProductLocation1ScanStatus();
+//                    Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
+//                    if (productDialog != null && productDialog.isShowing()) {
+//                        productDialog.dismiss();
+//                    }
+//                    // Check if position 1 is scanned and continue
+//                    if (!scannedProductLocation1.isEmpty() && !scannedProductLocation2.isEmpty()) {
+////                    continueConfirmProductBtn.setEnabled(true);
+//                        if (qrCodeManager != null) {
+//                            qrCodeManager.unregister();
+//                            qrCodeManager = null;
+//                        }
+//                    }
+//                } else {
+//                    Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
+//                    scannedProductLocation1 = "";
+//                }
+//            }
+//        }
+//
+////        if (scannedLocation1.isEmpty()) {
+////            scannedLocation1 = qrCodeText;
+////            if (scannedLocation1.equals(locationOld1.getText().toString().trim())) {
+////                String productName = productName1.getText().toString().trim();
+////                String productQuantity = productQuantity1.getText().toString().trim();
+////                String productCode = productCode1.getText().toString().trim();
+////                showProductDialog(scannedLocation1, productCode, productName, productQuantity);
+////                Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+////            } else {
+////                Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+////                scannedLocation1 = "";
+////            }
+////        } else if (scannedProductLocation1.isEmpty()) {
+////            scannedProductLocation1 = qrCodeText;
+////            if (scannedProductLocation1.equals(productCode1.getText().toString().trim())) {
+////                updateProductLocation1ScanStatus();
+////                Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
+////                if (productDialog != null && productDialog.isShowing()) {
+////                    productDialog.dismiss();
+////                }
+////            } else {
+////                Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
+////                scannedProductLocation1 = "";
+////            }
+////        } else if (scannedLocation2.isEmpty()) {
+////            scannedLocation2 = qrCodeText;
+////            if (scannedLocation2.equals(locationNewCode2.getText().toString().trim())) {
+////                String productName = productName2.getText().toString().trim();
+////                String productQuantity = productQuantity2.getText().toString().trim();
+////                String productCode = productCode2.getText().toString().trim();
+////                showProductDialog(scannedLocation2, productCode, productName, productQuantity);
+////                Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+////            } else {
+////                Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+////                scannedLocation2 = "";
+////            }
+////        } else if (scannedProductLocation2.isEmpty()) {
+////            scannedProductLocation2 = qrCodeText;
+////            if (scannedProductLocation2.equals(productCode2.getText().toString().trim())) {
+////                updateProductLocation2ScanStatus();
+////                Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
+////                if (productDialog != null && productDialog.isShowing()) {
+////                    productDialog.dismiss();
+////                }
+////                // Check if position 1 is scanned and continue
+////                if (!scannedProductLocation1.isEmpty() && !scannedProductLocation2.isEmpty()) {
+//////                    continueConfirmProductBtn.setEnabled(true);
+////                    if (qrCodeManager != null) {
+////                        qrCodeManager.unregister();
+////                        qrCodeManager = null;
+////                    }
+////                }
+////            } else {
+////                Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
+////                scannedProductLocation2 = "";
+////            }
+////        }
+//
+//    }
+
     private void handleScannedData(String qrCodeText) {
         if (isConfirmed) return;
 
-        if (scannedLocation1.isEmpty()) {
+        // Kiểm tra Location 1 trước
+        if (scannedLocation1.isEmpty() && qrCodeText.equals(locationOld1.getText().toString().trim())) {
             scannedLocation1 = qrCodeText;
-            if (scannedLocation1.equals(locationOld1.getText().toString().trim())) {
-                String productName = productName1.getText().toString().trim();
-                String productQuantity = productQuantity1.getText().toString().trim();
-                String productCode = productCode1.getText().toString().trim();
-                showProductDialog(scannedLocation1, productCode, productName, productQuantity);
-                Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
-                scannedLocation1 = "";
-            }
-        } else if (scannedProductLocation1.isEmpty()) {
+            showProductDialog(scannedLocation1, productCode1.getText().toString().trim(),
+                    productName1.getText().toString().trim(), productQuantity1.getText().toString().trim());
+            Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra sản phẩm của Location 1
+        if (scannedProductLocation1.isEmpty() && scannedLocation1.equals(locationOld1.getText().toString().trim())) {
             scannedProductLocation1 = qrCodeText;
             if (scannedProductLocation1.equals(productCode1.getText().toString().trim())) {
                 updateProductLocation1ScanStatus();
                 Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
-                if (productDialog != null && productDialog.isShowing()) {
-                    productDialog.dismiss();
-                }
+                closeDialogIfOpen();
             } else {
                 Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
                 scannedProductLocation1 = "";
             }
-        } else if (scannedLocation2.isEmpty()) {
+            return;
+        }
+
+        // Kiểm tra Location 2
+        if (scannedLocation2.isEmpty() && qrCodeText.equals(locationNewCode2.getText().toString().trim())) {
             scannedLocation2 = qrCodeText;
-            if (scannedLocation2.equals(locationNewCode2.getText().toString().trim())) {
-                String productName = productName2.getText().toString().trim();
-                String productQuantity = productQuantity2.getText().toString().trim();
-                String productCode = productCode2.getText().toString().trim();
-                showProductDialog(scannedLocation2, productCode, productName, productQuantity);
-                Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
-                scannedLocation2 = "";
-            }
-        } else if (scannedProductLocation2.isEmpty()) {
+            showProductDialog(scannedLocation2, productCode2.getText().toString().trim(), productName2.getText().toString().trim(), productQuantity2.getText().toString().trim());
+            Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra sản phẩm của Location 2
+        if (scannedProductLocation2.isEmpty() && scannedLocation2.equals(locationNewCode2.getText().toString().trim())) {
             scannedProductLocation2 = qrCodeText;
             if (scannedProductLocation2.equals(productCode2.getText().toString().trim())) {
                 updateProductLocation2ScanStatus();
                 Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
-                if (productDialog != null && productDialog.isShowing()) {
-                    productDialog.dismiss();
-                }
-                // Check if position 1 is scanned and continue
-                if (!scannedProductLocation1.isEmpty() && !scannedProductLocation2.isEmpty()) {
-//                    continueConfirmProductBtn.setEnabled(true);
-                    if (qrCodeManager != null) {
-                        qrCodeManager.unregister();
-                        qrCodeManager = null;
-                    }
-                }
+                closeDialogIfOpen();
+                finalizeScanning();
             } else {
                 Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
                 scannedProductLocation2 = "";
             }
+            return;
         }
 
-        // Ensure that continue button only gets enabled when both positions are scanned
-//        if (!scannedProductLocation1.isEmpty() && !scannedProductLocation2.isEmpty()) {
-//            continueConfirmProductBtn.setEnabled(true);
-//        }
+        // Nếu không khớp bất kỳ điều kiện nào
+        Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+    }
+
+    private void closeDialogIfOpen() {
+        if (productDialog != null && productDialog.isShowing()) {
+            productDialog.dismiss();
+        }
+    }
+
+    private void finalizeScanning() {
+        if (!scannedProductLocation1.isEmpty() && !scannedProductLocation2.isEmpty()) {
+            if (qrCodeManager != null) {
+                qrCodeManager.unregister();
+                qrCodeManager = null;
+            }
+        }
     }
 
 
@@ -342,22 +528,23 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
         loadingDialog.show();
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
-                response -> parseResponseProductLocation(response, isOldLocation),
+                response -> parseResponseProductLocation(response, isOldLocation,code),
                 this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        ) ;
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
@@ -369,7 +556,7 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void parseResponseProductLocation(String response, boolean isOldLocation) {
+    private void parseResponseProductLocation(String response, boolean isOldLocation,String code) {
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
@@ -380,12 +567,31 @@ public class DetailSwapLocationActivity extends AppCompatActivity {
 
                         if (isOldLocation) {
                             productName1.setText(product.optString("title", "N/A"));
-                            productQuantity1.setText(String.valueOf(product.optInt("quantity", 0)));
-                            productCode1.setText(product.optString("code", "N/A"));
+//                            productQuantity1.setText(String.valueOf(product.optInt("quantity", 0)));
+                            JSONArray locationList = product.optJSONArray("dataLocations");
+                            for(int j = 0; j< Objects.requireNonNull(locationList).length(); j++){
+                                JSONObject location = locationList.getJSONObject(i);
+                                String locationProduct  = location.getString("code");
+
+                                if(locationProduct.equals(code)){
+                                    productQuantity1.setText(String.valueOf(location.getInt("quantity")));
+                                }
+                            }
+
+                            productCode1.setText(product.optString("title", "N/A"));
                         } else {
                             productName2.setText(product.optString("title", "N/A"));
-                            productQuantity2.setText(String.valueOf(product.optInt("quantity", 0)));
-                            productCode2.setText(product.optString("code", "N/A"));
+//                            productQuantity2.setText(String.valueOf(product.optInt("quantity", 0)));
+                            JSONArray locationList = product.optJSONArray("dataLocations");
+                            for(int j = 0; j< Objects.requireNonNull(locationList).length(); j++){
+                                JSONObject location = locationList.getJSONObject(i);
+                                String locationProduct  = location.getString("code");
+
+                                if(locationProduct.equals(code)){
+                                    productQuantity2.setText(String.valueOf(location.getInt("quantity")));
+                                }
+                            }
+                            productCode2.setText(product.optString("title", "N/A"));
                         }
                     }
                 }else {

@@ -43,12 +43,12 @@ public class OutboundActivity extends AppCompatActivity {
     private RecyclerView exportsRv;
 
     private QRcodeManager qrcodeManager;
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
     private RequestQueue requestQueue;
     private ArrayList<ExportModal> exportList;
     private ExportAdapter exportAdapter;
     private LoadingDialog loadingDialog;
-    private TokenManager tokenManager;
+//    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class OutboundActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        qrcodeManager.setListener(this::loadInbound);
+        qrcodeManager.setListener(this::loadOutbound);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class OutboundActivity extends AppCompatActivity {
         });
     }
 
-    private void loadInbound(String scanValue) {
+    private void loadOutbound(String scanValue) {
         loadingDialog.show();
         if (scanValue == null || scanValue.isEmpty()) {
             Toast.makeText(this, getString(R.string.scan_value_empty), Toast.LENGTH_SHORT).show();
@@ -125,20 +125,21 @@ public class OutboundActivity extends AppCompatActivity {
                 Request.Method.GET, url,
                 this::responseData,
                 this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (tokenManager.isTokenExpired()) {
-                    tokenManager.clearTokenAndLogout();
-                }else {
-                    headers.put("Authorization", "Bearer " + token);
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        ) ;
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (tokenManager.isTokenExpired()) {
+//                    tokenManager.clearTokenAndLogout();
+//                }else {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
     }
 
@@ -148,8 +149,10 @@ public class OutboundActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONObject content = jsonObject.optJSONObject("content");
-                if (content != null) {
-                    content(content);
+                assert content != null;
+                JSONObject data = content.optJSONObject("data");
+                if (data != null) {
+                    content(data);
                 }
             } else {
                 Toast.makeText(this,getString(R.string.response_fail)
@@ -187,8 +190,8 @@ public class OutboundActivity extends AppCompatActivity {
 
         int id = content.optInt("id",0);
         String codeEp = content.optString("code", "N/A");
-        int items = content.optInt("totalProduct", 0);
-        int totalItem = content.optInt("totalQuantity", 0);
+        int items = content.optInt("quantity", 0);
+        int totalItem = content.optInt("quantityProduct", 0);
 
         exportList.add(new ExportModal(codeEp, items, totalItem,id));
         updateTotalValues();
@@ -223,14 +226,14 @@ public class OutboundActivity extends AppCompatActivity {
         totalProductEt = findViewById(R.id.totalProductEt);
 //        totalRealQuantityEt = findViewById(R.id.totalRealQuantityEt);
         submitCombineBtn = findViewById(R.id.submitCompineBtn);
-        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         requestQueue = Volley.newRequestQueue(this);
         exportsRv = findViewById(R.id.exportsRv);
         exportList = new ArrayList<>();
         exportsRv.setLayoutManager(new LinearLayoutManager(this));
         loadingDialog = new LoadingDialog(this);
         qrcodeManager = new QRcodeManager(this);
-        tokenManager = new TokenManager(this);
+//        tokenManager = new TokenManager(this);
     }
 
 }

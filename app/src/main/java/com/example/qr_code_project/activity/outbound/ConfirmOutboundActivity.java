@@ -43,13 +43,13 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
     private QRcodeManager qrCodeManager;
     private String scannedProductBarcode = "";
     private String scannedWarehouseBarcode = "";
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
     private RequestQueue requestQueue;
     private String code;
     private int areaId;
     private int location;
     private LoadingDialog loadingDialog;
-    private TokenManager tokenManager;
+//    private TokenManager tokenManager;
 
     private boolean isConfirmed = false;
 
@@ -76,6 +76,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         barcodeOutboundEt.setText(productModal.getCode());
         nameOutboundEt.setText(productModal.getTitle());
         quantityOutboundEt.setText(String.valueOf(productModal.getQuantity()));
+        warehouseCodeOutboundEt.setText(String.valueOf(productModal.getLocation()));
 
         Map<Integer, Object>  productMap =
                 (Map<Integer, Object> ) getIntent().getSerializableExtra("productMap");
@@ -102,10 +103,10 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
         productBarcodeStatusOutboundText = findViewById(R.id.productBarcodeStatusOutboundText);
         warehouseBarcodeStatusOutboundText = findViewById(R.id.warehouseBarcodeStatusOutboundText);
 
-        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         requestQueue = Volley.newRequestQueue(this);
         loadingDialog = new LoadingDialog(this);
-        tokenManager = new TokenManager(this);
+//        tokenManager = new TokenManager(this);
     }
 
     private void setupQRManager() {
@@ -139,7 +140,7 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
             scannedProductBarcode = qrCodeText;
             if (scannedProductBarcode.equals(barcodeOutboundEt.getText().toString().trim())) {
                 updateProductScanStatus(true, getString(R.string.product_barcode_valid));
-                fetchWarehouseLocation(scannedProductBarcode);
+//                fetchWarehouseLocation(scannedProductBarcode);
             } else {
                 updateProductScanStatus(false, getString(R.string.invalid_product_barcode));
                 scannedProductBarcode = "";
@@ -167,20 +168,21 @@ public class ConfirmOutboundActivity extends AppCompatActivity {
                 Request.Method.GET, url,
                 this::parseResponse,
                 this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        );
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,

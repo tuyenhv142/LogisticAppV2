@@ -44,7 +44,7 @@ import java.util.Objects;
 
 public class PackageActivity extends AppCompatActivity {
 
-    private EditText codePackageEt, titlePackageEt;
+    private EditText codePackageEt;// titlePackageEt;
     private TextView itemPackagesEt
             , totalProductPackageEt, totalRQProductPackageEt;
     private RecyclerView productPackagesRv;
@@ -55,12 +55,12 @@ public class PackageActivity extends AppCompatActivity {
     private int deliveryId;
     private QRcodeManager qrcodeManager;
     private RequestQueue requestQueue;
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
     private ArrayList<ProductModal> productArrayList;
     private ProductAdapter productAdapter;
     private final Map<Integer, Object> productMap = new HashMap<>();
     private LoadingDialog loadingDialog;
-    private TokenManager tokenManager;
+//    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,13 +101,13 @@ public class PackageActivity extends AppCompatActivity {
     //Submit data
     private void submit(String code, int deliveryId) {
         loadingDialog.show();
-        String url = ApiConstants.PACKAGE_SUBMIT;
+        String url = ApiConstants.UpdateOutboundIsPack(code);
         StringRequest request = new StringRequest(Request.Method.PUT, url,
                 response -> {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         boolean isSuccess = jsonObject.getBoolean("success");
-                        String message = jsonObject.optString("error", "Unknown error");
+//                        String message = jsonObject.optString("error", "Unknown error");
 
                         if (isSuccess) {
                             Toast.makeText(PackageActivity.this, getString(R.string.success_response)
@@ -121,31 +121,32 @@ public class PackageActivity extends AppCompatActivity {
                         Toast.makeText(PackageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 },
-                this::handleError) {
-            @Override
-            public byte[] getBody() throws AuthFailureError {
-                JSONObject params = new JSONObject();
-                try {
-                    params.put("code", code);
-                    params.put("id", deliveryId);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.d("PackageActivity", "Request Body: " + params.toString());
-                return params.toString().getBytes();
-            }
-
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (token != null) {
-                    headers.put("Authorization", "Bearer " + token);
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+                this::handleError) ;
+//        {
+//            @Override
+//            public byte[] getBody(){
+//                JSONObject params = new JSONObject();
+//                try {
+//                    params.put("code", code);
+//                    params.put("id", deliveryId);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                Log.d("PackageActivity", "Request Body: " + params.toString());
+//                return params.toString().getBytes();
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (token != null) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
@@ -165,7 +166,7 @@ public class PackageActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void resetData() {
         codePackageEt.setText("");
-        titlePackageEt.setText("");
+//        titlePackageEt.setText("");
         itemPackagesEt.setText("0");
         totalProductPackageEt.setText("0");
         totalRQProductPackageEt.setText("0");
@@ -257,20 +258,21 @@ public class PackageActivity extends AppCompatActivity {
                 Request.Method.GET, url,
                 this::parseResponse,
                 this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        ) ;
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
@@ -287,8 +289,10 @@ public class PackageActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.getBoolean("success")) {
                 JSONObject content = jsonObject.optJSONObject("content");
-                if (content != null) {
-                    populateContent(content);
+                assert content != null;
+                JSONObject data = content.optJSONObject("data");
+                if (data != null) {
+                    populateContent(data);
                     if (!productArrayList.isEmpty()) {
                         qrcodeManager.unregister();
                     }
@@ -319,23 +323,23 @@ public class PackageActivity extends AppCompatActivity {
 
         deliveryId = content.optInt("id",0);
         codePackageEt.setText(content.optString("code", "N/A"));
-        titlePackageEt.setText(content.optString("title", "N/A"));
-        itemPackagesEt.setText(String.valueOf(content.optInt("totalProduct", 0)));
-        totalProductPackageEt.setText(String.valueOf(content.optInt("totalQuantity", 0)));
+//        titlePackageEt.setText(content.optString("code", "N/A"));
+        itemPackagesEt.setText(String.valueOf(content.optInt("quantity", 0)));
+        totalProductPackageEt.setText(String.valueOf(content.optInt("quantityProduct", 0)));
 
-        JSONArray products = content.optJSONArray("products");
+        JSONArray products = content.optJSONArray("locationDataInbounds");
         productArrayList.clear();
         for (int i = 0; i < Objects.requireNonNull(products).length(); i++) {
             JSONObject object = products.getJSONObject(i);
 
             int id = object.optInt("id");
             String title = object.optString("title", "N/A");
-            int quantity = object.optInt("quantityDeliverynote");
-//            int location = object.optString("dataItem");
-            String code = object.optString("code", "N/A");
+            int quantity = object.optInt("quantity");
+            String location = object.optString("code");
+            String code = object.optString("title", "N/A");
             String image = object.optString("image", "");
 
-            productArrayList.add(new ProductModal(id, title, quantity, null, code, image));
+            productArrayList.add(new ProductModal(id, title, quantity, location, code, image));
         }
 
         if (productAdapter == null) {
@@ -371,7 +375,7 @@ public class PackageActivity extends AppCompatActivity {
 
     private void initUI() {
         codePackageEt = findViewById(R.id.codePackageEt);
-        titlePackageEt = findViewById(R.id.titlePackageEt);
+//        titlePackageEt = findViewById(R.id.titlePackageEt);
         itemPackagesEt = findViewById(R.id.itemPackagesEt);
         totalProductPackageEt = findViewById(R.id.totalProductPackageEt);
         productPackagesRv = findViewById(R.id.productPackagesRv);
@@ -382,8 +386,8 @@ public class PackageActivity extends AppCompatActivity {
 
         qrcodeManager = new QRcodeManager(this);
         requestQueue = Volley.newRequestQueue(this);
-        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
-        tokenManager = new TokenManager(this);
+//        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+//        tokenManager = new TokenManager(this);
         productPackagesRv.setLayoutManager(new LinearLayoutManager(this));
         productArrayList = new ArrayList<>();
         loadingDialog = new LoadingDialog(this);

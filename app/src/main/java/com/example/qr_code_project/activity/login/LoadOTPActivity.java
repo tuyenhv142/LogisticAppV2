@@ -48,7 +48,7 @@ public class LoadOTPActivity extends AppCompatActivity {
 
         util();
 
-        utilBtn();
+//        utilBtn();
     }
 
     private void util(){
@@ -59,57 +59,57 @@ public class LoadOTPActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
     }
 
-    private void utilBtn(){
-        submitOtpBtn.setOnClickListener(v -> {
-            otp = otpEt.getText().toString().trim();
-            if (email == null || email.isEmpty()) {
-                Toast.makeText(this, "Error: Email is missing!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (otp.isEmpty()) {
-                Toast.makeText(this, "Please enter the OTP sent to your email!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            loadingDialog.show();
-            String url = ApiConstants.ACCOUNT_CHECK_CODE;
-
-            StringRequest request = new StringRequest(Request.Method.POST,url,
-                    this::response,
-                    this::handleError)
-            {
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    JSONObject params = new JSONObject();
-                    try {
-                        params.put("email", email);
-                        params.put("code", otp);
-                    } catch (JSONException e) {
-                        Log.d("LoadOTPActivity", Objects.requireNonNull(e.getMessage()));
-                        return null;
-                    }
-                    Log.d("Request Body", params.toString());
-                    return params.toString().getBytes();
-                }
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json"); //  Content-Type is JSON
-                    return headers;
-                }
-            };
-
-            request.setRetryPolicy(new DefaultRetryPolicy(
-                    10 * 1000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-            ));
-
-            requestQueue.add(request);
-
-        });
-    }
+//    private void utilBtn(){
+//        submitOtpBtn.setOnClickListener(v -> {
+//            otp = otpEt.getText().toString().trim();
+//            if (email == null || email.isEmpty()) {
+//                Toast.makeText(this, "Error: Email is missing!", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            if (otp.isEmpty()) {
+//                Toast.makeText(this, "Please enter the OTP sent to your email!", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            loadingDialog.show();
+//            String url = ApiConstants.ACCOUNT_CHECK_CODE;
+//
+//            StringRequest request = new StringRequest(Request.Method.POST,url,
+//                    this::response,
+//                    this::handleError)
+//            {
+//                @Override
+//                public byte[] getBody() throws AuthFailureError {
+//                    JSONObject params = new JSONObject();
+//                    try {
+//                        params.put("email", email);
+//                        params.put("code", otp);
+//                    } catch (JSONException e) {
+//                        Log.d("LoadOTPActivity", Objects.requireNonNull(e.getMessage()));
+//                        return null;
+//                    }
+//                    Log.d("Request Body", params.toString());
+//                    return params.toString().getBytes();
+//                }
+//
+//                @Override
+//                public Map<String, String> getHeaders() throws AuthFailureError {
+//                    Map<String, String> headers = new HashMap<>();
+//                    headers.put("Content-Type", "application/json"); //  Content-Type is JSON
+//                    return headers;
+//                }
+//            };
+//
+//            request.setRetryPolicy(new DefaultRetryPolicy(
+//                    10 * 1000,
+//                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//            ));
+//
+//            requestQueue.add(request);
+//
+//        });
+//    }
 
     private void response(String response){
         try {

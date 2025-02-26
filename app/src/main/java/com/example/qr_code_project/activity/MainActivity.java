@@ -59,8 +59,9 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
-    private TextView usernameTv;
-    private ImageView imageAccountIv,menuButton;
+//    private TextView usernameTv;
+//    private ImageView imageAccountIv;
+    private ImageView menuButton;
     private ConstraintLayout inboundBtn, outboundBtn
             ,packageBtn,swapProductLocationBtn;
     private RequestQueue requestQueue;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         String language = LanguageManager.getLanguage(this);
         LocaleHelper.setLocale(this, language);
         setContentView(R.layout.activity_main);
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
 
         SSLHelper.trustAllCertificates();
 
@@ -90,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseMessaging();
 
-        loadAccountProfile();
+//        loadAccountProfile();
 
-        loadSwapUnSuccessPlan();
+//        loadSwapUnSuccessPlan();
 
     }
 
@@ -138,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void util(){
-        usernameTv = findViewById(R.id.usernameTv);
-        imageAccountIv = findViewById(R.id.imageAccountIv);
+//        usernameTv = findViewById(R.id.usernameTv);
+//        imageAccountIv = findViewById(R.id.imageAccountIv);
         menuButton = findViewById(R.id.menuButtons);
         inboundBtn = findViewById(R.id.inboundBtn);
         outboundBtn = findViewById(R.id.outboundBtn);
@@ -199,10 +201,10 @@ public class MainActivity extends AppCompatActivity {
                 showLanguageDialog();
                 return true;
             } else if (itemId == R.id.menu_unsuccess_plan) {
-                startActivity(new Intent(MainActivity.this, UnSuccessSwapLocationActivity.class));
+//                startActivity(new Intent(MainActivity.this, UnSuccessSwapLocationActivity.class));
                 return true;
             } else if (itemId == R.id.menu_logout) {
-                showLogoutConfirmationDialog();
+//                showLogoutConfirmationDialog();
                 return true;
             }
             return false;
@@ -211,23 +213,23 @@ public class MainActivity extends AppCompatActivity {
         popupMenu.show();
     }
 
-    private void showLogoutConfirmationDialog() {
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle(getString(R.string.confirm_logout))
-                .setMessage(getString(R.string.sure_logout))
-                .setPositiveButton(getString(R.string.logout), (dialog, which) -> {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.remove("token");
-                    editor.apply();
-
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                })
-                .setNegativeButton(getString(R.string.canel), (dialog, which) -> dialog.dismiss())
-                .show();
-    }
+//    private void showLogoutConfirmationDialog() {
+//        new AlertDialog.Builder(MainActivity.this)
+//                .setTitle(getString(R.string.confirm_logout))
+//                .setMessage(getString(R.string.sure_logout))
+//                .setPositiveButton(getString(R.string.logout), (dialog, which) -> {
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    editor.remove("token");
+//                    editor.apply();
+//
+//                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+////                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+//                    finish();
+//                })
+//                .setNegativeButton(getString(R.string.canel), (dialog, which) -> dialog.dismiss())
+//                .show();
+//    }
 
     private void showLanguageDialog() {
         String[] languages = languageMap.keySet().toArray(new String[0]);
@@ -249,174 +251,174 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void loadAccountProfile(){
-        loadingDialog.show();
-        String url = ApiConstants.ACCOUNT_PROFILE;
-        StringRequest request = new StringRequest(
-                Request.Method.GET,url,
-                this::responseData,
-                this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (tokenManager.isTokenExpired()) {
-                    tokenManager.clearTokenAndLogout();
-                } else {
-                    headers.put("Authorization", "Bearer " + token);
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+//    private void loadAccountProfile(){
+//        loadingDialog.show();
+//        String url = ApiConstants.ACCOUNT_PROFILE;
+//        StringRequest request = new StringRequest(
+//                Request.Method.GET,url,
+//                this::responseData,
+//                this::handleError
+//        ) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (tokenManager.isTokenExpired()) {
+//                    tokenManager.clearTokenAndLogout();
+//                } else {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
+//
+//        request.setRetryPolicy(new DefaultRetryPolicy(
+//                10 * 1000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//        ));
+//
+//        requestQueue.add(request);
+//    }
 
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10 * 1000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
+//    @SuppressLint("NotifyDataSetChanged")
+//    private void responseData(String response) {
+//        try {
+//            JSONObject jsonObject = new JSONObject(response);
+//            if (jsonObject.getBoolean("success")) {
+//                JSONObject content = jsonObject.optJSONObject("content");
+//                if (content != null) {
+//                    contentAccount(content);
+//                }
+//            } else {
+//                Toast.makeText(this, jsonObject.optString("error"
+//                        , getString(R.string.unknown_error)),Toast.LENGTH_SHORT).show();
+//            }
+//        } catch (JSONException e) {
+//            Log.e("responseValue", "Failed to parse JSON response", e);
+//            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
+//        }finally {
+//            if (loadingDialog != null && !isFinishing() && !isDestroyed()) {
+//                loadingDialog.dismiss();
+//            }
+//
+//        }
+//    }
 
-        requestQueue.add(request);
-    }
+//    @SuppressLint("NotifyDataSetChanged")
+//    private void contentAccount(JSONObject content) throws JSONException {
+//
+//        String username = content.optString("username", "N/A");
+//        String image = content.optString("image", "");
+//        String email = content.optString("email", "N/A");
+//        String phone = content.optString("phone", "N/A");
+//        String address = content.optString("address", "N/A");
+//
+////        usernameTv.setText(email);
+//        Log.d("img",image);
+//
+////        try {
+////            if (!image.isEmpty()) {
+////                Picasso.get()
+////                        .load(image)
+////                        .placeholder(R.drawable.ic_user)
+////                        .error(R.drawable.ic_user)
+////                        .fit()
+////                        .centerCrop()
+////                        .into(imageAccountIv);
+////            } else {
+////                imageAccountIv.setImageResource(R.drawable.ic_user);
+////            }
+////        } catch (Exception e) {
+////            Log.e("PicassoError", "Error loading image", e);
+////        }
+//
+//    }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void responseData(String response) {
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            if (jsonObject.getBoolean("success")) {
-                JSONObject content = jsonObject.optJSONObject("content");
-                if (content != null) {
-                    contentAccount(content);
-                }
-            } else {
-                Toast.makeText(this, jsonObject.optString("error"
-                        , getString(R.string.unknown_error)),Toast.LENGTH_SHORT).show();
-            }
-        } catch (JSONException e) {
-            Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
-        }finally {
-            if (loadingDialog != null && !isFinishing() && !isDestroyed()) {
-                loadingDialog.dismiss();
-            }
-
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void contentAccount(JSONObject content) throws JSONException {
-
-        String username = content.optString("username", "N/A");
-        String image = content.optString("image", "");
-        String email = content.optString("email", "N/A");
-        String phone = content.optString("phone", "N/A");
-        String address = content.optString("address", "N/A");
-
-        usernameTv.setText(email);
-        Log.d("img",image);
-
-        try {
-            if (!image.isEmpty()) {
-                Picasso.get()
-                        .load(image)
-                        .placeholder(R.drawable.ic_user)
-                        .error(R.drawable.ic_user)
-                        .fit()
-                        .centerCrop()
-                        .into(imageAccountIv);
-            } else {
-                imageAccountIv.setImageResource(R.drawable.ic_user);
-            }
-        } catch (Exception e) {
-            Log.e("PicassoError", "Error loading image", e);
-        }
-
-    }
-
-    private void handleError(Exception error) {
-        String errorMsg = getString(R.string.error_parse);
-        if (error instanceof com.android.volley.TimeoutError) {
-            errorMsg = getString(R.string.error_timeout);
-        } else if (error instanceof com.android.volley.NoConnectionError) {
-            errorMsg = getString(R.string.error_no_connection);
-        }
-        Log.e("API Error", error.getMessage(), error);
-        loadingDialog.dismiss();
-        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
-    }
-
-    private void loadSwapUnSuccessPlan(){
-        String url = ApiConstants.SWAP_LOCATION_CLAIM;
-        loadingDialog.show();
-        StringRequest request = new StringRequest(
-                Request.Method.GET,url,
-                this::responseUnSuccess,
-                this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (tokenManager.isTokenExpired()) {
-                    tokenManager.clearTokenAndLogout();
-                }else {
-                    headers.put("Authorization", "Bearer " + token);
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
-
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10 * 1000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
-
-        requestQueue.add(request);
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void responseUnSuccess(String response) {
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            if (jsonObject.getBoolean("success")) {
-                JSONObject content = jsonObject.optJSONObject("content");
-                if (content != null) {
-                    contentUnSuccess(content);
-                }
-            }
-        } catch (JSONException e) {
-            Log.e("responseValue", "Failed to parse JSON response", e);
-            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
-        }finally {
-            loadingDialog.dismiss();
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void contentUnSuccess(JSONObject content) throws JSONException {
-        JSONArray swapLocations = content.optJSONArray("data");
-
-        if (swapLocations != null && swapLocations.length() > 0) {
-            showUnSuccessPlanDialog(swapLocations.length());
-        }
-    }
-
-    //send warning have swap plan not done
-    private void showUnSuccessPlanDialog(int quantity) {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.dialog_title))
-                .setMessage(quantity+" "+getString(R.string.dialog_mes_unsucess))
-                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-                    Intent intent = new Intent(MainActivity.this,
-                            UnSuccessSwapLocationActivity.class);
-                    startActivity(intent);
-                })
-                .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
-                .setCancelable(false)
-                .show();
-    }
+//    private void handleError(Exception error) {
+//        String errorMsg = getString(R.string.error_parse);
+//        if (error instanceof com.android.volley.TimeoutError) {
+//            errorMsg = getString(R.string.error_timeout);
+//        } else if (error instanceof com.android.volley.NoConnectionError) {
+//            errorMsg = getString(R.string.error_no_connection);
+//        }
+//        Log.e("API Error", error.getMessage(), error);
+//        loadingDialog.dismiss();
+//        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+//    }
+//
+//    private void loadSwapUnSuccessPlan(){
+//        String url = ApiConstants.SWAP_LOCATION_CLAIM;
+//        loadingDialog.show();
+//        StringRequest request = new StringRequest(
+//                Request.Method.GET,url,
+//                this::responseUnSuccess,
+//                this::handleError
+//        ) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (tokenManager.isTokenExpired()) {
+//                    tokenManager.clearTokenAndLogout();
+//                }else {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
+//
+//        request.setRetryPolicy(new DefaultRetryPolicy(
+//                10 * 1000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//        ));
+//
+//        requestQueue.add(request);
+//    }
+//
+//    @SuppressLint("NotifyDataSetChanged")
+//    private void responseUnSuccess(String response) {
+//        try {
+//            JSONObject jsonObject = new JSONObject(response);
+//            if (jsonObject.getBoolean("success")) {
+//                JSONObject content = jsonObject.optJSONObject("content");
+//                if (content != null) {
+//                    contentUnSuccess(content);
+//                }
+//            }
+//        } catch (JSONException e) {
+//            Log.e("responseValue", "Failed to parse JSON response", e);
+//            Toast.makeText(this,getString(R.string.login_fail),Toast.LENGTH_SHORT).show();
+//        }finally {
+//            loadingDialog.dismiss();
+//        }
+//    }
+//
+//    @SuppressLint("NotifyDataSetChanged")
+//    private void contentUnSuccess(JSONObject content) throws JSONException {
+//        JSONArray swapLocations = content.optJSONArray("data");
+//
+//        if (swapLocations != null && swapLocations.length() > 0) {
+//            showUnSuccessPlanDialog(swapLocations.length());
+//        }
+//    }
+//
+//    //send warning have swap plan not done
+//    private void showUnSuccessPlanDialog(int quantity) {
+//        new AlertDialog.Builder(this)
+//                .setTitle(getString(R.string.dialog_title))
+//                .setMessage(quantity+" "+getString(R.string.dialog_mes_unsucess))
+//                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+//                    Intent intent = new Intent(MainActivity.this,
+//                            UnSuccessSwapLocationActivity.class);
+//                    startActivity(intent);
+//                })
+//                .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
+//                .setCancelable(false)
+//                .show();
+//    }
 
 }

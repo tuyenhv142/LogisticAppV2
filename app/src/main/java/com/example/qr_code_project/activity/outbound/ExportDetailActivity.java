@@ -38,9 +38,9 @@ public class ExportDetailActivity extends AppCompatActivity {
     private Button returnBtn;
     private RecyclerView productExportRv;
     private ArrayList<ProductModal> productList;
-    private SharedPreferences sharedPreferences;
+//    private SharedPreferences sharedPreferences;
     private LoadingDialog loadingDialog;
-    private TokenManager tokenManager;
+//    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +75,21 @@ public class ExportDetailActivity extends AppCompatActivity {
                 Request.Method.GET, url,
                 this::responseData,
                 this::handleError
-        )
-        {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        );
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
@@ -106,7 +106,9 @@ public class ExportDetailActivity extends AppCompatActivity {
             if (jsonObject.getBoolean("success")) {
                 JSONObject content = jsonObject.optJSONObject("content");
                 assert content != null;
-                contentProduct(content);
+                JSONObject data = content.optJSONObject("data");
+                assert data != null;
+                contentProduct(data);
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -127,18 +129,18 @@ public class ExportDetailActivity extends AppCompatActivity {
 //                    titleExportEt.setText(titleEx);
 //                    itemsExportEt.setText(String.valueOf(items));
 //                    totalExportEt.setText(String.valueOf(totalProduct));
-        JSONArray products = content.optJSONArray("products");
+        JSONArray products = content.optJSONArray("locationDataInbounds");
         if (products != null) {
             for (int i = 0; i < products.length(); i++) {
                 JSONObject object = products.getJSONObject(i);
                 int id = object.optInt("id");
                 String title = object.optString("title", "N/A");
-                int quantity = object.optInt("quantityDeliverynote");
-//                String location = null;
-                String code = object.optString("code");
+                int quantity = object.optInt("quantity");
+                String location = object.optString("code","N/A");
+                String code = object.optString("title");
                 String image = object.optString("image", "");
 
-                productList.add(new ProductModal(id, title, quantity, null, code, image));
+                productList.add(new ProductModal(id, title, quantity, location, code, image));
             }
             ProductAdapter productAdapter = new ProductAdapter(this, productList, new HashMap<>(),
                     (product, updatedMap) -> Log.d("ExportDetailActivity", product.getTitle()));
@@ -167,10 +169,10 @@ public class ExportDetailActivity extends AppCompatActivity {
 //        totalExportEt = findViewById(R.id.totalExportEt);
         returnBtn = findViewById(R.id.returnBtn);
         productExportRv = findViewById(R.id.productExportRv);
-        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
+//        sharedPreferences = getSharedPreferences("AccountToken", MODE_PRIVATE);
         productExportRv.setLayoutManager(new LinearLayoutManager(this));
         loadingDialog = new LoadingDialog(this);
         productList = new ArrayList<>();
-        tokenManager = new TokenManager(this);
+//        tokenManager = new TokenManager(this);
     }
 }

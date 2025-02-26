@@ -61,7 +61,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private String scannedProductLocation2= "";
     private String scannedLocation2New= "";
     private LoadingDialog loadingDialog;
-    private TokenManager tokenManager;
+//    private TokenManager tokenManager;
     private int pendingRequests = 0;
     private AlertDialog productDialog;
     private boolean isLocation1Confirmed = false;
@@ -90,7 +90,9 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
 
     private void onConfirmSwap(int swapId) {
         loadingDialog.show();
+        Log.d("SwapLocation", String.valueOf(swapId));
         String url = ApiConstants.SWAP_LOCATION_SUBMIT;
+        Log.d("SwapLocation", url);
         StringRequest request = new StringRequest(Request.Method.PUT, url,
                 response -> {
                     try {
@@ -102,7 +104,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                             Toast.makeText(ConfirmSwapLocationActivity.this,
                                     getString(R.string.success_response), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ConfirmSwapLocationActivity.this,
-                                    SwapLocationActivity.class);
+                                    MainActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -113,13 +115,14 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 },
-                this::handleError) {
+                this::handleError)
+        {
             @Override
-            public byte[] getBody() throws AuthFailureError {
+            public byte[] getBody(){
                 JSONObject params = new JSONObject();
                 try {
-                    params.put("id_statuswarehourse", statusId);
-                    params.put("title", "done");
+                    params.put("id", swapId);
+                    params.put("status", 1);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -130,10 +133,10 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (token != null) {
-                    headers.put("Authorization", "Bearer " + token);
-                }
+//                String token = sharedPreferences.getString("token", null);
+//                if (token != null) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }
                 headers.put("Content-Type", "application/json");
                 return headers;
             }
@@ -186,6 +189,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         codeLocation1New.setTextColor(Color.BLACK);
         checkLocation1Iv.setImageTintList(ColorStateList.valueOf(Color.GREEN));
         isLocation1Confirmed = true;
+        checkIfBothLocationsConfirmed();
     }
 
     private void updateProductLocation2ScanStatus() {
@@ -198,91 +202,86 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         nameProductLocation2.setTextColor(Color.BLACK);
         checkLocation2Iv.setImageTintList(ColorStateList.valueOf(Color.GREEN));
         isLocation2Confirmed = true;
+        checkIfBothLocationsConfirmed();
     }
 
     private void handleScannedData(String qrCodeText) {
-        if ( !scannedProductLocation1.equals("SKIP")) {
-            if (scannedProductLocation1.isEmpty()){
-                scannedProductLocation1 = qrCodeText;
-                if (scannedProductLocation1.equals(codeProductLocation1.getText().toString().trim())) {
-                    String productCode = codeProductLocation1.getText().toString().trim();
-                    String productName = nameProductLocation1.getText().toString().trim();
-                    String productQuantity = quantityProductLocation1.getText().toString().trim();
-                    showProductDialog(product2Location, productCode, productName, productQuantity);
-                } else {
-                    Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
-                    scannedProductLocation1 = "";
-                }
-            }else if (scannedLocation1New.isEmpty() ) {
-                scannedLocation1New = qrCodeText;
-                if (scannedLocation1New.equals(product2Location)) {
-                    updateProductLocation1ScanStatus();
-                    Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
-                    if (productDialog != null && productDialog.isShowing()) {
-                        productDialog.dismiss();
-                    }
-                } else {
-                    Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
-                    scannedLocation1New = "";
-                }
+        // Kiểm tra Location 1 trước
+        if (scannedProductLocation1.isEmpty() && qrCodeText.equals(codeProductLocation1.getText().toString().trim())) {
+            scannedProductLocation1 = qrCodeText;
+            showProductDialog(product2Location, codeProductLocation1.getText().toString().trim(),
+                    nameProductLocation1.getText().toString().trim(),
+                    quantityProductLocation1.getText().toString().trim());
+//            showProductDialog(scannedLocation1, productCode1.getText().toString().trim(),
+//                    productName1.getText().toString().trim(), productQuantity1.getText().toString().trim());
+            Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            }else if (scannedProductLocation2.isEmpty()) {
-                scannedProductLocation2 = qrCodeText;
-                if (scannedProductLocation2.equals(codeProductLocation2.getText().toString().trim())) {
-                    String productCode = codeProductLocation2.getText().toString().trim();
-                    String productName = nameProductLocation2.getText().toString().trim();
-                    String productQuantity = quantityProductLocation2.getText().toString().trim();
-                    showProductDialog(product1Location, productCode, productName, productQuantity);
-                } else {
-                    Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
-                    scannedProductLocation2 = "";
-                }
-            } else if (scannedLocation2New.isEmpty()) {
-                scannedLocation2New = qrCodeText;
-                if (scannedLocation2New.equals(product1Location)) {
-                    Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
-                    updateProductLocation2ScanStatus();
-                    if (productDialog != null && productDialog.isShowing()) {
-                        productDialog.dismiss();
-                    }
-                    confirmSwapBtn.setEnabled(true);
-                    if (qrCodeManager != null) {
-                        qrCodeManager.unregister();
-                        qrCodeManager = null;
-                    }
-                } else {
-                    Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
-                    scannedLocation2New = "";
-                }
-            }
-        } else if (scannedProductLocation2.isEmpty()) {
-            scannedProductLocation2 = qrCodeText;
-            if (scannedProductLocation2.equals(codeProductLocation2.getText().toString().trim())) {
-                String productCode = codeProductLocation2.getText().toString().trim();
-                String productName = nameProductLocation2.getText().toString().trim();
-                String productQuantity = quantityProductLocation2.getText().toString().trim();
-                showProductDialog(product1Location, productCode, productName, productQuantity);
-            } else {
-                Toast.makeText(this, R.string.invalid_product, Toast.LENGTH_SHORT).show();
-                scannedProductLocation2 = "";
-            }
-        } else if (scannedLocation2New.isEmpty()) {
-            scannedLocation2New = qrCodeText;
-            if (scannedLocation2New.equals(product1Location)) {
+        // Kiểm tra sản phẩm của Location 1
+        if (scannedLocation1New.isEmpty() && scannedProductLocation1.equals(codeProductLocation1.getText().toString().trim())) {
+            scannedLocation1New = qrCodeText;
+            if (scannedLocation1New.equals(codeLocation1New.getText().toString().trim()) ){
+                updateProductLocation1ScanStatus();
                 Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
-                updateProductLocation2ScanStatus();
-                if (productDialog != null && productDialog.isShowing()) {
-                    productDialog.dismiss();
-                }
-                confirmSwapBtn.setEnabled(true);
-                if (qrCodeManager != null) {
-                    qrCodeManager.unregister();
-                    qrCodeManager = null;
-                }
+                closeDialogIfOpen();
             } else {
-                Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.invalid_warehouse_barcode, Toast.LENGTH_SHORT).show();
+                scannedLocation1New = "";
+            }
+            return;
+        }
+
+        // Kiểm tra Location 2
+        if (scannedProductLocation2.isEmpty() && qrCodeText.equals(codeProductLocation2.getText().toString().trim())) {
+            scannedProductLocation2 = qrCodeText;
+            showProductDialog(product1Location, codeProductLocation2.getText().toString().trim()
+                    , nameProductLocation2.getText().toString().trim(),
+                    quantityProductLocation2.getText().toString().trim());
+//            showProductDialog(scannedLocation2, productCode2.getText().toString().trim(), productName2.getText().toString().trim(), productQuantity2.getText().toString().trim());
+            Toast.makeText(this, R.string.product_correct, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra sản phẩm của Location 2
+        if (scannedLocation2New.isEmpty() &&
+                scannedProductLocation2.equals(codeProductLocation2.getText().toString().trim())) {
+            scannedLocation2New = qrCodeText;
+            if (scannedLocation2New.equals(codeLocation2New.getText().toString().trim())) {
+                updateProductLocation2ScanStatus();
+                Toast.makeText(this, R.string.location_correct, Toast.LENGTH_SHORT).show();
+                closeDialogIfOpen();
+                finalizeScanning();
+            } else {
+                Toast.makeText(this, R.string.invalid_warehouse_barcode, Toast.LENGTH_SHORT).show();
                 scannedLocation2New = "";
             }
+            return;
+        }
+
+        // Nếu không khớp bất kỳ điều kiện nào
+        Toast.makeText(this, R.string.scan_again_location, Toast.LENGTH_SHORT).show();
+    }
+
+    private void closeDialogIfOpen() {
+        if (productDialog != null && productDialog.isShowing()) {
+            productDialog.dismiss();
+        }
+    }
+
+    private void finalizeScanning() {
+        if (!scannedLocation1New.isEmpty() && !scannedLocation2New.isEmpty()) {
+            if (qrCodeManager != null) {
+                qrCodeManager.unregister();
+                qrCodeManager = null;
+            }
+        }
+
+    }
+
+    private void checkIfBothLocationsConfirmed() {
+        if (isLocation1Confirmed && isLocation2Confirmed) {
+            confirmSwapBtn.setEnabled(true);
         }
     }
 
@@ -333,7 +332,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         confirmSwapBtn.setEnabled(false);
         loadingDialog = new LoadingDialog(this);
-        tokenManager = new TokenManager(this);
+//        tokenManager = new TokenManager(this);
     }
 
     private void fetchProductLocation(String code, boolean isOldLocation) {
@@ -345,22 +344,23 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
 
         StringRequest request = new StringRequest(
                 Request.Method.GET, url,
-                response -> parseResponseProductLocation(response, isOldLocation),
+                response -> parseResponseProductLocation(response, isOldLocation,code),
                 this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else{
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        );
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else{
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,
@@ -372,7 +372,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void parseResponseProductLocation(String response, boolean isOldLocation) {
+    private void parseResponseProductLocation(String response, boolean isOldLocation,String code) {
         checkAndDismissLoading();
         try {
             JSONObject jsonObject = new JSONObject(response);
@@ -384,12 +384,30 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
 
                         if (isOldLocation) {
                             nameProductLocation1.setText(product.optString("title", "N/A"));
-                            quantityProductLocation1.setText(String.valueOf(product.optInt("quantity", 0)));
-                            codeProductLocation1.setText(product.optString("code", "N/A"));
+//                            quantityProductLocation1.setText(String.valueOf(product.optInt("quantity", 0)));
+                            JSONArray locationList = product.optJSONArray("dataLocations");
+                            for(int j = 0; j< Objects.requireNonNull(locationList).length(); j++){
+                                JSONObject location = locationList.getJSONObject(i);
+                                String locationProduct  = location.getString("code");
+
+                                if(locationProduct.equals(code)){
+                                    quantityProductLocation1.setText(String.valueOf(location.getInt("quantity")));
+                                }
+                            }
+                            codeProductLocation1.setText(product.optString("title", "N/A"));
                         } else {
                             nameProductLocation2.setText(product.optString("title", "N/A"));
-                            quantityProductLocation2.setText(String.valueOf(product.optInt("quantity", 0)));
-                            codeProductLocation2.setText(product.optString("code", "N/A"));
+//                            quantityProductLocation2.setText(String.valueOf(product.optInt("quantity", 0)));
+                            JSONArray locationList = product.optJSONArray("dataLocations");
+                            for(int j = 0; j< Objects.requireNonNull(locationList).length(); j++){
+                                JSONObject location = locationList.getJSONObject(i);
+                                String locationProduct  = location.getString("code");
+
+                                if(locationProduct.equals(code)){
+                                    quantityProductLocation2.setText(String.valueOf(location.getInt("quantity")));
+                                }
+                            }
+                            codeProductLocation2.setText(product.optString("title", "N/A"));
                         }
                     }
                 }else{
@@ -399,12 +417,6 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                         codeProductLocation1.setText("null");
                         scannedProductLocation1 = "SKIP";
                         updateProductLocation1ScanStatus();
-                    } else {
-                        nameProductLocation2.setText("null");
-                        quantityProductLocation2.setText("null");
-                        codeProductLocation2.setText("null");
-                        scannedProductLocation2 = "SKIP";
-                        updateProductLocation2ScanStatus();
                     }
                 }
             } else {
@@ -443,20 +455,21 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
                 Request.Method.GET, url,
                 this::parseResponse,
                 this::handleError
-        ) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = sharedPreferences.getString("token", null);
-                if (!tokenManager.isTokenExpired()) {
-                    headers.put("Authorization", "Bearer " + token);
-                }else {
-                    tokenManager.clearTokenAndLogout();
-                }
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+        ) ;
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+//                String token = sharedPreferences.getString("token", null);
+//                if (!tokenManager.isTokenExpired()) {
+//                    headers.put("Authorization", "Bearer " + token);
+//                }else {
+//                    tokenManager.clearTokenAndLogout();
+//                }
+//                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//        };
 
         request.setRetryPolicy(new DefaultRetryPolicy(
                 10 * 1000,

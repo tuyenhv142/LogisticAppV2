@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="line_old">Line Old</string>
+    <string name="line_new">Line New</string>
+</resources>

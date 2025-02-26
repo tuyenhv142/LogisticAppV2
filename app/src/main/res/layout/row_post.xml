@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title"
+            android:text="@string/code"
             android:textColor="@color/black"
             android:textSize="20sp"/>
         <TextView
@@ -63,28 +63,28 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@id/linear2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@id/linear1"
-        app:layout_constraintTop_toBottomOf="@id/linear1">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/code"
-            android:textColor="@color/black"
-            android:textSize="14sp"/>
+<!--    <LinearLayout-->
+<!--        android:id="@id/linear2"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintStart_toStartOf="@id/linear1"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/linear1">-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/code"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="14sp"/>-->
 
-        <TextView
-            android:id="@+id/code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-             />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/code"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="14sp"-->
+<!--             />-->
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/linear3"
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@id/linear1"
-        app:layout_constraintTop_toBottomOf="@id/linear2">
+        app:layout_constraintTop_toBottomOf="@id/linear1">
 
         <TextView
             android:layout_width="wrap_content"

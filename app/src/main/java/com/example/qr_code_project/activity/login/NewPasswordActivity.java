@@ -48,7 +48,7 @@ public class NewPasswordActivity extends AppCompatActivity {
 
         util();
 
-        utilBtn();
+//        utilBtn();
     }
 
     private void util(){
@@ -60,60 +60,60 @@ public class NewPasswordActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
     }
 
-    private void utilBtn(){
-        confirmNewPasswordBtn.setOnClickListener(v -> {
-            String password = newPasswordEt.getText().toString();
-            String rePassword = reNewPasswordEt.getText().toString();
-
-            if (password.isEmpty() || rePassword.isEmpty()) {
-                Toast.makeText(this, "New password cannot be empty!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!password.equals(rePassword)) {
-                Toast.makeText(this, "Password and Re-Password must be the same!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            String url = ApiConstants.ACCOUNT_UPDATE_PASSWORD;
-
-            loadingDialog.show();
-            StringRequest request = new StringRequest(Request.Method.POST,url,
-                    this::response,
-                    this::handleError)
-            {
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    JSONObject params = new JSONObject();
-                    try {
-                        params.put("email", email);
-                        params.put("passwordNew", newPasswordEt.getText().toString());
-                        params.put("code", code);
-                    } catch (JSONException e) {
-                        Log.d("LoadOTPActivity", Objects.requireNonNull(e.getMessage()));
-                        return null;
-                    }
-                    Log.d("Request Body", params.toString());
-                    return params.toString().getBytes();
-                }
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json"); //  Content-Type is JSON
-                    return headers;
-                }
-            };
-
-            request.setRetryPolicy(new DefaultRetryPolicy(
-                    10 * 1000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-            ));
-
-            requestQueue.add(request);
-        });
-    }
+//    private void utilBtn(){
+//        confirmNewPasswordBtn.setOnClickListener(v -> {
+//            String password = newPasswordEt.getText().toString();
+//            String rePassword = reNewPasswordEt.getText().toString();
+//
+//            if (password.isEmpty() || rePassword.isEmpty()) {
+//                Toast.makeText(this, "New password cannot be empty!", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            if (!password.equals(rePassword)) {
+//                Toast.makeText(this, "Password and Re-Password must be the same!", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            String url = ApiConstants.ACCOUNT_UPDATE_PASSWORD;
+//
+//            loadingDialog.show();
+//            StringRequest request = new StringRequest(Request.Method.POST,url,
+//                    this::response,
+//                    this::handleError)
+//            {
+//                @Override
+//                public byte[] getBody() throws AuthFailureError {
+//                    JSONObject params = new JSONObject();
+//                    try {
+//                        params.put("email", email);
+//                        params.put("passwordNew", newPasswordEt.getText().toString());
+//                        params.put("code", code);
+//                    } catch (JSONException e) {
+//                        Log.d("LoadOTPActivity", Objects.requireNonNull(e.getMessage()));
+//                        return null;
+//                    }
+//                    Log.d("Request Body", params.toString());
+//                    return params.toString().getBytes();
+//                }
+//
+//                @Override
+//                public Map<String, String> getHeaders() throws AuthFailureError {
+//                    Map<String, String> headers = new HashMap<>();
+//                    headers.put("Content-Type", "application/json"); //  Content-Type is JSON
+//                    return headers;
+//                }
+//            };
+//
+//            request.setRetryPolicy(new DefaultRetryPolicy(
+//                    10 * 1000,
+//                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//            ));
+//
+//            requestQueue.add(request);
+//        });
+//    }
 
     private void response(String response) {
         try {
