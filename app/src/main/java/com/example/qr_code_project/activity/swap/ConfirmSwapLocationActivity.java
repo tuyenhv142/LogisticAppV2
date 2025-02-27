@@ -160,7 +160,7 @@ public class ConfirmSwapLocationActivity extends AppCompatActivity {
     private void showProductDialog(String location, String productCode, String productName, String quantity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.custom_product_dialog, null);
+        View dialogView = inflater.inflate(R.layout.custom_location_dialog, null);
         builder.setView(dialogView);
 
         TextView tvProductLocation = dialogView.findViewById(R.id.tvProductLocation);
